@@ -1,0 +1,268 @@
+
+<head>
+  <link rel="stylesheet" type="text/css" href="stmarkdown.css">
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+<link rel="stylesheet" type="text/css" href="/css/stmarkdown.css">
+</head>
+
+<!-- Side navigation -->
+<div class="sidenav">
+       <a href="#do-files" >Do-files</a>
+       <a href="#exercise-do-files">Exercise: Do-files</a>
+       <a href="#creating-frequency-tables">Frequency tables</a>
+       <a href="#exercise-creating-frequency-tables">Exercise: Frequency tables</a>
+       <a href="#computing-variables">Computing variables</a>
+       <a href="#exercise-computing-variables">Exercise: Computing variables</a>
+       <a href="#saving-data">Saving data</a>
+       <a href="#exercise-saving-data">Exercise: Saving data</a>
+     </div>
+<div class="main">
+
+
+
+<h1><a href="#stata-practical-2-do-files-and-computing-variables" id="stata-practical-2-do-files-and-computing-variables">Stata practical 2: Do-files and computing variables</a></h1>
+<p>In this practical session, you will learn to:</p>
+<ul>
+  <li>use do-files to create analysis scripts</li>
+  <li>create frequency tables</li>
+  <li>compute new variables</li>
+  <li>save datasets</li>
+</ul>
+<br>
+<br>
+<h2><a href="#do-files" id="do-files">Do files</a></h2>
+<p>With do-files you can keep a record of your commands in a text file, which makes it easy to re-run commands for pre-processing, 
+  plotting and analysing your data. It also provides a means to keep a record of your analysis and to share it with colleagues or 
+  to attach it to your dissertation or make it available with your publications.</p>
+<p>Just take the first section in which you changed the working directory and loaded a file into Stata as an example. By using a 
+  do-file you won’t have to re-type these commands in order to load the dataset the next time you want to work on your analysis.</p>
+<br>
+<br>
+<h3><a href="#create-a-new-do-file" id="create-a-new-do-file">Create a new do file</a></h3>
+<p>To create a new do-file use the shortcut Ctrl+9 (Windows) or Cmd+9 (Mac). A new do-file editor with an empty do-file script 
+  will open. To create additional do-files use the Ctrl+N (Windows) or Cmd+N (Mac) shortcut.</p>
+<img src="screenshots/empty_do_file.png">
+<br>
+<br>
+<h3><a href="#adding-comments" id="adding-comments">Adding comments</a></h3>
+<p>Comments, which are always in green, will be ignored by Stata. That means, Stata will not try to execute it as a command. 
+  You can use comments to explain what your script does.</p>
+<p>In the example do-file below, we use three differnt types of comments:</p>
+<ul>
+<li>double forward slash //</li>
+<li>asterisk *</li>
+<li>forward slash-asterisk combination /**/</li>
+</ul>
+<p>In line 1 the double forward slash is being used to turn the first line into a comment. The // can be used for the title of 
+  the do-file or a section title within your do-file.</p>
+<p>The other character that can be used to create comments is the asterisk. In line 3-5, the astrisk is used to comment out each 
+  line of that three-line paragraph about the dataset.</p>
+<p>The forward slash-asterisk combination /**/ can be used within a line to add a comment after a command (see line 7).</p>
+<br>
+<br>
+<img src="screenshots/example_do_file.png">
+<h3><a href="#running-a-do-file" id="running-a-do-file">Running a do-file</a></h3>
+<p>You can use the Ctrl+D (Windows) Cmd+D (Mac) command to run the whole file. To only run a single line or a selection of 
+  lines, highlight the lines and then use the Shift+Ctrl+D (Windows) or Shift+Cmd+D (Mac) shortcut.</p>
+<br>
+<br>
+<h3><a href="#exercise-do-files" id="exercise-do-files">Exercise: Do-files</a></h3>
+<ul>
+<li>Create a new do-file to reproduce the commands from the previous session on 
+Inspecting a dataset. See the commands below.</li>
+<li>Add a comment in the first line to describe what your do-file does.</li>
+<li>Copy the commands from the previous exercise into your do-file.</li>
+<li>Run the whole do-file.</li>
+<li>Run only the first three commands.</li>
+</ul>
+<br>
+<pre><code>clear all
+webuse census5
+describe
+list in 1/10
+list marriage_rate divorce_rate
+list marriage_rate divorce_rate in 1/10
+</code></pre>
+<br>
+<br>
+<br>
+<h2><a href="#creating-frequency-tables" id="creating-frequency-tables">Creating frequency tables</a></h2>
+<h3><a href="#creating-one-and-two-way-frequency-tables" id="creating-one-and-two-way-frequency-tables">Creating one- and two-way 
+  frequency tables</a></h3>
+<p>With the tabulate command, you can create one- and two-way frequency tables. We’re going to start with a simple frequency table 
+  for the hiqual variable. The tabulate command can be abbreviated as tab. In this example, we are again working with the lfs2017 dataset.</p>
+<pre><code>. use lfs2017, clear
+
+. tab hiqual
+
+         Highest qualification |
+           (detailed grouping) |      Freq.     Percent        Cum.
+-------------------------------+-----------------------------------
+                     No answer |         11        0.11        0.11
+          Degree or equivalent |      3,446       34.13       34.24
+              Higher education |        982        9.73       43.97
+     GCE A level or equivalent |      2,312       22.90       66.87
+GCSE grades A*-C or equivalent |      2,037       20.18       87.04
+           Other qualification |        728        7.21       94.26
+              No qualification |        503        4.98       99.24
+                    Don't know |         77        0.76      100.00
+-------------------------------+-----------------------------------
+                         Total |     10,096      100.00
+
+</code></pre>
+<br>
+<p>You can also create a two-way frequency table with the tabulate command. In the example below we look at the relationship 
+  between the sex and hiqual variables. The first variable sex will go to the rows. The second variable hiqual will go to the columns.</p>
+<pre><code>. tab sex hiqual
+
+        Sex of |                        Highest qualification (detailed grouping)
+    respondent | No answer  Degree or  Higher ed  GCE A lev  GCSE grad  Other qua  No qualif  Don't kno |     Total
+---------------+----------------------------------------------------------------------------------------+----------
+          Male |         6      1,590        434      1,234        870        403        258         46 |     4,841 
+        Female |         5      1,856        548      1,078      1,167        325        245         31 |     5,255 
+---------------+----------------------------------------------------------------------------------------+----------
+         Total |        11      3,446        982      2,312      2,037        728        503         77 |    10,096 
+
+</code></pre>
+<br>
+<p>To display percentages instead of frequencies, we can add the row and col options. The row option will add the row percentages, 
+  while col will add the column percentages. Per cell, the values from top to bottom reflect the frequency, row percentage and column 
+  percentage.</p>
+<p>For instance, in the first cell (Male, No answer) there are 6 observations. 0.12 % of male respondents answered with “No answer” 
+  and 54.55% of those that didn’t provide an answer were male.</p>
+<pre><code>. tab sex hiqual, row col
+
++-------------------+
+| Key               |
+|-------------------|
+|     frequency     |
+|  row percentage   |
+| column percentage |
++-------------------+
+
+        Sex of |                        Highest qualification (detailed grouping)
+    respondent | No answer  Degree or  Higher ed  GCE A lev  GCSE grad  Other qua  No qualif  Don't kno |     Total
+---------------+----------------------------------------------------------------------------------------+----------
+          Male |         6      1,590        434      1,234        870        403        258         46 |     4,841 
+               |      0.12      32.84       8.97      25.49      17.97       8.32       5.33       0.95 |    100.00 
+               |     54.55      46.14      44.20      53.37      42.71      55.36      51.29      59.74 |     47.95 
+---------------+----------------------------------------------------------------------------------------+----------
+        Female |         5      1,856        548      1,078      1,167        325        245         31 |     5,255 
+               |      0.10      35.32      10.43      20.51      22.21       6.18       4.66       0.59 |    100.00 
+               |     45.45      53.86      55.80      46.63      57.29      44.64      48.71      40.26 |     52.05 
+---------------+----------------------------------------------------------------------------------------+----------
+         Total |        11      3,446        982      2,312      2,037        728        503         77 |    10,096 
+               |      0.11      34.13       9.73      22.90      20.18       7.21       4.98       0.76 |    100.00 
+               |    100.00     100.00     100.00     100.00     100.00     100.00     100.00     100.00 |    100.00 
+
+</code></pre>
+<br>
+<h3><a href="#exercise-creating-frequency-tables" id="exercise-creating-frequency-tables">Exercise: Creating frequency tables</a></h3>
+<p>There is growing evidence that breastfeeding improves cognitive development of infants. The MCS_testscore dataset contains data on 
+  the Foundation Stage Profile scores, which is a teacher assessment of children’s development at the end of reception year, and amongst 
+  many other data also data on the months a child has been breastfed. We can use a frequency table to explore whether we can find evidence 
+  for a relationship between the length of breastfeeding and the foundation stage profile scores on the descriptive level in this dataset.</p>
+<ul>
+<li>Open the MCS_testscore dataset, which is in the files folder.</li>
+<li>The variables we are interested in are fsp (quartiles for the foundation 
+stage profile score) and mbreastt (lenght of breastfeeding in months).
+Create a two-way frequency table that lists the months of breastfeeding in the 
+rows and the fsp score quartiles in the columns. Also include percentages for 
+the rows.
+</li>
+<li>Is the data in line with the notion that breastfeedind improves cognitive 
+development?</li>
+</ul>
+<br>
+<br>
+<br>
+<h2><a href="#computing-variables" id="computing-variables">Computing variables</a></h2>
+<h3><a href="#computing-a-new-variable" id="computing-a-new-variable">Computing a new variable</a></h3>
+<p>With the generate command we can compute new variables in our dataset. For instance, we can calculate a new variable for the annual 
+  income based on the weekly income which is listed in the grosswk variable.</p>
+<p>We can abbreviate the generate command with gen. After gen we specify the name of the new variable for the yearly income as grossyr. 
+  After the = sign, we write an expression to calculate the values of the new variable. We multiply the values from the grosswk variable, 
+  the weekly income, by 52 to calculate the approximate annual income and assign the calculated values to a new variable called grossyr.</p>
+<pre><code>. use lfs2017, clear
+
+. gen grossyr = grosswk*52
+
+</code></pre>
+<br>
+<p>We can now use the summarize command to compare the mean and standard deviation of the grosswk and grossyr variables.</p>
+<pre><code>. sum grossyr grosswk
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+     grossyr |     10,096     27131.9    27189.54        260    1199952
+     grosswk |     10,096    521.7672    522.8757          5      23076
+
+</code></pre>
+<br>
+<br>
+<h3><a href="#replacing-a-variable" id="replacing-a-variable">Replacing a variable</a></h3>
+<p>The replace command enables you to overwrite an existing variable in your dataset. As an illustration, let us replace the values of 
+  the newly created grossyr variable, using the same expression we used to create the grossyr variable.</p>
+<pre><code>. replace grossyr = grosswk*52
+(0 real changes made)
+
+</code></pre>
+<br>
+<p>Since we used the same formula, the values in grossyr haven’t effectively changed.</p>
+<pre><code>. sum grossyr grosswk
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+     grossyr |     10,096     27131.9    27189.54        260    1199952
+     grosswk |     10,096    521.7672    522.8757          5      23076
+
+</code></pre>
+<br>
+<br>
+<h3><a href="#exercise-computing-variables" id="exercise-computing-variables">Exercise: Computing variables</a></h3>
+<p>The auto dataset lists the turn circle, which is the radius of the smallest circular turn a car can make. To determine in how far the 
+  turn circle depends on a car’s length, we want to calculate the ratio of the turn circle and the length.</p>
+<ul>
+<li>Open the auto dataset using the **webuse** command</li>
+<li>Convert the length variable, which lists the length of a car in inches, 
+to feet (12 inch = 1 ft). Overwrite the length variable.</li>
+<li>Calculate a new variable TLrat as the ratio of the turn circle and the 
+length in feet.</li>
+<li>Print the mean and standard deviation of the new variable.</li>
+</ul>
+<br>
+<br>
+<br>
+<h2><a href="#saving-data" id="saving-data">Saving data</a></h2>
+<h2><a href="#saving-as-new-file-and-replacing-files" id="saving-as-new-file-and-replacing-files">Saving as new file and replacing files</a></h2>
+<p>We have now added a new variable to our dataset, the grossyr variable. With the save command we can save changes we made to our dataset. 
+  If you want to save the dataset under a new name, you have to specify the new file name following save.</p>
+<pre><code>use lfs2017, clear
+
+save lfs2017b
+</code></pre>
+<br>
+<p>Alternatively, if you wanted to overwrite the existing file, you can use save with the replace option.</p>
+<pre><code>save, replace
+</code></pre>
+<br>
+<p>To replace an existing file, you have to specify the file to be replaced and also add the replace option. For instance, assuming I am 
+  currently working on the lfs2017_raw file, I made some changes to my dataset and now, I want to overwrite it under the already existing 
+  file lfs2017, I would have to use the command as below.</p>
+<pre><code>save lfs2017, replace
+</code></pre>
+<br>
+<br>
+<h3><a href="#exercise-saving-data" id="exercise-saving-data">Exercise: Saving data</a></h3>
+<ul>
+<li>Save the lfs2017 dataset under the new name lfs2017_raw.</li>
+<li>The grosswk variable lists the weekly income in Pound Sterling. 
+Create a new variable for the weekly income in USD. The conversion is 1 
+GBP = 1.24 USD.</li>
+<li>Save the dataset with the newly calculated variable under lfs2017.</li>
+</ul>
