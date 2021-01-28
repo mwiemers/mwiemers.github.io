@@ -1,0 +1,254 @@
+<head>
+  <link rel="stylesheet" type="text/css" href="stmarkdown.css">
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+<link rel="stylesheet" type="text/css" href="/css/stmarkdown.css">
+
+</head>
+
+
+<!-- Side navigation -->
+<div class="sidenav">
+  <a href="#linear-regression">Simple Linear Regression</a>
+  <a href="#scatter-plots">Scatter plots</a>
+  <a href="#running-a-linear-regression">Running a simple linear regression</a>
+  <a href="#scatter-plot-with-fitted-line">Scatter plot with fitted line</a>
+  <a href="#exercise-simple-linear-regression">Exercise: Simple linear regression</a>
+  <a href="#multiple-linear-regression">Multiple Linear Regression</a>
+  <a href="#scatter-matrix">Scatter matrix</a>
+  <a href="#running-multiple-linear-regression">Running a multiple linear regression</a>
+  <a href="#correlation-matrix">Correlation matrix</a>
+  <a href="#exercise-multiple-linear-regression">Exercise: Running a multiple linear regression</a>
+  </div>
+<div class="main">
+
+<h1><a href="#stata-practical-3-linear-regression" id="stata-practical-3-linear-regression">Stata practical 3: Linear Regression</a></h1>
+<p>In this practical session, you will learn to:</p>
+<ul>
+    <li>Use familiar Stata commands to explore a dataset prior to running a 
+  regression analysis.</li>
+    <li>Create and customize scatter plots</li>
+    <li>Run a simple linear regression and read the analysis output.</li>
+    <li>Create scatter plots for a set of variables using a scatter matrix</li>
+    <li>Run a multiple linear regression and read the analysis output.</li>
+    <li>Create a correlation matrix.</li>
+</ul>
+<br>
+<br>
+<h2><a href="#linear-regression" id="linear-regression">Linear Regression</a></h2>
+<p>Stata allows you to easily perform and visualise simple linear regression.</p>
+<p>For this example, we will use the sample dataset <strong>nlsw88.dta</strong> in-built in Stata. We can access this dataset with the <strong>sysuse</strong> command. Add the <em>clear</em> option, if a dataset is already loaded in Stata.</p>
+<pre><code>. sysuse nlsw88.dta, clear
+(NLSW, 1988 extract)
+
+</code></pre>
+<p>Let us start by inspecting the variables in the dataset. We use the describe command, to get an overview of all variables in the dataset and what they represent.</p>
+<pre><code>. describe
+
+Contains data from C:\Program Files (x86)\Stata15\ado\base/n/nlsw88.dta
+  obs:         2,246                          NLSW, 1988 extract
+ vars:            17                          1 May 2016 22:52
+ size:        60,642                          (_dta has notes)
+--------------------------------------------------------------------------------
+              storage   display    value
+variable name   type    format     label      variable label
+--------------------------------------------------------------------------------
+idcode          int     %8.0g                 NLS id
+age             byte    %8.0g                 age in current year
+race            byte    %8.0g      racelbl    race
+married         byte    %8.0g      marlbl     married
+never_married   byte    %8.0g                 never married
+grade           byte    %8.0g                 current grade completed
+collgrad        byte    %16.0g     gradlbl    college graduate
+south           byte    %8.0g                 lives in south
+smsa            byte    %9.0g      smsalbl    lives in SMSA
+c_city          byte    %8.0g                 lives in central city
+industry        byte    %23.0g     indlbl     industry
+occupation      byte    %22.0g     occlbl     occupation
+union           byte    %8.0g      unionlbl   union worker
+wage            float   %9.0g                 hourly wage
+hours           byte    %8.0g                 usual hours worked
+ttl_exp         float   %9.0g                 total work experience
+tenure          float   %9.0g                 job tenure (years)
+--------------------------------------------------------------------------------
+Sorted by: idcode
+
+</code></pre>
+<p>Although it is possible to include categorical variables in a linear regression model, in this tutorial, we will only consider numerical non-categorical variables.</p>
+<p>Examples of a categorical variable is sex, race or occupation. These have a limited set of values and there is no inherent order in the different values.</p>
+<p>Examples of numerical non-categorical variables are age, wage, hours. These variables might have an unlimited set of values or they can be ordered in a pre-defined way.</p>
+<p>To have a look at the whole dataset and to narrow down potential variables for our analysis, we use the <strong>browse</strong> command.</p>
+<pre><code>. browse
+
+</code></pre>
+<img src="screenshots/browse.png" height="500" />
+<p>We are interested in the two variables <strong>wage</strong> and <strong>tenure</strong>. Performing simple summary statistics can help you to better understand the distribution of the variables.</p>
+<pre><code>. sum tenure wage
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+      tenure |      2,231     5.97785    5.510331          0   25.91667
+        wage |      2,246    7.766949    5.755523   1.004952   40.74659
+
+</code></pre>
+<h3><a href="#scatter-plots" id="scatter-plots">Scatter Plots</a></h3>
+<p>Stata has a very easy-to-use graphical interface to create all plots. However, it is useful to get used to using code instead of the graphical interface as early as possible to be able to work your way up to more sophisticated graphs.</p>
+<p>Here&rsquo;s how you make a very simple scatter plot in Stata using the <strong>scatter</strong> command. Remember that the first variable is always displayed on the Y axis and the second variable is displayed on the X axis.</p>
+<pre><code>. scatter wage tenure
+
+. graph export first_scatter.png, replace
+(file first_scatter.png written in PNG format)
+
+</code></pre>
+<img src="screenshots/first_scatter.png" height="300" />
+<p>The command <strong>scatter</strong> has a range of options that you can tweak to customise your plot. For example, you could change the colour, symbol and size of the markets in the plot.</p>
+<pre><code>. scatter wage tenure, msize(0.5) mcolor(black) msymbol(diamond)
+
+. graph export second_scatter.png, replace
+(file second_scatter.png written in PNG format)
+
+</code></pre>
+<img src="screenshots/second_scatter.png" height="300" />
+<p>The best way to find out about all the different scatter plot options is to use the <strong>help</strong> command and to play around with the different options.</p>
+<pre><code>. help scatter
+
+</code></pre>
+<img src="screenshots/help_scatter.png" height="500" />
+<h3><a href="#running-a-linear-regression" id="running-a-linear-regression">Running a linear regression</a></h3>
+<p>Now that we have visualised the relationship between tenure and wage on a scatter plot, it is time to find out if there is an actual linear relationship between the two variables. We can find out by using the <strong>regress</strong> command, which will calculate a model to estimate the relationship between the wage and tenure variable.</p>
+<p>Remember to type the <em>dependent</em> variable first and the <em>independent</em> variable second.</p>
+<pre><code>. regress wage tenure
+
+      Source |       SS           df       MS      Number of obs   =     2,231
+-------------+----------------------------------   F(1, 2229)      =     72.66
+       Model |  2339.38077         1  2339.38077   Prob &gt; F        =    0.0000
+    Residual |  71762.4469     2,229  32.1949066   R-squared       =    0.0316
+-------------+----------------------------------   Adj R-squared   =    0.0311
+       Total |  74101.8276     2,230  33.2295191   Root MSE        =    5.6741
+
+------------------------------------------------------------------------------
+        wage |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      tenure |   .1858747   .0218054     8.52   0.000     .1431138    .2286357
+       _cons |   6.681316   .1772615    37.69   0.000     6.333702    7.028931
+------------------------------------------------------------------------------
+
+</code></pre>
+<p>As a result, Stata gives me a range of useful statistics. Perhaps the most interesting is the first line lower table (tenure), in which we see that there is a regression coefficient of <strong>0.1858747</strong>, alongside a standard error of <strong>0.0218054</strong>.</p>
+<p>We can interpret this as each year increase in work tenure is associated with an increase of 0.1858747 in hourly wage. The standard error gives us an indication of<br />
+how certain this estimation is. The lower the standard error, the more certain we can be that the regression coefficient is a good estimation of the relationship between the two variables.</p>
+<p>The p-value (P&gt;|t|) shows that the correlation is statistically significant, as it is below the critical level of 0.05. The _cons line shows us values about the <em>intercept</em>. These are usually not very interesting for the interpretation of the data. The intercept is the predicted value for a tenure of 0 years, which is <strong>6.681316</strong>.</p>
+<h3><a href="#scatter-plot-with-fitted-line" id="scatter-plot-with-fitted-line">Scatter plot with fitted line</a></h3>
+<p>Based on the model that Stata has calculated, we can now create a new variable with predicted values for wage. We can use the <strong>predict</strong> command to generate this new variable with predicted values. We create a new variable called <strong>pred_wage</strong> by typing:</p>
+<pre><code>. predict pred_wage, xb
+(15 missing values generated)
+
+</code></pre>
+<p>Using the fitted values from <strong>pred_wage</strong>, we can now add a fitted line to our scatter plot.</p>
+<p>With the <strong>twoway</strong> command, we can combine a scatter and a line plot in a single chart. We first plot the scatter and then the line on top. When using <strong>twoway</strong> the <strong>scatter</strong> and <strong>line</strong> command both have to be put in separate parentheses.</p>
+<pre><code>. twoway (scatter wage tenure, msize(0.5)) (line pred_wage tenure)
+
+. graph export third_scatter.png, replace
+(file third_scatter.png written in PNG format)
+
+</code></pre>
+<img src="screenshots/third_scatter.png" height="300" />
+<h3><a href="#exercise-simple-linear-regression" id="exercise-simple-linear-regression">Exercise: Simple linear regression</a></h3>
+<p>Now it&rsquo;s your turn to perform a linear regression using another sample dataset of Stata. You can access this dataset by typing:</p>
+<pre><code>. sysuse auto.dta, clear
+(1978 Automobile Data)
+
+</code></pre>
+<ol>
+    <li>Explore your dataset using the different commands that you have learned so far. In your opinion, on which variables could you perform a linear regression?</li>
+    <li>Make a scatter plot with the mileage of the car (<strong>mpg</strong>) and their weight (<strong>weight</strong>). What do you think is the most likely outcome of your regression analysis?</li>
+    <li>Customise your plot to show the markers in a different colour and symbol.
+        <ol>
+            <li><em>Bonus:</em> Can you show a label with the model of the car in your scatter plot? (<em>Hint</em>: use the option <strong>mlabel</strong> and the variable <strong>make</strong>)</li>
+        </ol>
+    </li>
+    <li>Perform a regression analysis with the variables <strong>mpg</strong> and <strong>weight</strong></li>
+    <li>Fit a regression line on your scatter plot.</li>
+</ol>
+<h2><a href="#multiple-linear-regression" id="multiple-linear-regression">Multiple Linear Regression</a></h2>
+<p>In the next section, we look at an example of multiple linear regression. Here we have multiple predictors, or independent variables. For this, we will be using a life expectancy dataset from the Stata website:</p>
+<pre><code>. use http://www.stata-press.com/data/r13/lifeexp, clear
+(Life expectancy, 1998)
+
+</code></pre>
+<h3><a href="#scatter-matrix" id="scatter-matrix">Scatter Matrix</a></h3>
+<p>First, we can do a preliminary screening of the relationships by creating a scatter matrix using the <strong>graph matrix</strong> command passing all variables that we would like to explore.</p>
+<pre><code>. graph matrix popgrowth lexp gnppc safewater
+
+. graph export scatter_mat.png, replace
+(file scatter_mat.png written in PNG format)
+
+</code></pre>
+<img src="screenshots/scatter_mat.png" height="300" />
+<p>We can also group our scatter matrix by another variable using the <strong>by()</strong> option:</p>
+<pre><code>. graph matrix popgrowth lexp gnppc safewater, by(region)
+
+. graph export scatter_mat2.png, replace
+(file scatter_mat2.png written in PNG format)
+
+</code></pre>
+<img src="screenshots/scatter_mat2.png" height="500" />
+<p>Or we can only show half of the graph:</p>
+<pre><code>. graph matrix popgrowth lexp gnppc safewater, half
+
+. graph export scatter_mat3.png, replace
+(file scatter_mat3.png written in PNG format)
+
+</code></pre>
+<img src="screenshots/scatter_mat3.png" height="300" />
+<h3><a href="#running-multiple-linear-regression" id="running-multiple-linear-regression">Running a multiple Linear Regression</a></h3>
+<p>Similar to the previous example, we can use the <strong>regress</strong> command for multiple variables, with the dependent variable going first.</p>
+<pre><code>. regress popgrowth lexp gnppc safewater
+
+      Source |       SS           df       MS      Number of obs   =        37
+-------------+----------------------------------   F(3, 33)        =      4.28
+       Model |  8.66091026         3  2.88697009   Prob &gt; F        =    0.0117
+    Residual |  22.2693603        33  .674829098   R-squared       =    0.2800
+-------------+----------------------------------   Adj R-squared   =    0.2146
+       Total |  30.9302705        36  .859174181   Root MSE        =    .82148
+
+------------------------------------------------------------------------------
+   popgrowth |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+        lexp |  -.0611253   .0480779    -1.27   0.212    -.1589404    .0366899
+       gnppc |   -.000031   .0000196    -1.58   0.124     -.000071    8.96e-06
+   safewater |   .0066364    .014125     0.47   0.642    -.0221012     .035374
+       _cons |   5.477221   2.803195     1.95   0.059     -.225923    11.18036
+------------------------------------------------------------------------------
+
+</code></pre>
+<p>The resulting table looks very similar to the results of the simple linear regression and you can check the relevant statistics for each variable.</p>
+<p>This analysis yields and interesting pattern. The upper right table gives us statistics on the model as such. The R-squared value indicates how well the model predicts the The p-value (Prob &gt; F) is below the critical value of 0.05, which means that there is sufficient evidence for us to conclude that the predictors (lexp, gnppc, safewater) together predict the independent variable popgrowth.</p>
+<p>At the same time, we can see in the lower table that none of the regression coefficients is statistically significant. This indicates that there is high correlation between our predictors.</p>
+<h3><a href="#correlation-matrix" id="correlation-matrix">Correlation matrix</a></h3>
+<p>We can use the <strong>pwcorr</strong> command to get a correlation matrix for all variables in our analysis.</p>
+<pre><code>. pwcorr popgrowth lexp gnppc safewater
+
+             | popgro~h     lexp    gnppc safewa~r
+-------------+------------------------------------
+   popgrowth |   1.0000 
+        lexp |  -0.4360   1.0000 
+       gnppc |  -0.3580   0.7182   1.0000 
+   safewater |  -0.4280   0.8297   0.7063   1.0000 
+
+</code></pre>
+<h3><a href="#exercise-multiple-linear-regression" id="exercise-multiple-linear-regression">Exercise: Multiple linear regression</a></h3>
+<p>Now, try to perform a multiple linear regression by yourself. We use the <strong>auto</strong> dataset again:</p>
+<pre><code>. sysuse auto.dta, clear
+(1978 Automobile Data)
+
+</code></pre>
+<ol>
+    <li>Make a scatter matrix of the variables <strong>mpg</strong>, <strong>price</strong>, <strong>weight</strong> and <strong>length</strong>. What do you think is the most likely relationship between the variables?</li>
+    <li>Can you show two different plots for foreign and domestic cars?</li>
+    <li>Perform a regression analysis with the previously mentioned variables. What do the results mean?</li>
+</ol>
