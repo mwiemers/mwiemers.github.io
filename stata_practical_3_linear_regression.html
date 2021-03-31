@@ -119,18 +119,10 @@ Sorted by: idcode
 <p>Stata has a very easy-to-use graphical interface to create all plots. However, it is useful to get used to using code instead of the graphical interface as early as possible to be able to work your way up to more sophisticated graphs.</p>
 <p>Here&rsquo;s how you make a very simple scatter plot in Stata using the <strong>scatter</strong> command. Remember that the first variable is always displayed on the Y axis and the second variable is displayed on the X axis.</p>
 <pre><code>. scatter wage tenure
-
-. graph export first_scatter.png, replace
-(file first_scatter.png written in PNG format)
-
 </code></pre>
 <img src="screenshots/first_scatter.png" height="300" />
 <p>The command <strong>scatter</strong> has a range of options that you can tweak to customise your plot. For example, you could change the colour, symbol and size of the markets in the plot.</p>
 <pre><code>. scatter wage tenure, msize(0.5) mcolor(black) msymbol(diamond)
-
-. graph export second_scatter.png, replace
-(file second_scatter.png written in PNG format)
-
 </code></pre>
 <img src="screenshots/second_scatter.png" height="300" />
 <p>The best way to find out about all the different scatter plot options is to use the <strong>help</strong> command and to play around with the different options.</p>
@@ -171,10 +163,6 @@ how certain this estimation is. The lower the standard error, the more certain w
 <p>Using the fitted values from <strong>pred_wage</strong>, we can now add a fitted line to our scatter plot.</p>
 <p>With the <strong>twoway</strong> command, we can combine a scatter and a line plot in a single chart. We first plot the scatter and then the line on top. When using <strong>twoway</strong> the <strong>scatter</strong> and <strong>line</strong> command both have to be put in separate parentheses.</p>
 <pre><code>. twoway (scatter wage tenure, msize(0.5)) (line pred_wage tenure)
-
-. graph export third_scatter.png, replace
-(file third_scatter.png written in PNG format)
-
 </code></pre>
 <img src="screenshots/third_scatter.png" height="300" />
 <h3><a href="#exercise-simple-linear-regression" id="exercise-simple-linear-regression">Exercise: Simple linear regression</a></h3>
@@ -203,26 +191,14 @@ how certain this estimation is. The lower the standard error, the more certain w
 <h3><a href="#scatter-matrix" id="scatter-matrix">Scatter Matrix</a></h3>
 <p>First, we can do a preliminary screening of the relationships by creating a scatter matrix using the <strong>graph matrix</strong> command passing all variables that we would like to explore.</p>
 <pre><code>. graph matrix popgrowth lexp gnppc safewater
-
-. graph export scatter_mat.png, replace
-(file scatter_mat.png written in PNG format)
-
 </code></pre>
 <img src="screenshots/scatter_mat.png" height="300" />
 <p>We can also group our scatter matrix by another variable using the <strong>by()</strong> option:</p>
 <pre><code>. graph matrix popgrowth lexp gnppc safewater, by(region)
-
-. graph export scatter_mat2.png, replace
-(file scatter_mat2.png written in PNG format)
-
 </code></pre>
 <img src="screenshots/scatter_mat2.png" height="500" />
 <p>Or we can only show half of the graph:</p>
 <pre><code>. graph matrix popgrowth lexp gnppc safewater, half
-
-. graph export scatter_mat3.png, replace
-(file scatter_mat3.png written in PNG format)
-
 </code></pre>
 <img src="screenshots/scatter_mat3.png" height="300" />
 <h3><a href="#running-multiple-linear-regression" id="running-multiple-linear-regression">Running a multiple Linear Regression</a></h3>
