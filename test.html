@@ -10,547 +10,519 @@
 </head>
 
 <body>
+  
 
-
-
-<div class="sidenav">
-       <a href="##access-to-datasets">Access to Datasets</a>
-       <a href="#changing-the-working-directory_section" >Changing the working directory</a>
-       <a href="#exercise-changing-the-working-directory">Exercise: Changing the workign directory</a>
-       <a href="#loading-data-into-stata">Loading data into Stata</a>
-       <a href="#exercise-loading-data">Exercise: Loading data</a>
-       <a href="#inspecting-a-dataset">Inspecting a dataset</a>
-       <a href="#exercise-inspecting-data">Exercise: Inspecting data</a>
-       <a href="#summary-statistics">Summary statistics</a>
-       <a href="#exercise-summary-statistics">Exercise: Summary statistics</a>
-       <a href="#evaluation">Final task: Please give us your feedback!</a>
-     </div>
-   <div class="main">
-
-
-<h1><a href="#stata-practical-1-importing-and-inspecting-data" id="stata-practical-1-importing-and-inspecting-data">Stata practical 1: Importing, inspecting and summarizing data</a></h1>
-
-<h2>What is Stata?</h2>
-<p>Stata is a general purpose statistical analysis software, similar to SPSS. You can use it to preprocess, analyse and visualise data.</p>
-<p>It is mostly used in research and particularly in the fields of economics, political science, and the social sciences in 
-	general.</p> 
-<p>In Stata you can either use the menus from the graphical user interface or write commands yourself.
-	Most Stata users write commands and do not use the user interface. There are many advantages to learning commands. 
-	A script can be shared, edited by colleagues and collaborators and made available with publications. By using scripts 
-	for your research, you promote transparency and reproducibility. Since writing commands has many advantages and 
-	the majority of Stata users write scripts, we will also teach you how to write commands in this workshop series.
-</p>
-<h2>More information on how the session is run</h2>
-<b>How to work together</b>: 
-<ul>
-    <li>Plesase turn on your microphone and webcam.</li>
-    <li>One shares the screen and the other requests remote control. </li>
-    <li>Take turns on who types for each exercise.</li>
-</ul>
-<b>What to do when getting stuck</b>:
-<ol>
-    <li>Ask the trainer if you struggle to find a solution.</li>
-    <li>Use the help command. To get help with a specific command type <b>help "command name"</b></li>
-    <li>Search online. The statalist.org forum is usually the most useful resource.</li>
-</ol>
-	   
-<b>In this practical session, you will learn to:</b>
-<ul>
-       <li>change the working directory</li>
-       <li>import stata and csv documents</li>
-       <li>print an overview of the variables in a dataset</li>
-       <li>print a dataset and subsets of the data</li>
-       <li>create a summary of continuous variables</li>
-</ul>
-<br>
-<br>
-	   
-<h2><a href="#access-to-datasets" id="access-to-datasets">Access to Datasets</a></h2>
-<p>Please use <a href="https://lsecloud-my.sharepoint.com/:f:/g/personal/m_wiemers_lse_ac_uk/Ej_vhZWIz5RFthJmQLn-DBkB345HzPU5GGgGjsUHKv4UeA?e=uRRnNu"><b>this link</b></a> 
-   to get access to the datasets that you will be using in the exercises</p>
-<br>
-<br>
-<h2><a href="#changing-the-working-directory_section" id="changing-the-working-directory_section">Changing the working directory</a></h2>
-<p>When loading a dataset, Stata will always look for the file in the working directory, unless you specify the whole path to the file.</p>
-<p>Although you can always specify the whole path to open a file that is not located in the working directory, it makes sense, to change the working directory to where your datasets are located at the beginning of your analysis. This will make it easier to load and switch between different datasets, since you only have to specify the file name and not the whole path to load a dataset.</p>
-<br>
-<br>
-<h3><a href="#printing-the-current-working-directory" id="printing-the-current-working-directory">Printing the current working directory</a></h3>
-<p>The working directory is displayed on the bottom of the main Stata window, just below the Command field.</p>
-<p>You can also use the <b>pwd</b> command to print the working directory.</p>
-<pre><code>. pwd
-/Users/michaelwiemers
-
-</code></pre>
-<br>
-<h3><a href="#changing-the-working-directory" id="changing-the-working-directory">Changing the working directory</a></h3>
-<p>You can change the working directory by using the <b>cd</b> command as below. Notice that the path has to be put in quotations.</p>
-<pre><code>. cd &quot;/Users/michaelwiemers/OneDrive - London School of Economics/DSL/datasets/&quot;
-/Users/michaelwiemers/OneDrive - London School of Economics/DSL/datasets
-
-</code></pre>
-<p>Stata will return an error, as in the example below, when the folder does not exist on the computer.</p>
-<pre><code>. cd &quot;/Users/mickey_mouse&quot;
-unable to change to /Users/mickey_mouse
-r(170);
-
-</code></pre>
-<br>
-<h3><a href="#exercise-changing-the-working-directory" id="exercise-changing-the-working-directory">Exercise: Changing the working directory</a></h3>
-<ol>
-	<li>Print the current working directory.</li>
-	<li>Change the working directory to where the datasets lfs2017.dta,  
-	gapminder.csv and MCS_testscores.dta are located on your computer.</li>
-	<li>Print the working directory again to verify that it has been changed.</li>
-</ol>
-<br>
-<br>
-<h2><a href="#loading-data-into-stata" id="loading-data-into-stata">Loading data into Stata</a></h2>
-<p>In this section you will learn how to import Stata datasets (.dta) and flat files, i.e. comma or tab separated value files (.csv or .tsv).</p>
-<br>
-<h3><a href="#loading-a-dta-file-stata-dataset" id="loading-a-dta-file-stata-dataset">loading a .dta file (Stata dataset)</a></h3>
-<p>Now that Stata knows where your datasets are located, we can load a dataset without having to specify the whole path. We can simply refer to the file name.</p>
-<p>We are going to load the lfs2017.dta file. This dataset contains data from the labour force survey from 2017. This dataset contains data on a persons age, sex, income, highest qualification and more.</p>
-<p>We can load a .dta file, with the <b>use</b> command.</p>
-<pre><code>. use lfs2017
-
-</code></pre>
-<p>You can see that the variables pane on the right now lists all variables in the lfs2017 dataset.</p>
-<img src="screenshots/use_01_mac.png" alt="Stata user interface showing variables in the variables pane after having loaded a dataset">
-<br>
-<br>
-<h3><a href="#loading-a-public-dataset-from-stata-presscom" id="loading-a-public-dataset-from-stata-presscom">Loading a public dataset from stata-press.com</a></h3>
-<p>There are a number of datasets in stata format available from the stata-press.com website. You can use this link for a list of all available datasets (unfortunately, without description):</p>
-<pre><code>https://www.stata-press.com/data/r15/u.html
-</code></pre>
-<p>To load the auto dataset from the stata website, we use the <b>webuse</b> command followed by the name of the dataset.</p>
-<pre><code>. webuse auto
-(1978 Automobile Data)
-
-</code></pre>
-<br>
-<h3><a href="#loading-a-csv-file" id="loading-a-csv-file">Loading a csv file</a></h3>
-<p>We can use the <b>import delimited</b> command to import a csv file. In the example below we are importing the data stored in the gapminder.csv file, which is from the gapminder.org website, and lists unemployment, life expectancy and gdp per capita, for a sample of countries from across the world.</p>
-<p>As you can see below, this commad returns an error. This is because we already have a dataset loaded in Stata and the error warns us that by loading the new dataset, unsaved changes to the currently loaded dataset might be lost.</p>
-<pre><code>. import delimited &quot;gapminder.csv&quot;
-no; data in memory would be lost
-r(4);
-
-</code></pre>
-<p>We have to first remove the currently loaded dataset with the <b>clear</b> command.</p>
-<pre><code>. clear
-
-. import delimited &quot;gapminder.csv&quot;
-(15 vars, 427 obs)
-
-</code></pre>
-<br>
-	   
-<p>Alternatively, we can add <i>clear</i> as an option to the <b>import delimited</b> command or any 
-	other command to import data.</p>
-<pre><code>. import delimited &quot;gapminder.csv&quot;, clear
-(15 vars, 427 obs)
-
-</code></pre>
-<br>
-	   
-<h3><a href="#exercise-loading-data" id="exercise-loading-data">Exercise: Loading data</a></h3>
-<ol>
-	<li>Load the lfs2017 dataset using the <b>use</b> command.</li>
-	<li>Load the citytemp.dta dataset from the Stata website.</li>
-	<li>Load the csv file gapminder.csv.</li>
-	<li>Notice how you can see the variables in the variables pane change everytime 
-	you load a different dataset.</li>
-</ol>
-<br>
-<br>
-<h2><a href="#inspecting-a-dataset" id="inspecting-a-dataset">Inspecting a dataset</a></h2>
-<p>In this section, we will focus on a few commands to inspect a dataset.</p>
-<p>We&rsquo;re first going to re-open the lfs2017 dataset.</p>
-<pre><code>. use lfs2017, clear
-
-</code></pre>
-<br>
-<h3><a href="#summary-of-a-dataset" id="summary-of-a-dataset">Summary of a dataset</a></h3>
-<p>The <b>describe</b> command produces a summary of a dataset. It lists the total number of observations, variables and the size of the dataset. Apart from the <i>variable name</i> and the <i>variable label</i>, which are also displayed in the Variables pane in the top right in the main Stata window, it also lists the <i>storage type</i>, <i>display format</i> and the <i>value label</i>.</p>
-<p>The <i>storage type</i> refers to how the values of a variable are stored in memory. Different storage types can hold different types of information, i.e. numerical or text, and can store information of different size.</p>
-<p>The <i>display format</i> refers to how the information is displayed, that is, the number of digits and decimals and the alignment.</p>
-<p>The <i>value label</i> refers to the text labels that are being associated to the numerical values in the dataset. The sex variable has the numerical values 1 and 2, but when looking at the data you will see the labels &lsquo;Female&rsquo; and &lsquo;Male&rsquo; displayed. This is because the values 1 and 2 have received the corresponding labels &lsquo;Male&rsquo; and &lsquo;Female&rsquo;.</p>
-<pre><code>describe
-
-Contains data from lfs2017.dta
-  obs:        10,096                          
- vars:             9                          3 Aug 2020 17:50
- size:       100,960                          
-------------------------------------------------------------------------------------------------------------------------
-              storage   display    value
-variable name   type    format     label      variable label
-------------------------------------------------------------------------------------------------------------------------
-age             byte    %8.0g      AGE        Age of respondent
-durun           byte    %8.0g      DURUN      Duration of unemployment
-edage           byte    %8.0g      EDAGE      Age when completed full time education
-emplen          byte    %8.0g      EMPLEN     Length of time with current employer
-ethnicity       byte    %8.0g      ETHUKEUL   Ethnicity (9 categories) UK level
-grosswk         int     %8.0g      GRSSWK     Gross weekly pay in main job (Government scheme or employee)
-hiqual          byte    %8.0g      HIQUL15D   Highest qualification (detailed grouping)
-sex             byte    %8.0g      SEX        Sex of respondent
-degreesub       byte    %8.0g      UNCOMBMA   Undergraduate main subject area
-------------------------------------------------------------------------------------------------------------------------
-Sorted by: 
-
-</code></pre>
-<br>
-<h3><a href="#printing-the-data" id="printing-the-data">Printing the data</a></h3>
-<p>With the <b>list</b> command, you can print the dataset in the results pane. Depending on the width of your Stata window, a single row might be spread out across several lines in the results pane.</p>
-<pre><code>list
-
-
-       +------------------------------------------------------------------------------------------+
-       | age      durun      edage     emplen   ethnic~y   grosswk     hiqual      sex   degree~b |
-       |------------------------------------------------------------------------------------------|
-10086. |  55   Does not         17   10 years      White       451   GCSE gra   Female   Does not |
-10087. |  66   Does not         15   10 years      White       279   Higher e     Male   Does not |
-10088. |  64   Does not         15   20 years      White       337   GCSE gra   Female   Does not |
-10089. |  74   Does not         17   20 years      White        75   Other qu   Female   Does not |
-10090. |  58   Does not         16   5 years,      White       525   No quali     Male   Does not |
-       |------------------------------------------------------------------------------------------|
-10091. |  59   Does not         17   20 years      White       808   GCSE gra     Male   Does not |
-10092. |  63   Does not         19   6 months      White       423   Higher e   Female   Does not |
-10093. |  60   Does not   Never ha   10 years   Black/Af       208   Other qu   Female   Does not |
-10094. |  59   Does not         16   2 years,      White       463   GCSE gra     Male   Does not |
-10095. |  70   Does not         15   20 years      White       138   GCSE gra   Female   Does not |
-       |------------------------------------------------------------------------------------------|
-10096. |  57   Does not         17   20 years      White       279   GCSE gra     Male   Does not |
-       +------------------------------------------------------------------------------------------+
-
-</code></pre>
-<br>
-<h3><a href="#printing-single-observations-or-a-range-of-observations" id="printing-single-observations-or-a-range-of-observations">Printing single observations or a range of observations</a></h3>
-<p>To display only a specific observation, type <b>list in</b> followed by the observation to be displayed. For instance, to display the 10th observation use this command:</p>
-<pre><code>list in 10
-
-     +----------------------------------------------------------------------------------------+
-     | age      durun      edage     emplen   ethnic~y   grosswk     hiqual    sex   degree~b |
-     |----------------------------------------------------------------------------------------|
- 10. |  16   Does not   Still in   3 months      White        66   GCSE gra   Male   Does not |
-     +----------------------------------------------------------------------------------------+
-
-</code></pre>
-<br>
-<p>To display a range of observations, type <b>list in </b> followed by the first observation, a forward slash and the last observation. For instance, to display observations 1 to 20 use this command:</p>
-<pre><code>list in 1/20
-
-     +------------------------------------------------------------------------------------------+
-     | age      durun      edage     emplen   ethnic~y   grosswk     hiqual      sex   degree~b |
-     |------------------------------------------------------------------------------------------|
-  1. |  17   Does not   Still in   6 months      White        42   GCSE gra   Female   Does not |
-  2. |  16   Does not   Still in   3 months      White        20   GCE A le   Female   Does not |
-  3. |  17   Does not   Still in   6 months      White        60   GCSE gra   Female   Does not |
-  4. |  16   Does not   Still in    1 year,      White        46   GCSE gra   Female   Does not |
-  5. |  17   Does not   Still in   6 months      White        20   GCSE gra   Female   Does not |
-     |------------------------------------------------------------------------------------------|
-  6. |  16   Does not   Still in   3 months      White        65   No quali   Female   Does not |
-  7. |  17   Does not   Still in   3 months      White        36   GCSE gra   Female   Does not |
-  8. |  16   Does not   Still in   Less tha      White        24   GCSE gra     Male   Does not |
-  9. |  16   Does not   Still in   3 months      White        64   No quali   Female   Does not |
- 10. |  16   Does not   Still in   3 months      White        66   GCSE gra     Male   Does not |
-     |------------------------------------------------------------------------------------------|
- 11. |  17   Does not   Still in   6 months      White        62   GCSE gra   Female   Does not |
- 12. |  17   Does not   Still in   6 months      White        90   GCSE gra   Female   Does not |
- 13. |  16   Does not   Still in   6 months      White        75   GCSE gra     Male   Does not |
- 14. |  16   Does not   Still in   6 months      White        55   GCSE gra   Female   Does not |
- 15. |  17   Does not   Still in   3 months      White        40   GCSE gra   Female   Does not |
-     |------------------------------------------------------------------------------------------|
- 16. |  16   Does not   Still in   Less tha      White        55   GCSE gra   Female   Does not |
- 17. |  16   Does not   Still in   3 months      White        39   No quali   Female   Does not |
- 18. |  17   Does not         17    1 year,      White       169   GCSE gra   Female   Does not |
- 19. |  17   Does not         16   3 months      White        58   GCSE gra     Male   Does not |
- 20. |  16   Does not   Still in   Less tha      White        24   GCSE gra   Female   Does not |
-     +------------------------------------------------------------------------------------------+
-
-</code></pre>
-<br>
-<h3><a href="#printing-only-a-subset-of-variables" id="printing-only-a-subset-of-variables">Printing only a subset of variables</a></h3>
-<p>To only display the observations for a specific variable, type <b>list</b> followed by the variable name. Here, we are only printing the values for the age variable.</p>
-<pre><code>list age
-
-
-       +-----+
-       | age |
-       |-----|
-10086. |  55 |
-10087. |  66 |
-10088. |  64 |
-10089. |  74 |
-10090. |  58 |
-       |-----|
-10091. |  59 |
-10092. |  63 |
-10093. |  60 |
-10094. |  59 |
-10095. |  70 |
-       |-----|
-10096. |  57 |
-       +-----+
-
-</code></pre>
-<br>
-<p>To display a subset of variables, type <b>list</b> followed by the different variable names separated with a space.</p>
-<pre><code>list age grosswk sex
-
-
-       +------------------------+
-       | age   grosswk      sex |
-       |------------------------|
-10086. |  55       451   Female |
-10087. |  66       279     Male |
-10088. |  64       337   Female |
-10089. |  74        75   Female |
-10090. |  58       525     Male |
-       |------------------------|
-10091. |  59       808     Male |
-10092. |  63       423   Female |
-10093. |  60       208   Female |
-10094. |  59       463     Male |
-10095. |  70       138   Female |
-       |------------------------|
-10096. |  57       279     Male |
-       +------------------------+
-
-</code></pre>
-<br>
-<p>To display a range of variables type <b>list</b> followed by the first variable, a hyphen and the last variable. The command <b>list grosswk - degreesub</b> will print the observations for the variables starting from ethnicity till sex in the order as appearing in the dataset from left to right.</p>
-<pre><code>list grosswk - degreesub
-
-
-       +----------------------------------------+
-       | grosswk     hiqual      sex   degree~b |
-       |----------------------------------------|
-10086. |     451   GCSE gra   Female   Does not |
-10087. |     279   Higher e     Male   Does not |
-10088. |     337   GCSE gra   Female   Does not |
-10089. |      75   Other qu   Female   Does not |
-10090. |     525   No quali     Male   Does not |
-       |----------------------------------------|
-10091. |     808   GCSE gra     Male   Does not |
-10092. |     423   Higher e   Female   Does not |
-10093. |     208   Other qu   Female   Does not |
-10094. |     463   GCSE gra     Male   Does not |
-10095. |     138   GCSE gra   Female   Does not |
-       |----------------------------------------|
-10096. |     279   GCSE gra     Male   Does not |
-       +----------------------------------------+
-
-</code></pre>
-<br>
-<h3><a href="#printing-only-a-subset-of-variables-for-specific-observations" id="printing-only-a-subset-of-variables-for-specific-observations">Printing only a subset of variables for specific observations</a></h3>
-<p>You can also display a range of observations for a subset of variables. Type <b>list</b> followed by the variable names and then specify which observations should be displayed, with <b>in start/end</b>. For instance, to display the first 10 observations for the variables age, sex and grosswk use this command:</p>
-<pre><code>list age sex grosswk in 1/10
-
-     +------------------------+
-     | age      sex   grosswk |
-     |------------------------|
-  1. |  17   Female        42 |
-  2. |  16   Female        20 |
-  3. |  17   Female        60 |
-  4. |  16   Female        46 |
-  5. |  17   Female        20 |
-     |------------------------|
-  6. |  16   Female        65 |
-  7. |  17   Female        36 |
-  8. |  16     Male        24 |
-  9. |  16   Female        64 |
- 10. |  16     Male        66 |
-     +------------------------+
-
-</code></pre>
-<br>
-<p>You can do the same with a range of variables.</p>
-<pre><code>list grosswk-sex in 1/10
-
-     +-----------------------------+
-     | grosswk     hiqual      sex |
-     |-----------------------------|
-  1. |      42   GCSE gra   Female |
-  2. |      20   GCE A le   Female |
-  3. |      60   GCSE gra   Female |
-  4. |      46   GCSE gra   Female |
-  5. |      20   GCSE gra   Female |
-     |-----------------------------|
-  6. |      65   No quali   Female |
-  7. |      36   GCSE gra   Female |
-  8. |      24   GCSE gra     Male |
-  9. |      64   No quali   Female |
- 10. |      66   GCSE gra     Male |
-     +-----------------------------+
-
-</code></pre>
-<br>
-<h3><a href="#viewing-the-dataset-in-the-data-editor-window" id="viewing-the-dataset-in-the-data-editor-window">Viewing the dataset in the data-editor window</a></h3>
-<p>The <b>browse</b> command is very similar to the list command, in the sense that it will list the observations in your dataset. In contrast to list, the output will be displayed in a new window, called the <i>data-editor</i>, and not in the results pane.</p>
-<pre><code>browse
-
-</code></pre>
-<br>
-<img src="screenshots/browse_01.png" alt="the data editor in view only mode">
-<p>Just as with the list command, you can chose to only display a subset of variables or a range of observations. For instance, to only display the first 10 observations for the variables from grosswk to sex, type the command as below.</p>
-<pre><code>browse grosswk-sex in 1/10
-
-</code></pre>
-<br>
-<img src="screenshots/browse_02_mac.png" alt="the data editor in view only mode">
-<br>
-<h3><a href="#exercise-inspecting-data" id="exercise-inspecting-data">Exercise: Inspecting data</a></h3>
-<ol>
-	<li>Open the census5 dataset from the stata website, which has data from 
-	the 1980 US census</li>
-	<li>Print an overview of the variables.</li>
-	<li>Print the first 10 observations.</li>
-	<li>Print only the marriage and divorce variables.</li>
-	<li>Print only the first 10 observations for the marriage and 
-	divorce variables.</li>
-</ol>
-<br>
-<h2><a href="#summary-statistics" id="summary-statistics">Summary statistics</a></h2>
-<p>The <strong>summarize</strong> command gives you a number of descriptive statistics like the mean, standard deviation and the minimum and maximum value. We can abbreviate the <strong>summarize</strong> command as <strong>sum</strong>.</p>
-<pre><code>sum grosswk
-
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
--------------+---------------------------------------------------------
-     grosswk |     10,096    521.7672    522.8757          5      23076
-
-</code></pre>
-<br>
-<p>You can add the detail option to the command to also display the percentiles, variance, skewness and kurtosis.</p>
-<pre><code>sum grosswk, detail
-
-     Gross weekly pay in main job (Government scheme or
-                          employee)
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%           34              5
- 5%           90              5
-10%          135              5       Obs              10,096
-25%          250              5       Sum of Wgt.      10,096
-
-50%          418                      Mean           521.7672
-                        Largest       Std. Dev.      522.8757
-75%          664          10250
-90%          962          13846       Variance         273399
-95%         1269          13846       Skewness       13.48147
-99%         1923          23076       Kurtosis       448.2789
-
-</code></pre>
-<br>
-<p>To summarize more than one continuous variable, add all variable names after <strong>sum</strong>.</p>
-<pre><code>sum grosswk sex
-
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
--------------+---------------------------------------------------------
-     grosswk |     10,096    521.7672    522.8757          5      23076
-         sex |     10,096    1.520503    .4996042          1          2
-
-</code></pre>
-<h3><a href="#customized-summary-statistics" id="customized-summary-statistics">Customized summary statistics</a></h3>
-<p>The <strong>summarize</strong> command although useful to get a quick impression of a variable, doesn&rsquo;t feature any options to select specific descriptives to be displayed in the output. The <strong>tabstat</strong> command allows such customisation of the statistics to be displayed.</p>
-<pre><code>tabstat age
-
-    variable |      mean
--------------+----------
-         age |  42.37223
-------------------------
-
-</code></pre>
-<br>
-<p>The command as such only displays the mean of a variable. You can specify each descriptive statistic you want to be included in the output with the stat option. Below we use the stat option to display the mean, the standard deviation, the minimum, percentiles and the maximum.</p>
-<pre><code>tabstat age, stat(mean, sd, min, p10, p25, p50, p75, p90, max)
-
-    variable |      mean        sd       min       p10       p25       p50       p75       p90       max
--------------+------------------------------------------------------------------------------------------
-         age |  42.37223  12.81225        16        25        32        43        52        59        78
---------------------------------------------------------------------------------------------------------
-
-</code></pre>
-<br>
-<p>Here is a list of all the statistics that can be added with the stat() option.</p>
-<pre><code>    statname       Definition
-    ---------------------------------------------------------------------
-    mean            mean
-    count           count of nonmissing observations
-    n               same as count
-    sum             sum
-    max             maximum
-    min             minimum
-    range           range = max - min
-    sd              standard deviation
-    variance        variance
-    cv              coefficient of variation (sd/mean)
-    semean          standard error of mean (sd/sqrt(n))
-    skewness        skewness
-    kurtosis        kurtosis
-    p1              1st percentile
-    p5              5th percentile
-    p10             10th percentile
-    p25             25th percentile
-    median          median (same as p50)
-    p50             50th percentile (same as median)
-    p75             75th percentile
-    p90             90th percentile
-    p95             95th percentile
-    p99             99th percentile
-    iqr             interquartile range = p75 - p25
-    q               equivalent to specifying p25 p50 p75
-</code></pre>
-<p>Both <strong>summarize</strong> and <strong>tabstat</strong> can be used to create descriptive statistics for a selection of variables. You can use a hyphen between two variable names to select a range of variables or select non-adjacent variables with a space inbetween their names.</p>
-<pre><code>sum age edage grosswk
-
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
--------------+---------------------------------------------------------
-         age |     10,096    42.37223    12.81225         16         78
-       edage |     10,096    20.64352    12.94552         -8         97
-     grosswk |     10,096    521.7672    522.8757          5      23076
-
-</code></pre>
-<br>
-<p>When using multiple variables with the <strong>tabstat</strong> command, Stata per default lists the statistics in the rows of the table. To force the statistics to the columns, use the <strong>col(stat)</strong> option.</p>
-<pre><code>tabstat age edage grosswk, stat(mean, sd, min, p10, p25, p50, p75, p90, max) col(stat)
-
-    variable |      mean        sd       min       p10       p25       p50       p75       p90       max
--------------+------------------------------------------------------------------------------------------
-         age |  42.37223  12.81225        16        25        32        43        52        59        78
-       edage |  20.64352  12.94552        -8        16        16        18        21        23        97
-     grosswk |  521.7672  522.8757         5       135       250       418       664       962     23076
---------------------------------------------------------------------------------------------------------
-
-</code></pre>
-<br>
-<br>
-<h3><a href="#exercise-summary-statistics" id="exercise-summary-statistics">Exercise: Summary statistics</a></h3>
-<p>The MCS_testscore dataset contains data from the age 5 sweep from the Millenium Cohort Study, which examined the first year of primary schooling alongside childhood health, childcare, education, social and family circumstances.</p>
-<ol>
-	<li>Open the MCS_testscore dataset.</li>
-	<li>Use <b>summarize</b> to create a table with descriptive 
-	statistics for the variables pse to fsptotal.</li>
-	<li>Use the <b>tabstat</b> command to create a table for the same 
-	variables that lists the mean, standard deviation, standard error of the mean, 
-	min, max and the 25th and 75th percentile.</li>
-	<li>Make sure that the statistics are displayed in the columns.</li>
-</ol>
-
-<br>
-<br>
-	   
-<h3><a href="#evaluation" id="evaluation">Final task: Please give us your feedback! </a></h3>
-	   <p>Upon completing the survey, <b>you will receive the link to the solution file</b>, to check how your commands compares to the sample solution.</p>
-<p>In order to adapt our training to your needs and provide the most valuable learning experience for you, we depend on your feedack.</p>
-	   <p>We would be grateful if you could take 1 min before the end of the workshop to get your feedback! </p>
-
-<a href="https://lse.eu.qualtrics.com/jfe/form/SV_77M35cq1arxNcj3?course=Stata%201:Importing%20and%20inspecting%20Data&topic=Stata&link=https://lsecloud-my.sharepoint.com/:u:/g/personal/m_wiemers_lse_ac_uk/EU9fXeq9Mm9Ii363M_Eypf0B231Lx_NEpTkHgMGnr3SGzw?e=pm3D9J">Click here to open the survey!</a>
-
-<br>
-<br>
-</div>
-
-
-	
+    <div class="sidenav">
+      <a href="#properties-of-clean-data">Properties of clean data</a>
+      <a href="#converting-strings-to-numerical">Converting strings to numerical</a>
+      <a href="#exercise-1-converting-strings-to-numerical-format">Exercise 1: Converting strings to numerical format</a>
+      <a href="#removing-leading-and-trailing-spaces">Removing leading and trailing spaces</a>
+      <a href="#exercise-2-removing-leading-and-trailing-spaces">Exercise 2: Removing leading and trailing spaces</a>
+      <a href="#splitting-and-combining-strings">Splitting and combining strings</a>
+      <a href="#exercise-3-splitting-and-combining-strings">Exercise 3: Splitting and combining strings</a>
+      <a href="#evaluation">Final task: Please give us your feedback!</a>
+    </div>
+  
+    <div class="main">
+      
+      <h1><a href="#data-cleaning-in-stata-strings" id="data-cleaning-in-stata-strings">Data cleaning in Stata - Strings</a></h1>
+      <p>The data cleaning series is going to teach you the most fundamental commands and techniques to prepare data in Stata for statistical analysis.</p>
+      <p>The series is going to cover the following topics:</p>
+    
+      <ul>
+        <li>Converting string to numerical</li>
+        <li>Dealing with missings and duplicates</li>
+        <li>Applying variable and value labels</li>
+        <li>Reshaping between long and wide format</li>
+        <li>Merging multiple datasets</li>
+      </ul>
+    
+      <p>In this practical session, you will learn to:</p>
+      <ul>
+        <li>Identify numerical values that have been imported as strings</li>
+        <li>Modifying string values</li>
+        <li>Convert strings to numerical</li>
+      </ul>
+    
+      <br>
+      <br>
+    
+      <h2><a href="#properties-of-clean-data" id="properties-of-clean-data">Properties of clean data</a></h2>
+    
+      <p>What do we mean, when we talk about clean vs unclean data? Here are some of the key features of clean data:</p>
+    
+      <ul>
+        <li>Numerical values are in a numerical format (integer of float)</li>
+        <li>Missing values are clearly labelled as missing</li>
+        <li>The data does not contain any duplicates</li>
+        <li>Categorical columns are in numerical format using text labels</li>
+        <li>Variables are meaningfully named and labelled</li>
+        <li>Text and numerical variables have been inspected for corrupted values and
+        cleaned</li>
+        <li>The data should be in long format, where the levels of a repeated measurement
+        are represented by a single variable and not spread out across several columns</li>
+      </ul>
+    
+      <p>The main reasons why data should be cleaned in a way outlined in the above list, is that it will prevent errors from commands that assume data to be in that particular format. For instance, Stata assumes data to be in long format for statistical analysis involving repeated measures and categorical variables to be using numerical values instead of strings. All of the above listed aspects of cleaning data will be addressed in the cleaning data workshop series. <br> <br></p>
+    
+      <h2><a href="#converting-strings-to-numerical" id="converting-strings-to-numerical">Converting strings to numerical</a></h2>
+    
+      <h3><a href="#importing-the-gapminderxlsx-dataset" id="importing-the-gapminderxlsx-dataset">Importing the gapminder.xlsx dataset</a></h3>
+    
+      <p>We import the gapminder.xlsx dataset with the <b>import excel</b> command. Since the data is coming from an url, we have to put <i>using</i> before the url. Since the first row contains the variable names, we use the <i>firstrow</i> option to set the values from the first row in the csv file as the variable names.</p>
+      <pre><code>. import excel using https://github.com/mwiemers/datasets/raw/main/gapminder_dirty_strings.xlsx, firstrow clear
+  
+      </code></pre>
+      <p>Let us have a quick look at the data.</p>
+      <p>The gapminder dataset contains data on GDP, population and life expectancy across the world. Each row represents values for a country. The actual values for the years 1952 to 2007 are in the D - O variables.</p>
+      <pre><code>. br
+  
+      </code></pre>
+    
+      <img src="browse_gapminder.png" height="500" />
+    
+      <h3><a href="#identifying-numerical-values-in-string-format" id="identifying-numerical-values-in-string-format">Identifying numerical values in string format</a></h3>
+    
+      <p>In this unit you are going to learn how to convert variables that contain numerical data but have been imported into Stata as string, i.e. text variables, into a numerical format.</p>
+      <p>Sometimes numeric variables are displayed using a dot in csv files or a comma in Excel files to separate thousands, which makes large numbers easier to read. This can cause the problem that Stata will import them as strings, since for numerical variables there is no other symbol allowed apart from the dot as a decimal separator.</p>
+      <p>It is therefore a good habit to always inspect a dataset after having imported it to spot variables that need to be converted to a different format.</p>
+      <p>After having imported the gapminder dataset, we are going to inspect how the variables have been imported with <b>describe</b>.</p>
+    
+      <pre><code>. describe
+  
+      Contains data
+        obs:           432                          
+      vars:            15                          
+      size:        90,288                          
+      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                    storage   display    value
+      variable name   type    format     label      variable label
+      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      country         str24   %24s                  country
+      continent       str8    %9s                   continent
+      subject         str9    %9s                   subject
+      D               str13   %13s                  1952
+      E               str13   %13s                  1957
+      F               str13   %13s                  1962
+      G               str13   %13s                  1967
+      H               str13   %13s                  1972
+      I               str13   %13s                  1977
+      J               str15   %15s                  1982
+      K               str15   %15s                  1987
+      L               str15   %15s                  1992
+      M               str15   %15s                  1997
+      N               str15   %15s                  2002
+      O               str15   %15s                  2007
+      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      Sorted by: 
+          Note: Dataset has changed since last saved.
+  
+      </code></pre>
+    
+      <p>All variables have been imported as string, which makes sense for the first three variables, which are categorical variables that contain text data. The remaining variables for the years from 1952 - 2007 however all contain numerical data.</p>
+      <p>We can get a quick overview of the data that is stored in the D-O variables with list.</p>
+      <p>Stata imported these variables as string because of the comma that is used to group the thousands as you can see in the third and fourth row.</p>
+    
+      <pre><code>. list D-O in 1/5
+  
+          +---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+          |           D             E              F              G              H              I              J              K              L              M              N              O |
+          |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+        1. | 779.4453145   820.8530296      853.10071    836.1971382    739.9811058      786.11336    978.0114388    852.3959448    649.3413952     635.341351    726.7340548    974.5803384 |
+        2. |      28.801        30.332         31.997          34.02         36.088         38.438         39.854         40.822         41.674         41.763         42.129         43.828 |
+        3. | 8,425,333.0   9,240,934.0   10,267,083.0   11,537,966.0   13,079,460.0   14,880,372.0   12,881,816.0   13,867,957.0   16,317,921.0   22,227,415.0   25,268,405.0   31,889,923.0 |
+        4. | 779.4453145   820.8530296      853.10071    836.1971382    739.9811058      786.11336    978.0114388    852.3959448    649.3413952     635.341351    726.7340548    974.5803384 |
+        5. |      28.801        30.332         31.997          34.02         36.088         38.438         39.854         40.822         41.674         41.763         42.129         43.828 |
+          +---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+  
+      </code></pre>
+    
+      <h3><a href="#removing-illegal-characters-before-converting" id="removing-illegal-characters-before-converting">Removing illegal characters before converting</a></h3>
+    
+      <p>In order to convert a variable that is in string format to numeric, we first have to remove any illegal characters. We have identified the commas in the D-O variables in the previous step. We can remove the commas with the replace command in combination with the <b>subinstr()</b> function.</p>
+    
+      <pre><code>. replace D=subinstr(D,&quot;,&quot;, &quot;&quot;, .)
+      (242 real changes made)
+  
+      </code></pre>
+    
+      <p>We use replace to make changes to the values in the variable D. In particular, we want to replace every comma with an empty string. In order to do so, we must ust the <b>subinstr()</b> function after the = sign.</p>
+      <p>The <b>subinstr()</b> function takes four arguments. The first is the variable we want to replace - D. The second argument is the value inside the variable, that we want to replace - the comma. The third argument is the value that we want to replace the comma with - an empty string. With the last argument you can specify how often you want to apply changing a comma to an empty string. It could be that there are only two commas in the variable that you want to replace. In that case you would enter a 2. By entering a . we instruct <b>subinstr()</b> to replace all occurences of the comma inside the values of the D variable with an empty string.</p>
+      <p>Below we replace the commas in all remaining variables with an empty string.</p>
+    
+      <pre><code>. replace D=subinstr(D,&quot;,&quot;, &quot;&quot;, .)
+      (0 real changes made)
+  
+      . replace E=subinstr(E,&quot;,&quot;, &quot;&quot;, .)
+      (245 real changes made)
+  
+      . replace F=subinstr(F,&quot;,&quot;, &quot;&quot;, .)
+      (252 real changes made)
+  
+      . replace G=subinstr(G,&quot;,&quot;, &quot;&quot;, .)
+      (257 real changes made)
+  
+      . replace H=subinstr(H,&quot;,&quot;, &quot;&quot;, .)
+      (259 real changes made)
+  
+      . replace I=subinstr(I,&quot;,&quot;, &quot;&quot;, .)
+      (259 real changes made)
+  
+      . replace J=subinstr(J,&quot;,&quot;, &quot;&quot;, .)
+      (257 real changes made)
+  
+      . replace K=subinstr(K,&quot;,&quot;, &quot;&quot;, .)
+      (258 real changes made)
+  
+      . replace L=subinstr(L,&quot;,&quot;, &quot;&quot;, .)
+      (257 real changes made)
+  
+      . replace M=subinstr(M,&quot;,&quot;, &quot;&quot;, .)
+      (261 real changes made)
+  
+      . replace N=subinstr(N,&quot;,&quot;, &quot;&quot;, .)
+      (263 real changes made)
+  
+      . replace O=subinstr(O,&quot;,&quot;, &quot;&quot;, .)
+      (267 real changes made)
+  
+      </code></pre>
+      
+      <p>We can write the code more efficient with a foreach loop.</p>
+      
+      <pre><code>. foreach var of varlist D-O{
+        2.         replace `var'=subinstr(`var', &quot;,&quot;, &quot;&quot;, .)
+        3. }
+      (0 real changes made)
+      (0 real changes made)
+      (0 real changes made)
+      (0 real changes made)
+      (0 real changes made)
+      (0 real changes made)
+      (0 real changes made)
+      (0 real changes made)
+      (0 real changes made)
+      (0 real changes made)
+      (0 real changes made)
+      (0 real changes made)
+  
+      </code></pre>
+      
+      <h2><a href="#convert-to-numeric" id="convert-to-numeric">Convert to numeric</a></h2>
+      
+      <p>Now that we have removed all commas in the D-O variables, we can convert the<br />
+      variables to the numeric format with the destring command.</p>
+      <p>We provide all D-O variables with D-O as the argument to the <b>destring</b> command. In order to overwrite the existing variables, instead of creating new variables, we use the replace option.</p>
+      <p>If we now attempt to destring all D-O variables, Stata will refuse to do so for the variables D-I, since they contain non-numerical strings.</p>
+      
+      <pre><code>. destring D-O, replace
+      D: contains nonnumeric characters; no replace
+      E: contains nonnumeric characters; no replace
+      F: contains nonnumeric characters; no replace
+      G: contains nonnumeric characters; no replace
+      H: contains nonnumeric characters; no replace
+      I: contains nonnumeric characters; no replace
+      J: all characters numeric; replaced as double
+      K: all characters numeric; replaced as double
+      L: all characters numeric; replaced as double
+      M: all characters numeric; replaced as double
+      N: all characters numeric; replaced as double
+      O: all characters numeric; replaced as double
+  
+      </code></pre>
+    
+      <p>We can inspect the non-numerical values with the following command. The <b>real</b> command will convert string values to number. If a string value does not only consist of digits, it will return the dot, which represents a missing numerical value in Stata. With the below command, we print the frequencies, using <b>tab</b>, for all values where <b>real(D)</b> returns a missing.</p>
+      <p>The value &ldquo;n/a&rdquo; occurs once in the D-I variables.</p>
+      
+      <pre><code>. tab D if real(D) == .
+  
+              1952 |      Freq.     Percent        Cum.
+      --------------+-----------------------------------
+                n/a |          1      100.00      100.00
+      --------------+-----------------------------------
+              Total |          1      100.00
+  
+      . tab E if real(E) == .
+  
+              1957 |      Freq.     Percent        Cum.
+      --------------+-----------------------------------
+                n/a |          1      100.00      100.00
+      --------------+-----------------------------------
+              Total |          1      100.00
+  
+      . tab F if real(F) == .
+  
+              1962 |      Freq.     Percent        Cum.
+      --------------+-----------------------------------
+                n/a |          1      100.00      100.00
+      --------------+-----------------------------------
+              Total |          1      100.00
+  
+      . tab G if real(G) == .
+  
+              1967 |      Freq.     Percent        Cum.
+      --------------+-----------------------------------
+                n/a |          1      100.00      100.00
+      --------------+-----------------------------------
+              Total |          1      100.00
+  
+      . tab H if real(H) == .
+  
+              1972 |      Freq.     Percent        Cum.
+      --------------+-----------------------------------
+                n/a |          1      100.00      100.00
+      --------------+-----------------------------------
+              Total |          1      100.00
+  
+      . tab I if real(I) == .
+  
+              1977 |      Freq.     Percent        Cum.
+      --------------+-----------------------------------
+                n/a |          1      100.00      100.00
+      --------------+-----------------------------------
+              Total |          1      100.00
+  
+      </code></pre>
+      
+      <p>In case a variable contains non-numeric entries, we can use the <i>force</i> option to replace all of the non-numeric values that Stata cannot convert to a number to a missing. You will learn more about missing values in the next workshop.</p>
+      
+      <pre><code>. destring D-I, replace force
+      D: contains nonnumeric characters; replaced as double
+      (1 missing value generated)
+      E: contains nonnumeric characters; replaced as double
+      (1 missing value generated)
+      F: contains nonnumeric characters; replaced as double
+      (1 missing value generated)
+      G: contains nonnumeric characters; replaced as double
+      (1 missing value generated)
+      H: contains nonnumeric characters; replaced as double
+      (1 missing value generated)
+      I: contains nonnumeric characters; replaced as double
+      (1 missing value generated)
+  
+      </code></pre>
+    
+      <h3><a href="#exercise-1-converting-strings-to-numerical-format" id="exercise-1-converting-strings-to-numerical-format">Exercise 1: Converting strings to numerical format</a></h3>
+    
+      <ol>
+        <li>Import the weo_data_dirty.xlsx file using the url "https://raw.githubusercontent.com/mwiemers/datasets/main/weo_data_dirty_strings.xlsx". 
+        Make sure to import the variable names from row 1.</li>
+        <li>The dataset is similar to the gapminder dataset, but has different types 
+        of economic variables. Like in the gapminder dataset, 
+        each row represents the data for a country. The variables C-AK contain data for 
+        the different economic variables for each year from 1980 to 2004. The 
+        subjectdescriptor variable indicates the type of economic variable.</li>
+        <li>Check which variables have been imported as string.</li>
+        <li>Have a look at the data to check whether some of the string variables 
+        contain numerical values that should be converted to the numerical format. 
+        <i>NB: Only numbers and the dot (for missing) are allowed when 
+        converting a string to the numerical format. There are two characters that 
+        need to be replaced before the variables can be converted to the numeric format.</i></li>
+        <li>Replace the two illegal characters inside the strings so that only the actual 
+        numbers using a dot as decimal symbol remain. Use a foreach loop to do this.</li>
+        <li>Convert the string variables to numerical.</li>
+      </ol>
+      
+      <br>
+      <br>
+    
+      <h2><a href="#removing-leading-and-trailing-spaces" id="removing-leading-and-trailing-spaces">Removing leading and trailing spaces</a></h2>
+    
+      <p>String variables sometimes contain unnecessary white spaces. We can easily remove these with the <b>strtrim</b> function. Let&rsquo;s first find out whether there are any leading or trailing spaces for the continent and country variables.</p>
+      <p>The frequency table shows that several countries occur several times due to leading or trailing spaces.</p>
+      
+      <pre><code>. tab continent
+  
+        continent |      Freq.     Percent        Cum.
+      ------------+-----------------------------------
+          Africa |          6        1.39        1.39
+          Europe |          3        0.69        2.08
+          Africa |        150       34.72       36.81
+        Americas |         78       18.06       54.86
+            Asia |         96       22.22       77.08
+            Asia  |          6        1.39       78.47
+          Europe |         87       20.14       98.61
+          Oceania |          6        1.39      100.00
+      ------------+-----------------------------------
+            Total |        432      100.00
+  
+      </code></pre>
+    
+      <p>We can replace the values with the trimmed values.</p>
+      
+      <pre><code>. replace continent = strtrim(continent)
+      (15 real changes made)
+  
+      </code></pre>
+      
+      <p>The frequency table now shows only one value per continent.</p>
+    
+      <pre><code>. tab continent
+  
+        continent |      Freq.     Percent        Cum.
+      ------------+-----------------------------------
+          Africa |        156       36.11       36.11
+        Americas |         78       18.06       54.17
+            Asia |        102       23.61       77.78
+          Europe |         90       20.83       98.61
+          Oceania |          6        1.39      100.00
+      ------------+-----------------------------------
+            Total |        432      100.00
+  
+      </code></pre>
+    
+      <h3><a href="#exercise-2-removing-leading-and-trailing-spaces" id="exercise-2-removing-leading-and-trailing-spaces">Exercise 2: Removing leading and trailing spaces</a></h3>
+      
+      <ol>
+        <li>Create a frequency table of the country column to check whether some 
+        of the values occur several time. This might be due to leading or trailing 
+        white spaces.</li>
+        <li>Replace the country variable with the trimmed values.</li>
+      </ol>
+      
+      <br>
+      <br>
+      
+      <pre><code></code></pre>
+    
+      <h2><a href="#splitting-and-combining-strings" id="splitting-and-combining-strings">Splitting and combining strings</a></h2>
+    
+      <p>We can split string variables into several variables with <b>split</b>. To illustrate how the <b>split</b> command works, we will use the splitxmpl dataset, which we can load from the Stata server.</p>
+      <p>The first column tells us the state and which region of the state.</p>
+    
+      <pre><code>. webuse splitxmpl, clear
+      (split example)
+  
+      . 
+      . list
+  
+          +-------------------------+
+          |            var1    var2 |
+          |-------------------------|
+        1. |   South Alabama   29.30 |
+        2. |     West Alaska   26.10 |
+        3. |    West Arizona   29.20 |
+        4. |  South Arkansas   30.60 |
+        5. | West California   29.90 |
+          |-------------------------|
+        6. |   West Colorado   28.60 |
+        7. |  NE Connecticut   32.00 |
+        8. |  South Delaware   29.80 |
+        9. |   South Florida   34.70 |
+      10. |   South Georgia   28.70 |
+          +-------------------------+
+  
+      </code></pre>
+    
+      <p>We can split the string into two variables. Two new variables, for the characters before the space and the characters following the space, have been added.</p>
+      
+      <pre><code>. split var1
+      variables created as string: 
+      var11  var12
+  
+      . 
+      . list
+  
+          +-----------------------------------------------+
+          |            var1    var2   var11         var12 |
+          |-----------------------------------------------|
+        1. |   South Alabama   29.30   South       Alabama |
+        2. |     West Alaska   26.10    West        Alaska |
+        3. |    West Arizona   29.20    West       Arizona |
+        4. |  South Arkansas   30.60   South      Arkansas |
+        5. | West California   29.90    West    California |
+          |-----------------------------------------------|
+        6. |   West Colorado   28.60    West      Colorado |
+        7. |  NE Connecticut   32.00      NE   Connecticut |
+        8. |  South Delaware   29.80   South      Delaware |
+        9. |   South Florida   34.70   South       Florida |
+      10. |   South Georgia   28.70   South       Georgia |
+          +-----------------------------------------------+
+  
+      </code></pre>
+      
+      <p>Let&rsquo;s say we wanted to extract the name and title from these manually entered data.</p>
+      
+      <pre><code>. clear all
+  
+      . input str30 name
+  
+                                    name
+        1. &quot;Mrs-Sarah-Miller&quot;
+        2. &quot;Mr-Patrick-McMaster&quot;
+        3. &quot;Mr-James-Pritchard&quot;
+        4. end
+  
+      . 
+      . list
+  
+          +---------------------+
+          |                name |
+          |---------------------|
+        1. |    Mrs-Sarah-Miller |
+        2. | Mr-Patrick-McMaster |
+        3. |  Mr-James-Pritchard |
+          +---------------------+
+  
+      </code></pre>
+      
+      <p>We can use the <i>parse</i> option to split the name variable based on the &ldquo;-&rdquo; character.</p>
+      
+      <pre><code>. split name, p(&quot;-&quot;)
+      variables created as string: 
+      name1  name2  name3
+  
+      . list
+  
+          +---------------------------------------------------+
+          |                name   name1     name2       name3 |
+          |---------------------------------------------------|
+        1. |    Mrs-Sarah-Miller     Mrs     Sarah      Miller |
+        2. | Mr-Patrick-McMaster      Mr   Patrick    McMaster |
+        3. |  Mr-James-Pritchard      Mr     James   Pritchard |
+          +---------------------------------------------------+
+  
+      </code></pre>
+      
+      <p>In order to combine the first and last name, we can use the +.</p>
+      
+      <pre><code>. replace name = name2 + &quot; &quot; + name3
+      (3 real changes made)
+  
+      . list
+  
+          +------------------------------------------------+
+          |             name   name1     name2       name3 |
+          |------------------------------------------------|
+        1. |     Sarah Miller     Mrs     Sarah      Miller |
+        2. | Patrick McMaster      Mr   Patrick    McMaster |
+        3. |  James Pritchard      Mr     James   Pritchard |
+          +------------------------------------------------+
+  
+      </code></pre>
+    
+      <h3><a href="#exercise-3-splitting-and-combining-strings" id="exercise-3-splitting-and-combining-strings">Exercise 3: Splitting and combining strings</a></h3>
+    
+      <ol>
+        <li>Load the auto dataset with <b>sysuse auto, clear</b>.</li>
+        <li>Split the make variable.</li>
+        <li>Generate a new variable named model that combines make2 and make3.</li>
+        <li>Rename make1 into brand.</li>
+        <li>Drop all make variables.</li>
+      </ol>
+    
+      <br>
+      <br>
+          
+      <h3><a href="#evaluation" id="evaluation">Final task: Please give us your feedback! </a></h3>
+          <p>Upon completing the survey, <b>you will receive the link to the solution file</b>, to check how your commands compares to the sample solution.</p>
+      <p>In order to adapt our training to your needs and provide the most valuable learning experience for you, we depend on your feedack.</p>
+          <p>We would be grateful if you could take 1 min before the end of the workshop to get your feedback! </p>
+  
+      <a href="https://lse.eu.qualtrics.com/jfe/form/SV_77M35cq1arxNcj3?course=&topic=Stata&link=">Click here to open the survey!</a>
+  
+      <br>
+      <br>
+    </div>
 </body>
+  
