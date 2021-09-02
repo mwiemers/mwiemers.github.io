@@ -1,0 +1,640 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="/css/stmarkdown.css">
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+        src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+    </script>
+</head>
+  
+<body>
+  
+    <div class="sidenav">
+        <a href="##access-to-datasets">Access to Datasets</a>
+        <a href="#changing-the-working-directory_section" >Changing the working directory</a>
+        <a href="#exercise-changing-the-working-directory">Exercise: Changing the workign directory</a>
+        <a href="#loading-data-into-stata">Loading data into Stata</a>
+        <a href="#exercise-loading-data">Exercise: Loading data</a>
+        <a href="#inspecting-a-dataset">Inspecting a dataset</a>
+        <a href="#exercise-inspecting-data">Exercise: Inspecting data</a>
+        <a href="#summary-statistics">Summary statistics</a>
+        <a href="#exercise-summary-statistics">Exercise: Summary statistics</a>
+        <a href="#evaluation">Final task: Please give us your feedback!</a>
+    </div>
+    <div class="main">
+  
+        <h1><a href="#stata-practical-5-if-qualifiers" id="stata-practical-5-if-qualifiers">Stata practical 5: If qualifiers</a></h1>
+        <p>In this practical session, you will learn:</p>
+        <ul>
+            <li>about the purpose of if qualifiers</li>
+            <li>how to use single if qualifiers</li>
+            <li>how to combine multiple if qualifiers</li>
+        </ul>
+        <br>
+        <br>
+        <h2>More information on how the session is run</h2>
+        <b>How to work together</b>: 
+        <ul>
+            <li>Please turn on your microphone and webcam.</li>
+            <li>One shares the screen and the other requests remote control. </li>
+            <li>Take turns on who types for each exercise.</li>
+        </ul>
+        <b>What to do when getting stuck</b>:
+        <ol>
+            <li>Ask the trainer if you struggle to find a solution.</li>
+            <li>Use the help command. To get help with a specific command type <b>help "command name"</b></li>
+            <li>Search online. The statalist.org forum is usually the most useful resource.</li>
+        </ol>
+        <p>In this unit, you are going to learn about if qualifiers. The if qualifier enables you to carry out a command on a subset of the dataset for which the expression being used in the if qualifier is true.</p>
+        <p>This way you can run a command for specific categories, that is, for instance, only female participants, but also for a specific range of values of a continuous variable, for instance only participants with a minimum amount of income or a combination of both.</p>
+        <br>
+        <br>
+        <h3><a href="#if-qualifiers-single-expressions" id="if-qualifiers-single-expressions">if qualifiers: single expressions</a></h3>
+        <br>
+        <p>With an if qualifier you can limit the scope of a command to those observations for which the expression you use after the <b>if</b> is true.</p>
+        <p>Let us look at a few examples to explain how if qualifiers work.</p>
+        <p>If we use the <b>list</b> command on the variables <i>make</i> and <i>price</i>, Stata will print all observations for those two variables.</p>
+        <pre><code>. webuse auto, clear
+        (1978 Automobile Data)
+
+        . list make price
+
+            +----------------------------+
+            | make                 price |
+            |----------------------------|
+        1. | AMC Concord          4,099 |
+        2. | AMC Pacer            4,749 |
+        3. | AMC Spirit           3,799 |
+        4. | Buick Century        4,816 |
+        5. | Buick Electra        7,827 |
+            |----------------------------|
+        6. | Buick LeSabre        5,788 |
+        7. | Buick Opel           4,453 |
+        8. | Buick Regal          5,189 |
+        9. | Buick Riviera       10,372 |
+        10. | Buick Skylark        4,082 |
+            |----------------------------|
+        11. | Cad. Deville        11,385 |
+        12. | Cad. Eldorado       14,500 |
+        13. | Cad. Seville        15,906 |
+        14. | Chev. Chevette       3,299 |
+        15. | Chev. Impala         5,705 |
+            |----------------------------|
+        16. | Chev. Malibu         4,504 |
+        17. | Chev. Monte Carlo    5,104 |
+        18. | Chev. Monza          3,667 |
+        19. | Chev. Nova           3,955 |
+        20. | Dodge Colt           3,984 |
+            |----------------------------|
+        21. | Dodge Diplomat       4,010 |
+        22. | Dodge Magnum         5,886 |
+        23. | Dodge St. Regis      6,342 |
+        24. | Ford Fiesta          4,389 |
+        25. | Ford Mustang         4,187 |
+            |----------------------------|
+        26. | Linc. Continental   11,497 |
+        27. | Linc. Mark V        13,594 |
+        28. | Linc. Versailles    13,466 |
+        29. | Merc. Bobcat         3,829 |
+        30. | Merc. Cougar         5,379 |
+            |----------------------------|
+        31. | Merc. Marquis        6,165 |
+        32. | Merc. Monarch        4,516 |
+        33. | Merc. XR-7           6,303 |
+        34. | Merc. Zephyr         3,291 |
+        35. | Olds 98              8,814 |
+            |----------------------------|
+        36. | Olds Cutl Supr       5,172 |
+        37. | Olds Cutlass         4,733 |
+        38. | Olds Delta 88        4,890 |
+        39. | Olds Omega           4,181 |
+        40. | Olds Starfire        4,195 |
+            |----------------------------|
+        41. | Olds Toronado       10,371 |
+        42. | Plym. Arrow          4,647 |
+        43. | Plym. Champ          4,425 |
+        44. | Plym. Horizon        4,482 |
+        45. | Plym. Sapporo        6,486 |
+            |----------------------------|
+        46. | Plym. Volare         4,060 |
+        47. | Pont. Catalina       5,798 |
+        48. | Pont. Firebird       4,934 |
+        49. | Pont. Grand Prix     5,222 |
+        50. | Pont. Le Mans        4,723 |
+            |----------------------------|
+        51. | Pont. Phoenix        4,424 |
+        52. | Pont. Sunbird        4,172 |
+        53. | Audi 5000            9,690 |
+        54. | Audi Fox             6,295 |
+        55. | BMW 320i             9,735 |
+            |----------------------------|
+        56. | Datsun 200           6,229 |
+        57. | Datsun 210           4,589 |
+        58. | Datsun 510           5,079 |
+        59. | Datsun 810           8,129 |
+        60. | Fiat Strada          4,296 |
+            |----------------------------|
+        61. | Honda Accord         5,799 |
+        62. | Honda Civic          4,499 |
+        63. | Mazda GLC            3,995 |
+        64. | Peugeot 604         12,990 |
+        65. | Renault Le Car       3,895 |
+            |----------------------------|
+        66. | Subaru               3,798 |
+        67. | Toyota Celica        5,899 |
+        68. | Toyota Corolla       3,748 |
+        69. | Toyota Corona        5,719 |
+        70. | VW Dasher            7,140 |
+            |----------------------------|
+        71. | VW Diesel            5,397 |
+        72. | VW Rabbit            4,697 |
+        73. | VW Scirocco          6,850 |
+        74. | Volvo 260           11,995 |
+            +----------------------------+
+
+        </code></pre>
+        <br>
+        <p>We can use an if qualifier with the <b>list</b> command to limit the observations that are being printed. If, for instance, we only wanted to print observations with a price above 10000, we have to add an <b>if</b> qualifier followed by the expression <i>price &gt; 10000</i> to the command.</p>
+        <p>Stata will evaluate the expression for every observation in the dataset and create a subset of the data for those observations for which the expression is true.</p>
+        <p>Then Stata will run the <b>list make price</b> command on this particular subset of the data.</p>
+        <pre><code>. list make price if price &gt; 10000
+
+            +----------------------------+
+            | make                 price |
+            |----------------------------|
+        9. | Buick Riviera       10,372 |
+        11. | Cad. Deville        11,385 |
+        12. | Cad. Eldorado       14,500 |
+        13. | Cad. Seville        15,906 |
+        26. | Linc. Continental   11,497 |
+            |----------------------------|
+        27. | Linc. Mark V        13,594 |
+        28. | Linc. Versailles    13,466 |
+        41. | Olds Toronado       10,371 |
+        64. | Peugeot 604         12,990 |
+        74. | Volvo 260           11,995 |
+            +----------------------------+
+
+        </code></pre>
+        <br>
+        <p>The &gt; operator is used to test whether a variable is larger than a particular value. Below are examples of the other operators that can be used to create expressions.</p>
+        <p>To run a command on a subset where a variable is equal to a particular value use the == operator.</p>
+        <pre><code>. list price if price == 10372
+
+            +--------+
+            |  price |
+            |--------|
+        9. | 10,372 |
+            +--------+
+
+        </code></pre>
+        <br>
+        <p>To run a command on a subset where a variable is smaller than a particular value use the &lt; operator.</p>
+        <pre><code>. list price if price &lt; 5000
+
+            +-------+
+            | price |
+            |-------|
+        1. | 4,099 |
+        2. | 4,749 |
+        3. | 3,799 |
+        4. | 4,816 |
+        7. | 4,453 |
+            |-------|
+        10. | 4,082 |
+        14. | 3,299 |
+        16. | 4,504 |
+        18. | 3,667 |
+        19. | 3,955 |
+            |-------|
+        20. | 3,984 |
+        21. | 4,010 |
+        24. | 4,389 |
+        25. | 4,187 |
+        29. | 3,829 |
+            |-------|
+        32. | 4,516 |
+        34. | 3,291 |
+        37. | 4,733 |
+        38. | 4,890 |
+        39. | 4,181 |
+            |-------|
+        40. | 4,195 |
+        42. | 4,647 |
+        43. | 4,425 |
+        44. | 4,482 |
+        46. | 4,060 |
+            |-------|
+        48. | 4,934 |
+        50. | 4,723 |
+        51. | 4,424 |
+        52. | 4,172 |
+        57. | 4,589 |
+            |-------|
+        60. | 4,296 |
+        62. | 4,499 |
+        63. | 3,995 |
+        65. | 3,895 |
+        66. | 3,798 |
+            |-------|
+        68. | 3,748 |
+        72. | 4,697 |
+            +-------+
+
+        </code></pre>
+        <br>
+        <p>To run a command on a subset where a variable is larger or equal to a particular value use the &gt;= or &lt;= operator.</p>
+        <pre><code>. list price if price &gt;= 11385
+
+            +--------+
+            |  price |
+            |--------|
+        11. | 11,385 |
+        12. | 14,500 |
+        13. | 15,906 |
+        26. | 11,497 |
+        27. | 13,594 |
+            |--------|
+        28. | 13,466 |
+        64. | 12,990 |
+        74. | 11,995 |
+            +--------+
+
+        </code></pre>
+        <pre><code>. list price if price &lt;= 4749
+
+            +-------+
+            | price |
+            |-------|
+        1. | 4,099 |
+        2. | 4,749 |
+        3. | 3,799 |
+        7. | 4,453 |
+        10. | 4,082 |
+            |-------|
+        14. | 3,299 |
+        16. | 4,504 |
+        18. | 3,667 |
+        19. | 3,955 |
+        20. | 3,984 |
+            |-------|
+        21. | 4,010 |
+        24. | 4,389 |
+        25. | 4,187 |
+        29. | 3,829 |
+        32. | 4,516 |
+            |-------|
+        34. | 3,291 |
+        37. | 4,733 |
+        39. | 4,181 |
+        40. | 4,195 |
+        42. | 4,647 |
+            |-------|
+        43. | 4,425 |
+        44. | 4,482 |
+        46. | 4,060 |
+        50. | 4,723 |
+        51. | 4,424 |
+            |-------|
+        52. | 4,172 |
+        57. | 4,589 |
+        60. | 4,296 |
+        62. | 4,499 |
+        63. | 3,995 |
+            |-------|
+        65. | 3,895 |
+        66. | 3,798 |
+        68. | 3,748 |
+        72. | 4,697 |
+            +-------+
+
+        </code></pre>
+        <br>
+        <p>To run a command on a subset where a variable is larger or equal to a particular value use the != operator.</p>
+        <pre><code>. list price if price != 10372
+
+            +--------+
+            |  price |
+            |--------|
+        1. |  4,099 |
+        2. |  4,749 |
+        3. |  3,799 |
+        4. |  4,816 |
+        5. |  7,827 |
+            |--------|
+        6. |  5,788 |
+        7. |  4,453 |
+        8. |  5,189 |
+        10. |  4,082 |
+        11. | 11,385 |
+            |--------|
+        12. | 14,500 |
+        13. | 15,906 |
+        14. |  3,299 |
+        15. |  5,705 |
+        16. |  4,504 |
+            |--------|
+        17. |  5,104 |
+        18. |  3,667 |
+        19. |  3,955 |
+        20. |  3,984 |
+        21. |  4,010 |
+            |--------|
+        22. |  5,886 |
+        23. |  6,342 |
+        24. |  4,389 |
+        25. |  4,187 |
+        26. | 11,497 |
+            |--------|
+        27. | 13,594 |
+        28. | 13,466 |
+        29. |  3,829 |
+        30. |  5,379 |
+        31. |  6,165 |
+            |--------|
+        32. |  4,516 |
+        33. |  6,303 |
+        34. |  3,291 |
+        35. |  8,814 |
+        36. |  5,172 |
+            |--------|
+        37. |  4,733 |
+        38. |  4,890 |
+        39. |  4,181 |
+        40. |  4,195 |
+        41. | 10,371 |
+            |--------|
+        42. |  4,647 |
+        43. |  4,425 |
+        44. |  4,482 |
+        45. |  6,486 |
+        46. |  4,060 |
+            |--------|
+        47. |  5,798 |
+        48. |  4,934 |
+        49. |  5,222 |
+        50. |  4,723 |
+        51. |  4,424 |
+            |--------|
+        52. |  4,172 |
+        53. |  9,690 |
+        54. |  6,295 |
+        55. |  9,735 |
+        56. |  6,229 |
+            |--------|
+        57. |  4,589 |
+        58. |  5,079 |
+        59. |  8,129 |
+        60. |  4,296 |
+        61. |  5,799 |
+            |--------|
+        62. |  4,499 |
+        63. |  3,995 |
+        64. | 12,990 |
+        65. |  3,895 |
+        66. |  3,798 |
+            |--------|
+        67. |  5,899 |
+        68. |  3,748 |
+        69. |  5,719 |
+        70. |  7,140 |
+        71. |  5,397 |
+            |--------|
+        72. |  4,697 |
+        73. |  6,850 |
+        74. | 11,995 |
+            +--------+
+
+        </code></pre>
+        <br>
+        <p>Let us look at another example using the <b>sum</b> command. The <b>sum</b> command will create a table with descriptive statistics (mean, standard deviation).</p>
+        <pre><code>. sum price
+
+            Variable |        Obs        Mean    Std. Dev.       Min        Max
+        -------------+---------------------------------------------------------
+            price |         74    6165.257    2949.496       3291      15906
+
+        </code></pre>
+        <br>
+        <p>If we wanted to print the descriptive statistics of the price variable only for cars from the United States, we can add an if qualifier with the expression <i>foreign == 0</i>, as 0 represents domestic, that is, US cars.</p>
+        <p>You can see that the number of observations is 52, since only those observations where the variable <i>foreign</i> has the value 0 have been selected.</p>
+        <pre><code>. sum price if foreign == 0
+
+            Variable |        Obs        Mean    Std. Dev.       Min        Max
+        -------------+---------------------------------------------------------
+            price |         52    6072.423    3097.104       3291      15906
+
+        </code></pre>
+        <br>
+        <p>In case you do not know the mapping of numbers and labels for a specific variable, you can use the <b>codebook</b> command, which contains a table with the mapping.</p>
+        <pre><code>. codebook foreign
+
+        ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        foreign                                                                                                                                                                                                                                           Car type
+        ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                        type:  numeric (byte)
+                        label:  origin
+
+                        range:  [0,1]                        units:  1
+                unique values:  2                        missing .:  0/74
+
+                    tabulation:  Freq.   Numeric  Label
+                                    52         0  Domestic
+                                    22         1  Foreign
+
+        </code></pre>
+        <br>
+        <h4><a href="#exercise-1-if-qualifiers-with-single-expressions" id="exercise-1-if-qualifiers-with-single-expressions">Exercise 1: if qualifiers with single expressions</a></h4>
+        <ol>
+        <li>Load the auto dataset</li>
+        <li>List cars with a weight below 2000</li>
+        <li>Print the descriptive statistics of the weight variable for foreign cars.</li> 
+        <li>Run the four commands below, to split the make variable into two separate 
+        variables; one for the <i>make</i> and one for the <i>model</i>.
+        <p>The <b>split</b> command will split the <i>make</i> variable into the three variables <i>make</i>, <i>make2</i> and <i>make3</i>. The <b>generate</b> command combines the <i>make2</i> and <i>make3</i> variables into the variable <i>model</i>. Then we delete the <i>make</i>, <i>make2</i> and <i>make3</i> variable and rename the <i>make1</i> variable to <i>make</i>.</p>
+        <pre><code>split make
+        generate model = make2+&quot; &quot;+make3
+        drop make make2 make3
+        rename make1 make
+        </code></pre>
+        </li>
+        <li>Print the descriptive statistics of the price variable for Dodge and VW
+        cars to determine which is more expensive on average - Dodge or VW?</li>
+        </ol>
+        <br>
+        <br>
+        <h3><a href="#if-qualifiers-multiple-expressions" id="if-qualifiers-multiple-expressions">if qualifiers: multiple expressions</a></h3>
+        <br>
+        <p>Sometimes you might want to run commands on a subset that is defined by a combination of conditions or variables. To do so, we have to combine two or more expressions in an if qualifier.</p>
+        <p>For instance, to only list cars with a price above 6000 and lower than 7000, you would have to use the expression <i>price &gt; 6000 &amp; price &lt; 7000</i>. Notice, that you only use one <b>if</b> qualifier and combine both expressions with the <b>&amp;</b> symbol. By using the <b>&amp;</b> Stata knows that both conditions, that is, <b>price &gt; 6000</b> and <b>price &lt; 7000</b> have to be true for an observation to be included in the subset on which the <b>list</b> command will be executed.</p>
+        <pre><code>. list if price &gt; 6000 &amp; price &lt; 7000
+
+            +--------------------------------------------------------------------------------------------------------------------+
+            | make              price   mpg   rep78   headroom   trunk   weight   length   turn   displa~t   gear_r~o    foreign |
+            |--------------------------------------------------------------------------------------------------------------------|
+        23. | Dodge St. Regis   6,342    17       2        4.5      21    3,740      220     46        225       2.94   Domestic |
+        31. | Merc. Marquis     6,165    15       3        3.5      23    3,720      212     44        302       2.26   Domestic |
+        33. | Merc. XR-7        6,303    14       4        3.0      16    4,130      217     45        302       2.75   Domestic |
+        45. | Plym. Sapporo     6,486    26       .        1.5       8    2,520      182     38        119       3.54   Domestic |
+        54. | Audi Fox          6,295    23       3        2.5      11    2,070      174     36         97       3.70    Foreign |
+            |--------------------------------------------------------------------------------------------------------------------|
+        56. | Datsun 200        6,229    23       4        1.5       6    2,370      170     35        119       3.89    Foreign |
+        73. | VW Scirocco       6,850    25       4        2.0      16    1,990      156     36         97       3.78    Foreign |
+            +--------------------------------------------------------------------------------------------------------------------+
+
+        </code></pre>
+        <br>
+        <p>Below is another example of how you can combine two expressions with an <b>if</b> qualifier to select a subset of the data for cars from outside the US with a price below 5000 USD.</p>
+        <pre><code>. list if foreign==1 &amp; price &lt; 5000
+
+            +------------------------------------------------------------------------------------------------------------------+
+            | make             price   mpg   rep78   headroom   trunk   weight   length   turn   displa~t   gear_r~o   foreign |
+            |------------------------------------------------------------------------------------------------------------------|
+        57. | Datsun 210       4,589    35       5        2.0       8    2,020      165     32         85       3.70   Foreign |
+        60. | Fiat Strada      4,296    21       3        2.5      16    2,130      161     36        105       3.37   Foreign |
+        62. | Honda Civic      4,499    28       4        2.5       5    1,760      149     34         91       3.30   Foreign |
+        63. | Mazda GLC        3,995    30       4        3.5      11    1,980      154     33         86       3.73   Foreign |
+        65. | Renault Le Car   3,895    26       3        3.0      10    1,830      142     34         79       3.72   Foreign |
+            |------------------------------------------------------------------------------------------------------------------|
+        66. | Subaru           3,798    35       5        2.5      11    2,050      164     36         97       3.81   Foreign |
+        68. | Toyota Corolla   3,748    31       5        3.0       9    2,200      165     35         97       3.21   Foreign |
+        72. | VW Rabbit        4,697    25       4        3.0      15    1,930      155     35         89       3.78   Foreign |
+            +------------------------------------------------------------------------------------------------------------------+
+
+        </code></pre>
+        <br>
+        <p>Make sure to run the commands from the previous exercise in order to split the make variable into two separate make and model variables before you continue!</p>
+        <pre><code>. webuse auto, clear
+        (1978 Automobile Data)
+
+        . split make
+        variables created as string: 
+        make1  make2  make3
+
+        . generate model = make2+&quot; &quot;+make3
+
+        . drop make make2 make3
+
+        . rename make1 make
+
+        </code></pre>
+        <br>
+        <p>What if you would like to print only Dodge or Ford cars? You have to use the | symbol to combine the two expressions <i>brand==&ldquo;Dodge&rdquo;</i> and <i>brand==&ldquo;Ford&rdquo;</i>. This way Stata will select a subset where the brand variable is either equal to the value &ldquo;Dodge&rdquo; or &ldquo;Ford&rdquo;.</p>
+        <pre><code>. list if make==&quot;Dodge&quot; | make==&quot;Ford&quot;
+
+            +----------------------------------------------------------------------------------------------------------------------+
+            | price   mpg   rep78   headroom   trunk   weight   length   turn   displa~t   gear_r~o    foreign    make       model |
+            |----------------------------------------------------------------------------------------------------------------------|
+        20. | 3,984    30       5        2.0       8    2,120      163     35         98       3.54   Domestic   Dodge       Colt  |
+        21. | 4,010    18       2        4.0      17    3,600      206     46        318       2.47   Domestic   Dodge   Diplomat  |
+        22. | 5,886    16       2        4.0      17    3,600      206     46        318       2.47   Domestic   Dodge     Magnum  |
+        23. | 6,342    17       2        4.5      21    3,740      220     46        225       2.94   Domestic   Dodge   St. Regis |
+        24. | 4,389    28       4        1.5       9    1,800      147     33         98       3.15   Domestic    Ford     Fiesta  |
+            |----------------------------------------------------------------------------------------------------------------------|
+        25. | 4,187    21       3        2.0      10    2,650      179     43        140       3.08   Domestic    Ford    Mustang  |
+            +----------------------------------------------------------------------------------------------------------------------+
+
+        </code></pre>
+        <br>
+        <p>In order to run a command on a subset of your data that is defined by an even more complex set of conditions, you might have to combine three or more expressions.</p>
+        <p>If you wanted to select cars from either Dodge or Buick with a price below 5000 USD, you would have to combine three expressions. Intuitively, you might assume that the if qualifier below should create a subset of that data.</p>
+        <pre><code>. list make price if make==&quot;Dodge&quot; | make==&quot;Buick&quot; &amp; price &lt; 5000
+
+            +---------------+
+            |  make   price |
+            |---------------|
+        4. | Buick   4,816 |
+        7. | Buick   4,453 |
+        10. | Buick   4,082 |
+        20. | Dodge   3,984 |
+        21. | Dodge   4,010 |
+            |---------------|
+        22. | Dodge   5,886 |
+        23. | Dodge   6,342 |
+            +---------------+
+
+        </code></pre>
+        <br> 
+        <p>However, if we look at the values, you will notice that while all Buick cars have a price below 5000 USD, there are Dodge cars with a price above 5000 USD.</p>
+        <p>We get this output since the expression <i>make==&ldquo;Buick&rdquo;</i> and <i>price &lt; 5000</i> are being grouped together through the <i>&amp;</i>. Therefor, Stata will<br />
+        select observations where the variable make is equal to &ldquo;Buick&rdquo; and the variable price is below 5000 USD and also all observations with the make being &ldquo;Dodge&rdquo; irrespective what the value of the price variable is.</p>
+        <p>In order to select cars that are either a Dodge or a Buick and have a price below 5000 USD, you have to put the first two expressions in parentheses. This way, you are effectively testing two conditions. The first is that the car is <i>either</i> a Dodge or a Buick and the second is that it <i>also</i> has a price below 5000 USD. The important difference is that the second condition, the price being below 5000 USD, now has to be true together with the car being either a Dodge or a Buick.</p>
+        <pre><code>. list make price if (make==&quot;Dodge&quot; | make==&quot;Buick&quot;) &amp; price &lt; 5000
+
+            +---------------+
+            |  make   price |
+            |---------------|
+        4. | Buick   4,816 |
+        7. | Buick   4,453 |
+        10. | Buick   4,082 |
+        20. | Dodge   3,984 |
+        21. | Dodge   4,010 |
+            +---------------+
+
+        </code></pre>
+        <br>
+        <h4><a href="#exercise-2-if-qualifiers-with-multiple-expressions" id="exercise-2-if-qualifiers-with-multiple-expressions">Exercise 2: if qualifiers with multiple expressions</a></h4>
+        <ol>
+        <li>List cars with a price between 6000 and 7000 including both values.</li>
+        <li>Create a histogram with the <b>hist</b> command of the car prices for all Buick or Chevrolet cars.</li>
+        <li>Create a histogram of price for all Buick and Chevrolet cars with a minimum weight of 3000 Pounds. Use the frequency option and set the number of bins to 10. Use the <b>help hist</b> command if you don&rsquo;t know how to customize the histogram correctly.</li>
+        </ol>
+        <br>
+        <br>
+        <h3><a href="#using-if-qualifiers-to-replace-values-and-create-variables" id="using-if-qualifiers-to-replace-values-and-create-variables">Using if qualifiers to replace values and create variables</a></h3>
+        <p>If qualifiers are particularly useful to replace values in an existing variable. Similarly, you can use if qualifiers to create variables that recode existing variables.</p>
+        <p>In the following example we are creating a categorical recoding of the <i>price</i> variable under the new variable <i>price_cat</i>. The new variable <i>price_cat</i> categorizes the price variable into three bands:</p>
+        <ul>
+            <li>0 : price below 5000</li>
+            <li>1 : price between 5000 and 10000</li>
+            <li>2 : price above 10000</li>
+        </ul>
+        <p>In the first step we simply create the variable <i>price_cat</i> and set all values to 0. We then use the <b>replace</b> command to replace the 0&rsquo;s with 1&rsquo;s where the price is equal or larger than 5000. Finally, we use the <b>replace</b> command again to replace the 0&rsquo;s with 1&rsquo;s where the price is larger than 10000.</p>
+        <pre><code>. gen price_cat=0
+
+        . replace price_cat=1 if price &gt;= 5000
+        (37 real changes made)
+
+        . replace price_cat=2 if price &gt; 10000
+        (10 real changes made)
+
+        </code></pre>
+        <br>
+        <p>We can now use the <b>tab</b> command to inspect the frequency distribution of the different categories of the newly created <i>price_cat</i> variable.</p>
+        <pre><code>. tab price_cat, sort
+
+        price_cat |      Freq.     Percent        Cum.
+        ------------+-----------------------------------
+                0 |         37       50.00       50.00
+                1 |         27       36.49       86.49
+                2 |         10       13.51      100.00
+        ------------+-----------------------------------
+            Total |         74      100.00
+
+        </code></pre>
+        <br>
+        <h4><a href="#exercise-3-replacing-values-using-if-qualifiers" id="exercise-3-replacing-values-using-if-qualifiers">Exercise 3: Replacing values using if qualifiers</a></h4>
+        <ol>
+            <li>Create a new variable called <i>german</i> that codes for a car being german 
+            or not. 
+                <ul>
+                    <li>0 : non-german</li>
+                    <li>1 : german</li>
+                </ul>	
+                The german car brands in the dataset are:
+                <ul>
+                    <li>- Audi</li>
+                    <li>- BMW</li>
+                    <li>- VW</li>
+                </ul>
+            </li>
+            <li>What is the mean price of german cars?</li>
+        </ol>
+        <h3><a href="#evaluation" id="evaluation">Final task: Please give us your feedback! </a></h3>
+            <p>Upon completing the survey, <b>you will receive the link to the solution file</b>, to check how your commands compares to the sample solution.</p>
+        <p>In order to adapt our training to your needs and provide the most valuable learning experience for you, we depend on your feedack.</p>
+            <p>We would be grateful if you could take 1 min before the end of the workshop to get your feedback! </p>
+        <p><a href="https://lse.eu.qualtrics.com/jfe/form/SV_77M35cq1arxNcj3?course=Stata%201:Importing%20and%20inspecting%20Data&topic=Stata&link=https://lsecloud-my.sharepoint.com/:u:/g/personal/m_wiemers_lse_ac_uk/EU9fXeq9Mm9Ii363M_Eypf0B231Lx_NEpTkHgMGnr3SGzw?e=pm3D9J">Click here to open the survey!</a></p>
+    </div>
+</body>
