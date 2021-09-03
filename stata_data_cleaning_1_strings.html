@@ -89,125 +89,124 @@
     <p>It is therefore a good habit to always inspect a dataset after having imported it to spot variables that need to be converted to a different format.</p>
     <p>After having imported the gapminder dataset, we are going to inspect how the variables have been imported with <b>describe</b>.</p>
   
-    <pre><code>. describe
+<pre><code>. describe
 
-    Contains data
-      obs:           432                          
-    vars:            15                          
-    size:        90,288                          
-    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                  storage   display    value
-    variable name   type    format     label      variable label
-    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    country         str24   %24s                  country
-    continent       str8    %9s                   continent
-    subject         str9    %9s                   subject
-    D               str13   %13s                  1952
-    E               str13   %13s                  1957
-    F               str13   %13s                  1962
-    G               str13   %13s                  1967
-    H               str13   %13s                  1972
-    I               str13   %13s                  1977
-    J               str15   %15s                  1982
-    K               str15   %15s                  1987
-    L               str15   %15s                  1992
-    M               str15   %15s                  1997
-    N               str15   %15s                  2002
-    O               str15   %15s                  2007
-    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    Sorted by: 
-        Note: Dataset has changed since last saved.
+Contains data
+  obs:           432                          
+vars:            15                          
+size:        90,288                          
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+              storage   display    value
+variable name   type    format     label      variable label
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+country         str24   %24s                  country
+continent       str8    %9s                   continent
+subject         str9    %9s                   subject
+D               str13   %13s                  1952
+E               str13   %13s                  1957
+F               str13   %13s                  1962
+G               str13   %13s                  1967
+H               str13   %13s                  1972
+I               str13   %13s                  1977
+J               str15   %15s                  1982
+K               str15   %15s                  1987
+L               str15   %15s                  1992
+M               str15   %15s                  1997
+N               str15   %15s                  2002
+O               str15   %15s                  2007
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Sorted by: 
+    Note: Dataset has changed since last saved.
 
-    </code></pre>
+</code></pre>
   
     <p>All variables have been imported as string, which makes sense for the first three variables, which are categorical variables that contain text data. The remaining variables for the years from 1952 - 2007 however all contain numerical data.</p>
     <p>We can get a quick overview of the data that is stored in the D-O variables with list.</p>
     <p>Stata imported these variables as string because of the comma that is used to group the thousands as you can see in the third and fourth row.</p>
   
-    <pre><code>. list D-O in 1/5
+<pre><code>. list D-O in 1/5
 
-        +---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-        |           D             E              F              G              H              I              J              K              L              M              N              O |
-        |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-      1. | 779.4453145   820.8530296      853.10071    836.1971382    739.9811058      786.11336    978.0114388    852.3959448    649.3413952     635.341351    726.7340548    974.5803384 |
-      2. |      28.801        30.332         31.997          34.02         36.088         38.438         39.854         40.822         41.674         41.763         42.129         43.828 |
-      3. | 8,425,333.0   9,240,934.0   10,267,083.0   11,537,966.0   13,079,460.0   14,880,372.0   12,881,816.0   13,867,957.0   16,317,921.0   22,227,415.0   25,268,405.0   31,889,923.0 |
-      4. | 779.4453145   820.8530296      853.10071    836.1971382    739.9811058      786.11336    978.0114388    852.3959448    649.3413952     635.341351    726.7340548    974.5803384 |
-      5. |      28.801        30.332         31.997          34.02         36.088         38.438         39.854         40.822         41.674         41.763         42.129         43.828 |
-        +---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+   +---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+   |           D             E              F              G              H              I              J              K              L              M              N              O |
+   |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+1. | 779.4453145   820.8530296      853.10071    836.1971382    739.9811058      786.11336    978.0114388    852.3959448    649.3413952     635.341351    726.7340548    974.5803384 |
+2. |      28.801        30.332         31.997          34.02         36.088         38.438         39.854         40.822         41.674         41.763         42.129         43.828 |
+3. | 8,425,333.0   9,240,934.0   10,267,083.0   11,537,966.0   13,079,460.0   14,880,372.0   12,881,816.0   13,867,957.0   16,317,921.0   22,227,415.0   25,268,405.0   31,889,923.0 |
+4. | 779.4453145   820.8530296      853.10071    836.1971382    739.9811058      786.11336    978.0114388    852.3959448    649.3413952     635.341351    726.7340548    974.5803384 |
+5. |      28.801        30.332         31.997          34.02         36.088         38.438         39.854         40.822         41.674         41.763         42.129         43.828 |
+   +---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-    </code></pre>
+</code></pre>
   
     <h3><a href="#removing-illegal-characters-before-converting" id="removing-illegal-characters-before-converting">Removing illegal characters before converting</a></h3>
   
     <p>In order to convert a variable that is in string format to numeric, we first have to remove any illegal characters. We have identified the commas in the D-O variables in the previous step. We can remove the commas with the replace command in combination with the <b>subinstr()</b> function.</p>
-  
-    <pre><code>. replace D=subinstr(D,&quot;,&quot;, &quot;&quot;, .)
-    (242 real changes made)
 
-    </code></pre>
+<pre><code>. replace D=subinstr(D,&quot;,&quot;, &quot;&quot;, .)
+(242 real changes made)
+</code></pre>
   
     <p>We use replace to make changes to the values in the variable D. In particular, we want to replace every comma with an empty string. In order to do so, we must ust the <b>subinstr()</b> function after the = sign.</p>
     <p>The <b>subinstr()</b> function takes four arguments. The first is the variable we want to replace - D. The second argument is the value inside the variable, that we want to replace - the comma. The third argument is the value that we want to replace the comma with - an empty string. With the last argument you can specify how often you want to apply changing a comma to an empty string. It could be that there are only two commas in the variable that you want to replace. In that case you would enter a 2. By entering a . we instruct <b>subinstr()</b> to replace all occurences of the comma inside the values of the D variable with an empty string.</p>
     <p>Below we replace the commas in all remaining variables with an empty string.</p>
   
-    <pre><code>. replace D=subinstr(D,&quot;,&quot;, &quot;&quot;, .)
-    (0 real changes made)
+<pre><code>. replace D=subinstr(D,&quot;,&quot;, &quot;&quot;, .)
+(0 real changes made)
 
-    . replace E=subinstr(E,&quot;,&quot;, &quot;&quot;, .)
-    (245 real changes made)
+. replace E=subinstr(E,&quot;,&quot;, &quot;&quot;, .)
+(245 real changes made)
 
-    . replace F=subinstr(F,&quot;,&quot;, &quot;&quot;, .)
-    (252 real changes made)
+. replace F=subinstr(F,&quot;,&quot;, &quot;&quot;, .)
+(252 real changes made)
 
-    . replace G=subinstr(G,&quot;,&quot;, &quot;&quot;, .)
-    (257 real changes made)
+. replace G=subinstr(G,&quot;,&quot;, &quot;&quot;, .)
+(257 real changes made)
 
-    . replace H=subinstr(H,&quot;,&quot;, &quot;&quot;, .)
-    (259 real changes made)
+. replace H=subinstr(H,&quot;,&quot;, &quot;&quot;, .)
+(259 real changes made)
 
-    . replace I=subinstr(I,&quot;,&quot;, &quot;&quot;, .)
-    (259 real changes made)
+. replace I=subinstr(I,&quot;,&quot;, &quot;&quot;, .)
+(259 real changes made)
 
-    . replace J=subinstr(J,&quot;,&quot;, &quot;&quot;, .)
-    (257 real changes made)
+. replace J=subinstr(J,&quot;,&quot;, &quot;&quot;, .)
+(257 real changes made)
 
-    . replace K=subinstr(K,&quot;,&quot;, &quot;&quot;, .)
-    (258 real changes made)
+. replace K=subinstr(K,&quot;,&quot;, &quot;&quot;, .)
+(258 real changes made)
 
-    . replace L=subinstr(L,&quot;,&quot;, &quot;&quot;, .)
-    (257 real changes made)
+. replace L=subinstr(L,&quot;,&quot;, &quot;&quot;, .)
+(257 real changes made)
 
-    . replace M=subinstr(M,&quot;,&quot;, &quot;&quot;, .)
-    (261 real changes made)
+. replace M=subinstr(M,&quot;,&quot;, &quot;&quot;, .)
+(261 real changes made)
 
-    . replace N=subinstr(N,&quot;,&quot;, &quot;&quot;, .)
-    (263 real changes made)
+. replace N=subinstr(N,&quot;,&quot;, &quot;&quot;, .)
+(263 real changes made)
 
-    . replace O=subinstr(O,&quot;,&quot;, &quot;&quot;, .)
-    (267 real changes made)
+. replace O=subinstr(O,&quot;,&quot;, &quot;&quot;, .)
+(267 real changes made)
 
-    </code></pre>
+</code></pre>
     
     <p>We can write the code more efficient with a foreach loop.</p>
     
-    <pre><code>. foreach var of varlist D-O{
-      2.         replace `var'=subinstr(`var', &quot;,&quot;, &quot;&quot;, .)
-      3. }
-    (0 real changes made)
-    (0 real changes made)
-    (0 real changes made)
-    (0 real changes made)
-    (0 real changes made)
-    (0 real changes made)
-    (0 real changes made)
-    (0 real changes made)
-    (0 real changes made)
-    (0 real changes made)
-    (0 real changes made)
-    (0 real changes made)
+<pre><code>. foreach var of varlist D-O{
+  replace `var'=subinstr(`var', &quot;,&quot;, &quot;&quot;, .)
+}
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
 
-    </code></pre>
+</code></pre>
     
     <h2><a href="#convert-to-numeric" id="convert-to-numeric">Convert to numeric</a></h2>
     
@@ -216,92 +215,90 @@
     <p>We provide all D-O variables with D-O as the argument to the <b>destring</b> command. In order to overwrite the existing variables, instead of creating new variables, we use the replace option.</p>
     <p>If we now attempt to destring all D-O variables, Stata will refuse to do so for the variables D-I, since they contain non-numerical strings.</p>
     
-    <pre><code>. destring D-O, replace
-    D: contains nonnumeric characters; no replace
-    E: contains nonnumeric characters; no replace
-    F: contains nonnumeric characters; no replace
-    G: contains nonnumeric characters; no replace
-    H: contains nonnumeric characters; no replace
-    I: contains nonnumeric characters; no replace
-    J: all characters numeric; replaced as double
-    K: all characters numeric; replaced as double
-    L: all characters numeric; replaced as double
-    M: all characters numeric; replaced as double
-    N: all characters numeric; replaced as double
-    O: all characters numeric; replaced as double
-
-    </code></pre>
+<pre><code>. destring D-O, replace
+D: contains nonnumeric characters; no replace
+E: contains nonnumeric characters; no replace
+F: contains nonnumeric characters; no replace
+G: contains nonnumeric characters; no replace
+H: contains nonnumeric characters; no replace
+I: contains nonnumeric characters; no replace
+J: all characters numeric; replaced as double
+K: all characters numeric; replaced as double
+L: all characters numeric; replaced as double
+M: all characters numeric; replaced as double
+N: all characters numeric; replaced as double
+O: all characters numeric; replaced as double
+</code></pre>
   
     <p>We can inspect the non-numerical values with the following command. The <b>real</b> command will convert string values to number. If a string value does not only consist of digits, it will return the dot, which represents a missing numerical value in Stata. With the below command, we print the frequencies, using <b>tab</b>, for all values where <b>real(D)</b> returns a missing.</p>
     <p>The value &ldquo;n/a&rdquo; occurs once in the D-I variables.</p>
     
-    <pre><code>. tab D if real(D) == .
+<pre><code>. tab D if real(D) == .
 
-            1952 |      Freq.     Percent        Cum.
-    --------------+-----------------------------------
-              n/a |          1      100.00      100.00
-    --------------+-----------------------------------
-            Total |          1      100.00
+         1952 |      Freq.     Percent        Cum.
+--------------+-----------------------------------
+          n/a |          1      100.00      100.00
+--------------+-----------------------------------
+        Total |          1      100.00
 
-    . tab E if real(E) == .
+. tab E if real(E) == .
 
-            1957 |      Freq.     Percent        Cum.
-    --------------+-----------------------------------
-              n/a |          1      100.00      100.00
-    --------------+-----------------------------------
-            Total |          1      100.00
+         1957 |      Freq.     Percent        Cum.
+--------------+-----------------------------------
+          n/a |          1      100.00      100.00
+--------------+-----------------------------------
+        Total |          1      100.00
 
-    . tab F if real(F) == .
+. tab F if real(F) == .
 
-            1962 |      Freq.     Percent        Cum.
-    --------------+-----------------------------------
-              n/a |          1      100.00      100.00
-    --------------+-----------------------------------
-            Total |          1      100.00
+         1962 |      Freq.     Percent        Cum.
+--------------+-----------------------------------
+          n/a |          1      100.00      100.00
+--------------+-----------------------------------
+        Total |          1      100.00
 
-    . tab G if real(G) == .
+. tab G if real(G) == .
 
-            1967 |      Freq.     Percent        Cum.
-    --------------+-----------------------------------
-              n/a |          1      100.00      100.00
-    --------------+-----------------------------------
-            Total |          1      100.00
+         1967 |      Freq.     Percent        Cum.
+--------------+-----------------------------------
+          n/a |          1      100.00      100.00
+--------------+-----------------------------------
+        Total |          1      100.00
 
-    . tab H if real(H) == .
+. tab H if real(H) == .
 
-            1972 |      Freq.     Percent        Cum.
-    --------------+-----------------------------------
-              n/a |          1      100.00      100.00
-    --------------+-----------------------------------
-            Total |          1      100.00
+         1972 |      Freq.     Percent        Cum.
+--------------+-----------------------------------
+          n/a |          1      100.00      100.00
+--------------+-----------------------------------
+        Total |          1      100.00
 
-    . tab I if real(I) == .
+. tab I if real(I) == .
 
-            1977 |      Freq.     Percent        Cum.
-    --------------+-----------------------------------
-              n/a |          1      100.00      100.00
-    --------------+-----------------------------------
-            Total |          1      100.00
-
-    </code></pre>
+         1977 |      Freq.     Percent        Cum.
+--------------+-----------------------------------
+          n/a |          1      100.00      100.00
+--------------+-----------------------------------
+        Total |          1      100.00
+</code></pre>
     
     <p>In case a variable contains non-numeric entries, we can use the <i>force</i> option to replace all of the non-numeric values that Stata cannot convert to a number to a missing. You will learn more about missing values in the next workshop.</p>
     
-    <pre><code>. destring D-I, replace force
-    D: contains nonnumeric characters; replaced as double
-    (1 missing value generated)
-    E: contains nonnumeric characters; replaced as double
-    (1 missing value generated)
-    F: contains nonnumeric characters; replaced as double
-    (1 missing value generated)
-    G: contains nonnumeric characters; replaced as double
-    (1 missing value generated)
-    H: contains nonnumeric characters; replaced as double
-    (1 missing value generated)
-    I: contains nonnumeric characters; replaced as double
-    (1 missing value generated)
+<pre><code>. destring D-I, replace force
+D: contains nonnumeric characters; replaced as double
+(1 missing value generated)
+E: contains nonnumeric characters; replaced as double
+(1 missing value generated)
+F: contains nonnumeric characters; replaced as double
+(1 missing value generated)
+G: contains nonnumeric characters; replaced as double
+(1 missing value generated)
+H: contains nonnumeric characters; replaced as double
+(1 missing value generated)
+I: contains nonnumeric characters; replaced as double
+(1 missing value generated)
 
-    </code></pre>
+</code></pre>
   
     <h3><a href="#exercise-1-converting-strings-to-numerical-format" id="exercise-1-converting-strings-to-numerical-format">Exercise 1: Converting strings to numerical format</a></h3>
   
@@ -332,45 +329,44 @@
     <p>String variables sometimes contain unnecessary white spaces. We can easily remove these with the <b>strtrim</b> function. Let&rsquo;s first find out whether there are any leading or trailing spaces for the continent and country variables.</p>
     <p>The frequency table shows that several countries occur several times due to leading or trailing spaces.</p>
     
-    <pre><code>. tab continent
+<pre><code>. tab continent
 
-      continent |      Freq.     Percent        Cum.
-    ------------+-----------------------------------
-        Africa |          6        1.39        1.39
-        Europe |          3        0.69        2.08
-        Africa |        150       34.72       36.81
-      Americas |         78       18.06       54.86
-          Asia |         96       22.22       77.08
-          Asia  |          6        1.39       78.47
-        Europe |         87       20.14       98.61
-        Oceania |          6        1.39      100.00
-    ------------+-----------------------------------
-          Total |        432      100.00
+  continent |      Freq.     Percent        Cum.
+------------+-----------------------------------
+     Africa |          6        1.39        1.39
+     Europe |          3        0.69        2.08
+     Africa |        150       34.72       36.81
+   Americas |         78       18.06       54.86
+       Asia |         96       22.22       77.08
+      Asia  |          6        1.39       78.47
+     Europe |         87       20.14       98.61
+    Oceania |          6        1.39      100.00
+------------+-----------------------------------
+      Total |        432      100.00
 
-    </code></pre>
-  
+</code></pre>
+
     <p>We can replace the values with the trimmed values.</p>
     
-    <pre><code>. replace continent = strtrim(continent)
-    (15 real changes made)
+<pre><code>. replace continent = strtrim(continent)
+(15 real changes made)
 
-    </code></pre>
-    
+</code></pre>
+
     <p>The frequency table now shows only one value per continent.</p>
   
-    <pre><code>. tab continent
+<pre><code>. tab continent
 
-      continent |      Freq.     Percent        Cum.
-    ------------+-----------------------------------
-        Africa |        156       36.11       36.11
-      Americas |         78       18.06       54.17
-          Asia |        102       23.61       77.78
-        Europe |         90       20.83       98.61
-        Oceania |          6        1.39      100.00
-    ------------+-----------------------------------
-          Total |        432      100.00
-
-    </code></pre>
+  continent |      Freq.     Percent        Cum.
+------------+-----------------------------------
+     Africa |        156       36.11       36.11
+   Americas |         78       18.06       54.17
+       Asia |        102       23.61       77.78
+     Europe |         90       20.83       98.61
+    Oceania |          6        1.39      100.00
+------------+-----------------------------------
+      Total |        432      100.00
+</code></pre>
   
     <h3><a href="#exercise-2-removing-leading-and-trailing-spaces" id="exercise-2-removing-leading-and-trailing-spaces">Exercise 2: Removing leading and trailing spaces</a></h3>
     
@@ -391,116 +387,110 @@
     <p>We can split string variables into several variables with <b>split</b>. To illustrate how the <b>split</b> command works, we will use the splitxmpl dataset, which we can load from the Stata server.</p>
     <p>The first column tells us the state and which region of the state.</p>
   
-    <pre><code>. webuse splitxmpl, clear
-    (split example)
+<pre><code>. webuse splitxmpl, clear
+(split example)
 
-    . 
-    . list
+. list
 
-        +-------------------------+
-        |            var1    var2 |
-        |-------------------------|
-      1. |   South Alabama   29.30 |
-      2. |     West Alaska   26.10 |
-      3. |    West Arizona   29.20 |
-      4. |  South Arkansas   30.60 |
-      5. | West California   29.90 |
-        |-------------------------|
-      6. |   West Colorado   28.60 |
-      7. |  NE Connecticut   32.00 |
-      8. |  South Delaware   29.80 |
-      9. |   South Florida   34.70 |
-    10. |   South Georgia   28.70 |
-        +-------------------------+
-
-    </code></pre>
+     +-------------------------+
+     |            var1    var2 |
+     |-------------------------|
+  1. |   South Alabama   29.30 |
+  2. |     West Alaska   26.10 |
+  3. |    West Arizona   29.20 |
+  4. |  South Arkansas   30.60 |
+  5. | West California   29.90 |
+     |-------------------------|
+  6. |   West Colorado   28.60 |
+  7. |  NE Connecticut   32.00 |
+  8. |  South Delaware   29.80 |
+  9. |   South Florida   34.70 |
+ 10. |   South Georgia   28.70 |
+     +-------------------------+
+</code></pre>
   
     <p>We can split the string into two variables. Two new variables, for the characters before the space and the characters following the space, have been added.</p>
     
-    <pre><code>. split var1
-    variables created as string: 
-    var11  var12
+<pre><code>. split var1
+variables created as string: 
+var11  var12
 
-    . 
-    . list
 
-        +-----------------------------------------------+
-        |            var1    var2   var11         var12 |
-        |-----------------------------------------------|
-      1. |   South Alabama   29.30   South       Alabama |
-      2. |     West Alaska   26.10    West        Alaska |
-      3. |    West Arizona   29.20    West       Arizona |
-      4. |  South Arkansas   30.60   South      Arkansas |
-      5. | West California   29.90    West    California |
-        |-----------------------------------------------|
-      6. |   West Colorado   28.60    West      Colorado |
-      7. |  NE Connecticut   32.00      NE   Connecticut |
-      8. |  South Delaware   29.80   South      Delaware |
-      9. |   South Florida   34.70   South       Florida |
-    10. |   South Georgia   28.70   South       Georgia |
-        +-----------------------------------------------+
+. list
 
-    </code></pre>
+     +-----------------------------------------------+
+     |            var1    var2   var11         var12 |
+     |-----------------------------------------------|
+  1. |   South Alabama   29.30   South       Alabama |
+  2. |     West Alaska   26.10    West        Alaska |
+  3. |    West Arizona   29.20    West       Arizona |
+  4. |  South Arkansas   30.60   South      Arkansas |
+  5. | West California   29.90    West    California |
+     |-----------------------------------------------|
+  6. |   West Colorado   28.60    West      Colorado |
+  7. |  NE Connecticut   32.00      NE   Connecticut |
+  8. |  South Delaware   29.80   South      Delaware |
+  9. |   South Florida   34.70   South       Florida | 
+ 10. |   South Georgia   28.70   South       Georgia |
+     +-----------------------------------------------+
+</code></pre>
     
     <p>Let&rsquo;s say we wanted to extract the name and title from these manually entered data.</p>
     
-    <pre><code>. clear all
+<pre><code>. clear all
 
-    . input str30 name
+. input str30 name
 
-                                  name
-      1. &quot;Mrs-Sarah-Miller&quot;
-      2. &quot;Mr-Patrick-McMaster&quot;
-      3. &quot;Mr-James-Pritchard&quot;
-      4. end
+                              name
+  1. &quot;Mrs-Sarah-Miller&quot;
+  2. &quot;Mr-Patrick-McMaster&quot;
+  3. &quot;Mr-James-Pritchard&quot;
+  4. end
 
-    . 
-    . list
+ 
+. list
 
-        +---------------------+
-        |                name |
-        |---------------------|
-      1. |    Mrs-Sarah-Miller |
-      2. | Mr-Patrick-McMaster |
-      3. |  Mr-James-Pritchard |
-        +---------------------+
-
-    </code></pre>
+     +---------------------+
+     |                name |
+     |---------------------|
+  1. |    Mrs-Sarah-Miller |
+  2. | Mr-Patrick-McMaster |
+  3. |  Mr-James-Pritchard |
+     +---------------------+
+</code></pre>
     
     <p>We can use the <i>parse</i> option to split the name variable based on the &ldquo;-&rdquo; character.</p>
     
-    <pre><code>. split name, p(&quot;-&quot;)
-    variables created as string: 
-    name1  name2  name3
+<pre><code>. split name, p(&quot;-&quot;)
+variables created as string: 
+name1  name2  name3
 
-    . list
+. list
 
-        +---------------------------------------------------+
-        |                name   name1     name2       name3 |
-        |---------------------------------------------------|
-      1. |    Mrs-Sarah-Miller     Mrs     Sarah      Miller |
-      2. | Mr-Patrick-McMaster      Mr   Patrick    McMaster |
-      3. |  Mr-James-Pritchard      Mr     James   Pritchard |
-        +---------------------------------------------------+
-
-    </code></pre>
+     +---------------------------------------------------+
+     |                name   name1     name2       name3 |
+     |---------------------------------------------------|
+  1. |    Mrs-Sarah-Miller     Mrs     Sarah      Miller |
+  2. | Mr-Patrick-McMaster      Mr   Patrick    McMaster |
+  3. |  Mr-James-Pritchard      Mr     James   Pritchard |
+     +---------------------------------------------------+
+</code></pre>
     
     <p>In order to combine the first and last name, we can use the +.</p>
     
-    <pre><code>. replace name = name2 + &quot; &quot; + name3
-    (3 real changes made)
+<pre><code>. replace name = name2 + &quot; &quot; + name3
+(3 real changes made)
 
-    . list
+. list
 
-        +------------------------------------------------+
-        |             name   name1     name2       name3 |
-        |------------------------------------------------|
-      1. |     Sarah Miller     Mrs     Sarah      Miller |
-      2. | Patrick McMaster      Mr   Patrick    McMaster |
-      3. |  James Pritchard      Mr     James   Pritchard |
-        +------------------------------------------------+
-
-    </code></pre>
+     +------------------------------------------------+
+     |             name   name1     name2       name3 |
+     |------------------------------------------------|
+  1. |     Sarah Miller     Mrs     Sarah      Miller |
+  2. | Patrick McMaster      Mr   Patrick    McMaster |
+  3. |  James Pritchard      Mr     James   Pritchard |
+     +------------------------------------------------+
+</code></pre>
   
     <h3><a href="#exercise-3-splitting-and-combining-strings" id="exercise-3-splitting-and-combining-strings">Exercise 3: Splitting and combining strings</a></h3>
   
