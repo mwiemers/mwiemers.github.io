@@ -80,7 +80,6 @@ Duplicates in terms of all variables
 
 Duplicates in terms of all variables
 
-. 
 . browse if duplicated_n &gt; 0
 
 </code></pre>
@@ -92,7 +91,6 @@ Duplicates in terms of all variables
 
 (6 observations deleted)
 
-. 
 . duplicates report
 
 Duplicates in terms of all variables
@@ -182,8 +180,8 @@ duplicated_n |        426    .0140845     .117978          0          1
 <h2><a href="#correctly-label-missings" id="correctly-label-missings">Correctly label missings</a></h2>
 <p>Once the data has been imported into Stata, we should use the . symbol to represent missing numerical values. Let us therefore replace the -99 values with the . symbol for the variables v5, v10, v1 and v15 using a foreach loop.</p>
 <pre><code>. foreach var of varlist D-H L{
-  2.         replace `var'=. if `var' == -99
-  3. }
+	replace `var'=. if `var' == -99
+}
 (12 real changes made, 12 to missing)
 (9 real changes made, 9 to missing)
 (6 real changes made, 6 to missing)
@@ -270,9 +268,6 @@ missing values for the <i>D-H</i> and <i>L</i> variables.</p>
 <p>To get a sense of the distribution of missing values across observations, we can plot a histogram. This will help us to understand whether there are a lot of observations with a few missings or whether there are a few observations with a lot of missings.</p>
 <pre><code>. hist nmiss
 (bin=20, start=0, width=.3)
-
-. graph export hist_nmiss.png, replace
-(file hist_nmiss.png written in PNG format)
 
 </code></pre>
 <img src="/screenshots/hist_nmiss.png" width="50%">
