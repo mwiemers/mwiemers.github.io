@@ -23,526 +23,524 @@
       <a href="#evaluation">Final task: Please give us your feedback!</a>
   </div>
 
-  <div class="main">
-      <h1><a href="#data-cleaning-in-stata-variable-and-value-labels" id="data-cleaning-in-stata-variable-and-value-labels">Data cleaning in Stata - Variable and value labels</a></h1>
-      <p>The data cleaning series is going to teach you the most fundamental commands and techniques to prepare data in Stata for statistical analysis.</p>
-      <p>The series is going to cover the following topics:</p>
-      <ul>
-      <li>Converting string to numerical</li>
-      <li>Dealing with missings and duplicates</li>
-      <li>Applying variable and value labels</li>
-      <li>Reshaping and merging data</li>
-      </ul>
-      <p>In this practical session, you will learn:</p>
-      <ul>
-      <li>about the importance of labelling variables and values</li>
-      <li>how to apply variable labels</li>
-      <li>how to create, apply and modify value labels</li>
-      <li>how to turn a string variable into a numerical variable with corresponding
-      value labels</li>
-      <li>how to rename variable names with extracted variable labels</li>
-      </ul>
-      <br>
-      <br>
-      <h2>More information on how the session is run</h2>
-      <b>How to work together</b>: 
-      <ul>
-         <li>Please turn on your microphone and webcam.</li>
-         <li>One shares the screen and the other requests remote control. </li>
-         <li>Take turns on who types for each exercise.</li>
-      </ul>
-      <b>What to do when getting stuck</b>:
-      <ol>
-         <li>Ask the trainer if you struggle to find a solution.</li>
-         <li>Use the help command. To get help with a specific command type <b>help "command name"</b></li>
-         <li>Search online. The statalist.org forum is usually the most useful resource.</li>
-      </ol>
-      <br>
-      <p>In this unit, you are going to learn about variable and value labels and the different commands available to create and apply labels.</p>
-      <p>Labels can be applied to either variables or the values of a variable. A variable label is a short description of the data that the variable contains. Value labels are labels that are displayed instead of the raw numerical values. You would apply value labels only to a categorical variable and not to a continuous variable, since for a categorical variable the numerical values represent a specific category and not a scale value.</p>
-      <br>
-      <br>
-      <h3><a href="#variable-labels" id="variable-labels">Variable labels</a></h3>
-      <br>
-      <p>A variable label is a short description of the type of data that the variable contains. As you might remember you can get a list of the label for each variable in your dataset with the <b>describe</b> command.</p>
-      <pre><code>
-      . webuse auto, clear
-      (1978 Automobile Data)
+<div class="main">
+<h1><a href="#data-cleaning-in-stata-variable-and-value-labels" id="data-cleaning-in-stata-variable-and-value-labels">Data cleaning in Stata - Variable and value labels</a></h1>
+<p>The data cleaning series is going to teach you the most fundamental commands and techniques to prepare data in Stata for statistical analysis.</p>
+<p>The series is going to cover the following topics:</p>
+<ul>
+<li>Converting string to numerical</li>
+<li>Dealing with missings and duplicates</li>
+<li>Applying variable and value labels</li>
+<li>Reshaping and merging data</li>
+</ul>
+<p>In this practical session, you will learn:</p>
+<ul>
+<li>about the importance of labelling variables and values</li>
+<li>how to apply variable labels</li>
+<li>how to create, apply and modify value labels</li>
+<li>how to turn a string variable into a numerical variable with corresponding
+value labels</li>
+<li>how to rename variable names with extracted variable labels</li>
+</ul>
+<br>
+<br>
+<h2>More information on how the session is run</h2>
+<b>How to work together</b>: 
+<ul>
+<li>Please turn on your microphone and webcam.</li>
+<li>One shares the screen and the other requests remote control. </li>
+<li>Take turns on who types for each exercise.</li>
+</ul>
+<b>What to do when getting stuck</b>:
+<ol>
+<li>Ask the trainer if you struggle to find a solution.</li>
+<li>Use the help command. To get help with a specific command type <b>help "command name"</b></li>
+<li>Search online. The statalist.org forum is usually the most useful resource.</li>
+</ol>
+<br>
+<p>In this unit, you are going to learn about variable and value labels and the different commands available to create and apply labels.</p>
+<p>Labels can be applied to either variables or the values of a variable. A variable label is a short description of the data that the variable contains. Value labels are labels that are displayed instead of the raw numerical values. You would apply value labels only to a categorical variable and not to a continuous variable, since for a categorical variable the numerical values represent a specific category and not a scale value.</p>
+<br>
+<br>
+<h3><a href="#variable-labels" id="variable-labels">Variable labels</a></h3>
+<br>
+<p>A variable label is a short description of the type of data that the variable contains. As you might remember you can get a list of the label for each variable in your dataset with the <b>describe</b> command.</p>
+<pre><code>. webuse auto, clear
+(1978 Automobile Data)
+. describe
 
-      . describe
+Contains data from http://www.stata-press.com/data/r15/auto.dta
+obs:            74                          1978 Automobile Data
+vars:            12                          13 Apr 2016 17:45
+size:         3,182                          (_dta has notes)
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+storage   display    value
+variable name   type    format     label      variable label
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+make            str18   %-18s                 Make and Model
+price           int     %8.0gc                Price
+mpg             int     %8.0g                 Mileage (mpg)
+rep78           int     %8.0g                 Repair Record 1978
+headroom        float   %6.1f                 Headroom (in.)
+trunk           int     %8.0g                 Trunk space (cu. ft.)
+weight          int     %8.0gc                Weight (lbs.)
+length          int     %8.0g                 Length (in.)
+turn            int     %8.0g                 Turn Circle (ft.)
+displacement    int     %8.0g                 Displacement (cu. in.)
+gear_ratio      float   %6.2f                 Gear Ratio
+foreign         byte    %8.0g      origin     Car type
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Sorted by: foreign
+</code></pre>
+<br>
+<p>You can change the label of a variable with the <b>label variable</b> command. The <b>label variable</b> command takes as arguments the name of the variable and the variable label in double qoutes.</p>
+<p>In the example below, we are changing the variable label of the variable <i>price</i> to <i>Price (USD)</i>.</p>
+<pre><code>. label variable price &quot;Price (USD)&quot;
 
-      Contains data from http://www.stata-press.com/data/r15/auto.dta
-      obs:            74                          1978 Automobile Data
-      vars:            12                          13 Apr 2016 17:45
-      size:         3,182                          (_dta has notes)
-      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                    storage   display    value
-      variable name   type    format     label      variable label
-      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      make            str18   %-18s                 Make and Model
-      price           int     %8.0gc                Price
-      mpg             int     %8.0g                 Mileage (mpg)
-      rep78           int     %8.0g                 Repair Record 1978
-      headroom        float   %6.1f                 Headroom (in.)
-      trunk           int     %8.0g                 Trunk space (cu. ft.)
-      weight          int     %8.0gc                Weight (lbs.)
-      length          int     %8.0g                 Length (in.)
-      turn            int     %8.0g                 Turn Circle (ft.)
-      displacement    int     %8.0g                 Displacement (cu. in.)
-      gear_ratio      float   %6.2f                 Gear Ratio
-      foreign         byte    %8.0g      origin     Car type
-      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      Sorted by: foreign
-      </code></pre>
-      <br>
-      <p>You can change the label of a variable with the <b>label variable</b> command. The <b>label variable</b> command takes as arguments the name of the variable and the variable label in double qoutes.</p>
-      <p>In the example below, we are changing the variable label of the variable <i>price</i> to <i>Price (USD)</i>.</p>
-      <pre><code>. label variable price &quot;Price (USD)&quot;
+</code></pre>
+<p>We can quickly check whether the label has been changed with <b>describe</b></p>
+<pre><code>
+. describe  price
 
-      </code></pre>
-      <p>We can quickly check whether the label has been changed with <b>describe</b></p>
-      <pre><code>
-      . describe  price
+storage   display    value
+variable name   type    format     label      variable label
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+price           int     %8.0gc                Price (USD)
+</code></pre>
+<br>
+<br>
+<h4><a href="#exercise-1-variable-labels" id="exercise-1-variable-labels">Exercise 1: Variable labels</a></h4>
+<p>Run the code chunk to split the make variable into a variable for the brand and model.</p>
+<pre><code>
+. split make
+. gen model = make2 + &quot; &quot; + make3
+. rename make1 brand
+. drop make*
+</code></pre>
+<ol>
+<li>Create a variable label for the brand variable.</li>
+<li>Create a variable label for the model variable.</li>
+</ol>
+<br>
+<br>
+<h3><a href="#value-labels" id="value-labels">Value labels</a></h3>
+<p>In order to illustrate the concept of value labels, we are going to use a fictitious dataset on income data with variables on the respondents id,  gender, employment sector and income.</p>
+<p>We can enter data into Stata manually with the <b>input</b> command. After <b>input</b> we specify the names of the variables we want to enter, that is <i>id</i>, <i>gender</i>, <i>sector</i> and <i>income</i> and hit return. We can then enter the values for each observation in a separate line. In order to end the input of more observations, we use the <b>end</b> command.</p>
+<pre><code>
+. clear
 
-                    storage   display    value
-      variable name   type    format     label      variable label
-      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      price           int     %8.0gc                Price (USD)
-      </code></pre>
-      <br>
-      <br>
-      <h4><a href="#exercise-1-variable-labels" id="exercise-1-variable-labels">Exercise 1: Variable labels</a></h4>
-      <p>Run the code chunk to split the make variable into a variable for the brand and model.</p>
-      <pre><code>
-      . split make
-      . gen model = make2 + &quot; &quot; + make3
-      . rename make1 brand
-      . drop make*
-      </code></pre>
-      <ol>
-         <li>Create a variable label for the brand variable.</li>
-         <li>Create a variable label for the model variable.</li>
-      </ol>
-      <br>
-      <br>
-      <h3><a href="#value-labels" id="value-labels">Value labels</a></h3>
-      <p>In order to illustrate the concept of value labels, we are going to use a fictitious dataset on income data with variables on the respondents id,  gender, employment sector and income.</p>
-      <p>We can enter data into Stata manually with the <b>input</b> command. After <b>input</b> we specify the names of the variables we want to enter, that is <i>id</i>, <i>gender</i>, <i>sector</i> and <i>income</i> and hit return. We can then enter the values for each observation in a separate line. In order to end the input of more observations, we use the <b>end</b> command.</p>
-      <pre><code>
-      . clear
+. input id gender sector income
+id     gender     sector     income
+1. 1 1 4 30000
+2. 2 2 2 50000
+3. 3 1 3 10000
+4. 4 2 2 40000
+5. 5 1 1 120000
+6. 6 2 4 20000
+7. end
+</code></pre>
+<br>
+<p>Value labels are labels that are displayed instead of the raw numerical values of a variable. Value labels are useful to add a label that describes the category that the raw numerical value represents.</p>
+<p>The gender and sector variables are numerical variables where the numbers represent a specific category. In the gender column, 1 represents male and 2 represents female. Since the mapping is abritrary it makes sense to add labels to these numerical values so that the labels and not the raw numbers are displayed.</p>
+<p>In the next two sections, you will learn how to add such labels to a categorical variable with numerical values.</p>
+<h4><a href="#defining-value-labels" id="defining-value-labels">Defining value labels</a></h4>
+<p>Creating value labels is a two step process, in which you first define the value label, that is, the mapping between raw values and labels and then apply that value label to a specific variable.</p>
+<p>Below you can see how we can use the <b>label define</b> command to define the value label <i>gender_lab</i> which maps 1 to male and 2 to female.</p>
+<p>Following <b>label define</b>, we first provide the name for the value label, that is, <i>gender_lab</i>. Subsequently, we define the mapping between each numerical value and its label. The first numerical value is 1, which is labelled male. The next numerical value is 2, which is labelled female.</p>
+<pre><code>
+. label define gender_lab 1 male 2 female
+</code></pre>
+<br>
+<p>In order to list the mapping between values and labels in a value label, we can use the <b>label list</b> command. This command provides a quick way to verify that a label has been defined as intended.</p>
+<pre><code>
+. label list gender_lab
+gender_lab:
+1 male
+2 female
+</code></pre>
+<br>
+<h4><a href="#applying-value-labels" id="applying-value-labels">Applying value labels</a></h4>
+<p>If we now list the data, we see that the label hasn&rsquo;t yet been applied. We still only see the entered numbers in the <i>gender</i> column.</p>
+<pre><code>
+. list
 
-      . input id gender sector income
-      id     gender     sector     income
-      1. 1 1 4 30000
-      2. 2 2 2 50000
-      3. 3 1 3 10000
-      4. 4 2 2 40000
-      5. 5 1 1 120000
-      6. 6 2 4 20000
-      7. end
-      </code></pre>
-      <br>
-      <p>Value labels are labels that are displayed instead of the raw numerical values of a variable. Value labels are useful to add a label that describes the category that the raw numerical value represents.</p>
-      <p>The gender and sector variables are numerical variables where the numbers represent a specific category. In the gender column, 1 represents male and 2 represents female. Since the mapping is abritrary it makes sense to add labels to these numerical values so that the labels and not the raw numbers are displayed.</p>
-      <p>In the next two sections, you will learn how to add such labels to a categorical variable with numerical values.</p>
-      <h4><a href="#defining-value-labels" id="defining-value-labels">Defining value labels</a></h4>
-      <p>Creating value labels is a two step process, in which you first define the value label, that is, the mapping between raw values and labels and then apply that value label to a specific variable.</p>
-      <p>Below you can see how we can use the <b>label define</b> command to define the value label <i>gender_lab</i> which maps 1 to male and 2 to female.</p>
-      <p>Following <b>label define</b>, we first provide the name for the value label, that is, <i>gender_lab</i>. Subsequently, we define the mapping between each numerical value and its label. The first numerical value is 1, which is labelled male. The next numerical value is 2, which is labelled female.</p>
-      <pre><code>
-      . label define gender_lab 1 male 2 female
-      </code></pre>
-      <br>
-      <p>In order to list the mapping between values and labels in a value label, we can use the <b>label list</b> command. This command provides a quick way to verify that a label has been defined as intended.</p>
-      <pre><code>
-      . label list gender_lab
-      gender_lab:
-               1 male
-               2 female
-      </code></pre>
-      <br>
-      <h4><a href="#applying-value-labels" id="applying-value-labels">Applying value labels</a></h4>
-      <p>If we now list the data, we see that the label hasn&rsquo;t yet been applied. We still only see the entered numbers in the <i>gender</i> column.</p>
-      <pre><code>
-      . list
++-------------------------------+
+| id   gender   sector   income |
+|-------------------------------|
+1. |  1        1        4    30000 |
+2. |  2        2        2    50000 |
+3. |  3        1        3    10000 |
+4. |  4        2        2    40000 |
+5. |  5        1        1   120000 |
+|-------------------------------|
+6. |  6        2        4    20000 |
++-------------------------------+
+</code></pre>
+<p>With the <b>label define</b> command we have only created the value label <i>gender_lab</i>, that is, the mapping of numerical values and labels (1 = male, 2 = female).</p>
+<p>In order to apply the value label <i>gender_lab</i> to the variable <i>gender</i>, we can use the <b>label value</b> command. The <b>label value</b> command takes as first argument the name of the variable (<i>gender</i>) and as second argument the name of the value label (<i>gender_lab</i>)that should be applied to that variable.</p>
+<pre><code>
+. label value gender gender_lab
+</code></pre>
+<br>
+<p>If we now use <b>list</b> the dataset, we can see that the gender variable no longer lists the numbers 1 and 2 but the labels male and female.</p>
+<pre><code>
+. list 
 
-         +-------------------------------+
-         | id   gender   sector   income |
-         |-------------------------------|
-      1. |  1        1        4    30000 |
-      2. |  2        2        2    50000 |
-      3. |  3        1        3    10000 |
-      4. |  4        2        2    40000 |
-      5. |  5        1        1   120000 |
-         |-------------------------------|
-      6. |  6        2        4    20000 |
-         +-------------------------------+
-      </code></pre>
-      <p>With the <b>label define</b> command we have only created the value label <i>gender_lab</i>, that is, the mapping of numerical values and labels (1 = male, 2 = female).</p>
-      <p>In order to apply the value label <i>gender_lab</i> to the variable <i>gender</i>, we can use the <b>label value</b> command. The <b>label value</b> command takes as first argument the name of the variable (<i>gender</i>) and as second argument the name of the value label (<i>gender_lab</i>)that should be applied to that variable.</p>
-      <pre><code>
-      . label value gender gender_lab
-      </code></pre>
-      <br>
-      <p>If we now use <b>list</b> the dataset, we can see that the gender variable no longer lists the numbers 1 and 2 but the labels male and female.</p>
-      <pre><code>
-      . list 
++-------------------------------+
+| id   gender   sector   income |
+|-------------------------------|
+1. |  1     male        4    30000 |
+2. |  2   female        2    50000 |
+3. |  3     male        3    10000 |
+4. |  4   female        2    40000 |
+5. |  5     male        1   120000 |
+|-------------------------------|
+6. |  6   female        4    20000 |
++-------------------------------+
+</code></pre>
+<br>
+<p>The labels male and female, however, have not replaced the raw numerical values 1 and 2. They are simply displayed instead of the raw numerical values. We can use the <i>nolab</i> option to display the numerical values instead.</p>
+<pre><code>
+. list, nolab
 
-         +-------------------------------+
-         | id   gender   sector   income |
-         |-------------------------------|
-      1. |  1     male        4    30000 |
-      2. |  2   female        2    50000 |
-      3. |  3     male        3    10000 |
-      4. |  4   female        2    40000 |
-      5. |  5     male        1   120000 |
-         |-------------------------------|
-      6. |  6   female        4    20000 |
-         +-------------------------------+
-      </code></pre>
-      <br>
-      <p>The labels male and female, however, have not replaced the raw numerical values 1 and 2. They are simply displayed instead of the raw numerical values. We can use the <i>nolab</i> option to display the numerical values instead.</p>
-      <pre><code>
-      . list, nolab
++-------------------------------+
+| id   gender   sector   income |
+|-------------------------------|
+1. |  1        1        4    30000 |
+2. |  2        2        2    50000 |
+3. |  3        1        3    10000 |
+4. |  4        2        2    40000 |
+5. |  5        1        1   120000 |
+|-------------------------------|
+6. |  6        2        4    20000 |
++-------------------------------+
+</code></pre>
+<br>
+<p>To quickly check which value label has been applied to a variable, we can use <b>codebook</b>. In the second row it says label: gender_lab, which means that the value label <i>gender_lab</i> has been applied to the <i>gender</i> variable.</p>
+<pre><code>
+. codebook gender
 
-         +-------------------------------+
-         | id   gender   sector   income |
-         |-------------------------------|
-      1. |  1        1        4    30000 |
-      2. |  2        2        2    50000 |
-      3. |  3        1        3    10000 |
-      4. |  4        2        2    40000 |
-      5. |  5        1        1   120000 |
-         |-------------------------------|
-      6. |  6        2        4    20000 |
-         +-------------------------------+
-      </code></pre>
-      <br>
-      <p>To quickly check which value label has been applied to a variable, we can use <b>codebook</b>. In the second row it says label: gender_lab, which means that the value label <i>gender_lab</i> has been applied to the <i>gender</i> variable.</p>
-      <pre><code>
-      . codebook gender
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+gender                                                                                                                                                                                                                                         (unlabeled)
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      gender                                                                                                                                                                                                                                         (unlabeled)
-      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   type:  numeric (float)
+  label:  gender_lab
 
-                        type:  numeric (float)
-                       label:  gender_lab
+  range:  [1,2]                        units:  1
+unique values:  2                        missing .:  0/6
 
-                       range:  [1,2]                        units:  1
-               unique values:  2                        missing .:  0/6
+tabulation:  Freq.   Numeric  Label
+              3         1  male
+              3         2  female
+</code></pre>
+<br>
+<h4><a href="#why-using-value-labels-for-categorical-data" id="why-using-value-labels-for-categorical-data">Why using value labels for categorical data?</a></h4>
+<p>You might wonder why we would add value labels to a categorical variable instead of simply replacing the numerical values with string values?</p>
+<p>Having a numerical variable makes it easier to use it for certain types of analyses. For instance, a linear regression analysis will not accept a string variable. An ordinal variable, that is, a variable whose categories have an inherent order, can be analysed with a linear regression, but only if in numerical format with labels/categories associated with each number.</p>
+<br>
+<h4><a href="#exercise-2-value-labels" id="exercise-2-value-labels">Exercise 2: Value labels</a></h4>
+<ol>
+<li>Enter the data with the below input command.</li>
+<pre><code>
+. clear all
 
-                  tabulation:  Freq.   Numeric  Label
-                                   3         1  male
-                                   3         2  female
-      </code></pre>
-      <br>
-      <h4><a href="#why-using-value-labels-for-categorical-data" id="why-using-value-labels-for-categorical-data">Why using value labels for categorical data?</a></h4>
-      <p>You might wonder why we would add value labels to a categorical variable instead of simply replacing the numerical values with string values?</p>
-      <p>Having a numerical variable makes it easier to use it for certain types of analyses. For instance, a linear regression analysis will not accept a string variable. An ordinal variable, that is, a variable whose categories have an inherent order, can be analysed with a linear regression, but only if in numerical format with labels/categories associated with each number.</p>
-      <br>
-      <h4><a href="#exercise-2-value-labels" id="exercise-2-value-labels">Exercise 2: Value labels</a></h4>
-      <ol>
-      <li>Enter the data with the below input command.</li>
-      <pre><code>
-      . clear all
-      
-      . input id gender sector income
-      1 1 4 30000
-      2 2 2 50000
-      3 1 3 10000
-      4 2 2 40000
-      5 1 1 120000
-      6 2 4 20000
-      end
-      </code></pre>
-      <li>Define the value label <i>sector_lab</i> for the sector variable, where the mapping 
-         between the values and labels is:
-         <ul>
-            <li>1 - technology</li>
-         <li>2 - media</li>
-         <li>3 - energy</li>
-         <li>4 - transportation</li>
-         </ul>
-         Create the value label only for the first three mappings.</li>
-      <li>List the number-value mappings of the <i>sector_lab</i> value label.</li>
-      <li>Apply the value label to the sector variable.</li>
-      <li>Print the dataset in the results pane to check that the value labels have 
-         been applied correctly.</li>
-      </ol>
-      <br>
-      <br>
-      <h4><a href="#modifying-value-labels" id="modifying-value-labels">Modifying value labels</a></h4>
-      <p>Below we are adding another observation with the <b>input</b> command to our existing dataset.</p>
-      <pre><code>
-      . input
+. input id gender sector income
+1 1 4 30000
+2 2 2 50000
+3 1 3 10000
+4 2 2 40000
+5 1 1 120000
+6 2 4 20000
+end
+</code></pre>
+<li>Define the value label <i>sector_lab</i> for the sector variable, where the mapping 
+between the values and labels is:
+<ul>
+<li>1 - technology</li>
+<li>2 - media</li>
+<li>3 - energy</li>
+<li>4 - transportation</li>
+</ul>
+Create the value label only for the first three mappings.</li>
+<li>List the number-value mappings of the <i>sector_lab</i> value label.</li>
+<li>Apply the value label to the sector variable.</li>
+<li>Print the dataset in the results pane to check that the value labels have 
+been applied correctly.</li>
+</ol>
+<br>
+<br>
+<h4><a href="#modifying-value-labels" id="modifying-value-labels">Modifying value labels</a></h4>
+<p>Below we are adding another observation with the <b>input</b> command to our existing dataset.</p>
+<pre><code>
+. input
 
-      id     gender     sector     income
-      7. 7 3 3 35000
-      8. end
-      </code></pre>
-      <br>
-      <p>If we now print the dataset in the results pane, we notice that for the last observation no label is used for the value of the <i>gender</i> variable in the last row. That is because we didn&rsquo;t add a label for the value 3, which codes for trans-female, when we defined the value label <i>gender_lab</i>.</p>
-      <pre><code>
-      . list
+id     gender     sector     income
+7. 7 3 3 35000
+8. end
+</code></pre>
+<br>
+<p>If we now print the dataset in the results pane, we notice that for the last observation no label is used for the value of the <i>gender</i> variable in the last row. That is because we didn&rsquo;t add a label for the value 3, which codes for trans-female, when we defined the value label <i>gender_lab</i>.</p>
+<pre><code>
+. list
 
-         +-------------------------------+
-         | id   gender   sector   income |
-         |-------------------------------|
-      1. |  1     male        4    30000 |
-      2. |  2   female        2    50000 |
-      3. |  3     male        3    10000 |
-      4. |  4   female        2    40000 |
-      5. |  5     male        1   120000 |
-         |-------------------------------|
-      6. |  6   female        4    20000 |
-      7. |  7        3        3    35000 |
-         +-------------------------------+
++-------------------------------+
+| id   gender   sector   income |
+|-------------------------------|
+1. |  1     male        4    30000 |
+2. |  2   female        2    50000 |
+3. |  3     male        3    10000 |
+4. |  4   female        2    40000 |
+5. |  5     male        1   120000 |
+|-------------------------------|
+6. |  6   female        4    20000 |
+7. |  7        3        3    35000 |
++-------------------------------+
 
-      </code></pre>
-      <br>
-      <p>To add the mapping 3 trans_female to the existing value label <i>gender_lab</i>, we can use the <b>label define</b> command with the <i>modify</i> option.</p>
-      <p>This works very similar to when we defined the value label initially. After <b>label define</b>, we first specify the value label that we want to modify, that is, <i>gender_lab</i>. Next, we pass the numerical value and the corresponding label, that is, 3 trans_female, which we want to add to the existing value label. Finally, we add the option <i>modify</i> so that Stata knows we want to modify the existing value label <i>gender_lab</i>, instead of creating a new value label.</p>
-      <pre><code>
-      . label define gender_lab 3 trans_female, modify
-      </code></pre>
-      <br>
-      <p>As you can see, the changes are immediate, since the value label is already applied to the variable <i>gender</i>.</p>
-      <pre><code>
-      . list
+</code></pre>
+<br>
+<p>To add the mapping 3 trans_female to the existing value label <i>gender_lab</i>, we can use the <b>label define</b> command with the <i>modify</i> option.</p>
+<p>This works very similar to when we defined the value label initially. After <b>label define</b>, we first specify the value label that we want to modify, that is, <i>gender_lab</i>. Next, we pass the numerical value and the corresponding label, that is, 3 trans_female, which we want to add to the existing value label. Finally, we add the option <i>modify</i> so that Stata knows we want to modify the existing value label <i>gender_lab</i>, instead of creating a new value label.</p>
+<pre><code>
+. label define gender_lab 3 trans_female, modify
+</code></pre>
+<br>
+<p>As you can see, the changes are immediate, since the value label is already applied to the variable <i>gender</i>.</p>
+<pre><code>
+. list
 
-         +-------------------------------------+
-         | id         gender   sector   income |
-         |-------------------------------------|
-      1. |  1           male        4    30000 |
-      2. |  2         female        2    50000 |
-      3. |  3           male        3    10000 |
-      4. |  4         female        2    40000 |
-      5. |  5           male        1   120000 |
-         |-------------------------------------|
-      6. |  6         female        4    20000 |
-      7. |  7   trans_female        3    35000 |
-         +-------------------------------------+
-      </code></pre>
-      <br>
-      <h4><a href="#exercise-3-modfying-value-labels" id="exercise-3-modfying-value-labels">Exercise 3: Modfying value labels</a></h4>
-      <ol>
-         <li>Modify the value label by adding the mapping 4 - transportation.</li>
-         <li>Verify that the new pairing has been applied.</li>
-      </ol>
-      <br>
-      <br>
-      <h3><a href="#using-string-values-as-value-labels-for-a-new-numerical-variable" id="using-string-values-as-value-labels-for-a-new-numerical-variable">Using string values as value labels for a new numerical variable</a></h3>
-      <p>In this section we will continue to work with the gapminder and weo_data datasets. You are going to explore how you can create a numerical variable from an existing string variable and then apply the string values as labels to the numerical values.</p>
-      <p>In the data editor window you can see that the first few categorical variables in the gapminder dataset have been imported as string variables.</p>
-      <pre><code>
-      . import excel using &quot;https://raw.githubusercontent.com/mwiemers/datasets/main/gapminder_dirty_labels.xlsx&quot;, ///
-      &gt; firstrow clear
++-------------------------------------+
+| id         gender   sector   income |
+|-------------------------------------|
+1. |  1           male        4    30000 |
+2. |  2         female        2    50000 |
+3. |  3           male        3    10000 |
+4. |  4         female        2    40000 |
+5. |  5           male        1   120000 |
+|-------------------------------------|
+6. |  6         female        4    20000 |
+7. |  7   trans_female        3    35000 |
++-------------------------------------+
+</code></pre>
+<br>
+<h4><a href="#exercise-3-modfying-value-labels" id="exercise-3-modfying-value-labels">Exercise 3: Modfying value labels</a></h4>
+<ol>
+<li>Modify the value label by adding the mapping 4 - transportation.</li>
+<li>Verify that the new pairing has been applied.</li>
+</ol>
+<br>
+<br>
+<h3><a href="#using-string-values-as-value-labels-for-a-new-numerical-variable" id="using-string-values-as-value-labels-for-a-new-numerical-variable">Using string values as value labels for a new numerical variable</a></h3>
+<p>In this section we will continue to work with the gapminder and weo_data datasets. You are going to explore how you can create a numerical variable from an existing string variable and then apply the string values as labels to the numerical values.</p>
+<p>In the data editor window you can see that the first few categorical variables in the gapminder dataset have been imported as string variables.</p>
+<pre><code>
+. import excel using &quot;https://raw.githubusercontent.com/mwiemers/datasets/main/gapminder_dirty_labels.xlsx&quot;, ///
+&gt; firstrow clear
 
-      . browse
-      </code></pre>
-      <br>
-      <img src="/screenshots/gapminder01.png" width="80%">
-      <p>You can use the <b>encode</b> command in combination with the <b>gen</b> function to create a numerical variable <i>country_code</i> that uses the country names from the <i>country</i> variable as labels. The mapping of numbers to labels will be based on the alphabetical order of the string values.</p>
-      <p>Following <b>encode</b> you specify the name of the original string variable and with the <b>gen</b> option you can determine the name of the new numerical variable. The values from the string variable will be applied as labels to the values of the newly created numerical variable.</p>
-      <pre><code>
-      . encode country, gen(country_code)
-      </code></pre>
-      <br>
-      <p>As a final step we can delete the <i>country</i> variable. Rename the <i>country_code</i> variable to <i>country</i> and move it to first position with the <b>order</b> command.</p>
-      <pre><code>
-      . drop country
+. browse
+</code></pre>
+<br>
+<img src="/screenshots/gapminder01.png" width="80%">
+<p>You can use the <b>encode</b> command in combination with the <b>gen</b> function to create a numerical variable <i>country_code</i> that uses the country names from the <i>country</i> variable as labels. The mapping of numbers to labels will be based on the alphabetical order of the string values.</p>
+<p>Following <b>encode</b> you specify the name of the original string variable and with the <b>gen</b> option you can determine the name of the new numerical variable. The values from the string variable will be applied as labels to the values of the newly created numerical variable.</p>
+<pre><code>
+. encode country, gen(country_code)
+</code></pre>
+<br>
+<p>As a final step we can delete the <i>country</i> variable. Rename the <i>country_code</i> variable to <i>country</i> and move it to first position with the <b>order</b> command.</p>
+<pre><code>
+. drop country
 
-      . rename country_code country
+. rename country_code country
 
-      . order country
-      </code></pre>
-      <br>
-      <br>
-      <h5><a href="#exercise-4-string-to-numeric" id="exercise-4-string-to-numeric">Exercise 4: String to numeric</a></h5>
-      <ol>
-      <li>Load the weo_data_dirty_labels.xlsx dataset using the url &ldquo;https://raw.githubusercontent.com/mwiemers/datasets/main/weo_data_dirty_labels.xlsx&rdquo;. Make sure to import the variable names from the first row.</li>
-      <li>Create a numerical version of the <i>Country</i> variable under the name <i>Country_code</i>.</li>
-      <li>Remove the original <i>Country</i> variable and rename the <i>Country_code</i> variable to <i>Country</i>.</li>
-      <li>Move the <i>Country</i> variable to the first position in the dataset with the <b>order</b> command.</li>
-      </ol>
-      <br>
-      <br>
-      <h3><a href="#replace-variable-names-with-extracted-variable-labels" id="replace-variable-names-with-extracted-variable-labels">Replace variable names with extracted variable labels</a></h3>
-      <p>Stata doesn&rsquo;t allow variable names to start with a number. The gapminder Excel file uses the date as a column name. When we import the Excel file with the <i>firstrow</i> option, Stata uses the column letters as the variable names and stores the actual column names, the dates (1952 - 2007), in the variable label, which we can inspect with the <b>describe</b> command.</p>
-      <pre><code>
-      . describe
+. order country
+</code></pre>
+<br>
+<br>
+<h5><a href="#exercise-4-string-to-numeric" id="exercise-4-string-to-numeric">Exercise 4: String to numeric</a></h5>
+<ol>
+<li>Load the weo_data_dirty_labels.xlsx dataset using the url &ldquo;https://raw.githubusercontent.com/mwiemers/datasets/main/weo_data_dirty_labels.xlsx&rdquo;. Make sure to import the variable names from the first row.</li>
+<li>Create a numerical version of the <i>Country</i> variable under the name <i>Country_code</i>.</li>
+<li>Remove the original <i>Country</i> variable and rename the <i>Country_code</i> variable to <i>Country</i>.</li>
+<li>Move the <i>Country</i> variable to the first position in the dataset with the <b>order</b> command.</li>
+</ol>
+<br>
+<br>
+<h3><a href="#replace-variable-names-with-extracted-variable-labels" id="replace-variable-names-with-extracted-variable-labels">Replace variable names with extracted variable labels</a></h3>
+<p>Stata doesn&rsquo;t allow variable names to start with a number. The gapminder Excel file uses the date as a column name. When we import the Excel file with the <i>firstrow</i> option, Stata uses the column letters as the variable names and stores the actual column names, the dates (1952 - 2007), in the variable label, which we can inspect with the <b>describe</b> command.</p>
+<pre><code>
+. describe
 
-      Contains data
-      obs:           426                          
-      vars:            15                          
-      size:        49,842                          
-      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                    storage   display    value
-      variable name   type    format     label      variable label
-      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      country         long    %24.0g     country_code
-                                                    country
-      continent       str8    %9s                   continent
-      subject         str9    %9s                   subject
-      D               double  %10.0g                1952
-      E               double  %10.0g                1957
-      F               double  %10.0g                1962
-      G               double  %10.0g                1967
-      H               double  %10.0g                1972
-      I               double  %10.0g                1977
-      J               double  %10.0g                1982
-      K               double  %10.0g                1987
-      L               double  %10.0g                1992
-      M               double  %10.0g                1997
-      N               double  %10.0g                2002
-      O               double  %10.0g                2007
-      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      Sorted by: 
-         Note: Dataset has changed since last saved.
-      </code></pre>
-      <br>
-      <p>We can replace variables names with the <b>rename</b> command. Let us replace the variable name <i>D</i> with <i>y1952</i>. We can verify that the name has been changed by calling the <b>describe</b> command again.</p>
-      <pre><code>
-      . rename D y1952
+Contains data
+obs:           426                          
+vars:            15                          
+size:        49,842                          
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+storage   display    value
+variable name   type    format     label      variable label
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+country         long    %24.0g     country_code
+                               country
+continent       str8    %9s                   continent
+subject         str9    %9s                   subject
+D               double  %10.0g                1952
+E               double  %10.0g                1957
+F               double  %10.0g                1962
+G               double  %10.0g                1967
+H               double  %10.0g                1972
+I               double  %10.0g                1977
+J               double  %10.0g                1982
+K               double  %10.0g                1987
+L               double  %10.0g                1992
+M               double  %10.0g                1997
+N               double  %10.0g                2002
+O               double  %10.0g                2007
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Sorted by: 
+Note: Dataset has changed since last saved.
+</code></pre>
+<br>
+<p>We can replace variables names with the <b>rename</b> command. Let us replace the variable name <i>D</i> with <i>y1952</i>. We can verify that the name has been changed by calling the <b>describe</b> command again.</p>
+<pre><code>
+. rename D y1952
 
-      . describe
+. describe
 
-      Contains data
-      obs:           426                          
-      vars:            15                          
-      size:        49,842                          
-      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                    storage   display    value
-      variable name   type    format     label      variable label
-      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      country         long    %24.0g     country_code
-                                                   country
-      continent       str8    %9s                   continent
-      subject         str9    %9s                   subject
-      y1952           double  %10.0g                1952
-      E               double  %10.0g                1957
-      F               double  %10.0g                1962
-      G               double  %10.0g                1967
-      H               double  %10.0g                1972
-      I               double  %10.0g                1977
-      J               double  %10.0g                1982
-      K               double  %10.0g                1987
-      L               double  %10.0g                1992
-      M               double  %10.0g                1997
-      N               double  %10.0g                2002
-      O               double  %10.0g                2007
-      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      Sorted by: 
-         Note: Dataset has changed since last saved.
-      </code></pre>
-      <br>
-      <p>We can also create a local macro to extract and store the variable label and then use that local macro to rename the variable. Here, we create the local macro <i>year</i>, which extracts the variable label from the <i>E</i> variable.</p>
-      <p>We can then use the <b>display</b> command to show its value.</p>
-      <pre><code>
-      . local year: variable label E
- 
-      . display `year'
-      1957
-      </code></pre>
-      <br>
-      <p>Let us now use the <i>year</i> macro to rename the <i>E</i> variable. We put the letter y in front of the year value, since the variable name has to start with a letter.</p>
-      <pre><code>
-      . rename E y`year'
+Contains data
+obs:           426                          
+vars:            15                          
+size:        49,842                          
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+storage   display    value
+variable name   type    format     label      variable label
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+country         long    %24.0g     country_code
+                              country
+continent       str8    %9s                   continent
+subject         str9    %9s                   subject
+y1952           double  %10.0g                1952
+E               double  %10.0g                1957
+F               double  %10.0g                1962
+G               double  %10.0g                1967
+H               double  %10.0g                1972
+I               double  %10.0g                1977
+J               double  %10.0g                1982
+K               double  %10.0g                1987
+L               double  %10.0g                1992
+M               double  %10.0g                1997
+N               double  %10.0g                2002
+O               double  %10.0g                2007
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Sorted by: 
+Note: Dataset has changed since last saved.
+</code></pre>
+<br>
+<p>We can also create a local macro to extract and store the variable label and then use that local macro to rename the variable. Here, we create the local macro <i>year</i>, which extracts the variable label from the <i>E</i> variable.</p>
+<p>We can then use the <b>display</b> command to show its value.</p>
+<pre><code>
+. local year: variable label E
 
-      . describe
+. display `year'
+1957
+</code></pre>
+<br>
+<p>Let us now use the <i>year</i> macro to rename the <i>E</i> variable. We put the letter y in front of the year value, since the variable name has to start with a letter.</p>
+<pre><code>
+. rename E y`year'
 
-      Contains data
-      obs:           426                          
-      vars:            15                          
-      size:        49,842                          
-      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                    storage   display    value
-      variable name   type    format     label      variable label
-      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      country         long    %24.0g     country_code
-                                                   country
-      continent       str8    %9s                   continent
-      subject         str9    %9s                   subject
-      y1952           double  %10.0g                1952
-      y1957           double  %10.0g                1957
-      F               double  %10.0g                1962
-      G               double  %10.0g                1967
-      H               double  %10.0g                1972
-      I               double  %10.0g                1977
-      J               double  %10.0g                1982
-      K               double  %10.0g                1987
-      L               double  %10.0g                1992
-      M               double  %10.0g                1997
-      N               double  %10.0g                2002
-      O               double  %10.0g                2007
-      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      Sorted by: 
-         Note: Dataset has changed since last saved.
-      </code></pre>
-      <br>
-      <p>Instead of doing this manually for all the reaiming variables, we can write a for loop that loops over the variables from&lt; i&gt;F</i> - <i>O</i>.</p>
-      <p>Inside the loop, we extract the variable label from each variable. Just like above, we create a new local macro under the name <i>year</i> by extracting the variable label from the variable that is currently stored with the <i>var</i> macro.</p>
-      <p>We then rename the variable stored with the <i>var</i> macro and replace it with the y followed by the year that is stored with the <i>year</i> macro.</p>
-      <pre><code>
-      . foreach var of varlist F-O{
-            local year: variable label `var'
-            rename `var' y`year'
-      }
-      </code></pre>
-      <p>Let us check whether the renaming worked.</p>
-      <pre><code>
-      . describe
+. describe
 
-      Contains data
-      obs:           426                          
-      vars:            15                          
-      size:        49,842                          
-      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                  storage   display    value
-      variable name   type    format     label      variable label
-      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      country         long    %24.0g     country_code
-                                                   country
-      continent       str8    %9s                   continent
-      subject         str9    %9s                   subject
-      y1952           double  %10.0g                1952
-      y1957           double  %10.0g                1957
-      y1962           double  %10.0g                1962
-      y1967           double  %10.0g                1967
-      y1972           double  %10.0g                1972
-      y1977           double  %10.0g                1977
-      y1982           double  %10.0g                1982
-      y1987           double  %10.0g                1987
-      y1992           double  %10.0g                1992
-      y1997           double  %10.0g                1997
-      y2002           double  %10.0g                2002
-      y2007           double  %10.0g                2007
-      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      Sorted by: 
-         Note: Dataset has changed since last saved.
-      </code></pre>
-      <br>
-      <h4><a href="#exercise-5-renaming-variables-with-extracted-variable-labels" id="exercise-5-renaming-variables-with-extracted-variable-labels">Exercise 5: Renaming variables with extracted variable labels</a></h4>
-      <ol>
-         <li>Rename the C variable to y1980 without extracting the variable label with 
-         a local macro</li>
-         <li>Extract the year from the variable label using a local macro and then rename 
-         the D variable using the local macro.</li>
-         <li>Use a foreach loop for he remaining variables <i>E</i>-<i>AK</i>. Use the 
-         local macro <i>var_name</i> for the variale name. Inside the foreach loop, first extract 
-         the variable label from each varible using a local macro named <i>var_year</i>. 
-         Then rename the variable using the <i>var_name</i> and <i>var_year</i> macros, so 
-         that the new variables always start with the letter y followed by the year.</li>
-      </ol>
-      <br>
-      <br>
-      <h3><a href="#evaluation" id="evaluation">Final task: Please give us your feedback! </a></h3>
-            <p>Upon completing the survey, <b>you will receive the link to the solution file</b>, to check how your commands compares to the sample solution.</p>
-      <p>In order to adapt our training to your needs and provide the most valuable learning experience for you, we depend on your feedack.</p>
-            <p>We would be grateful if you could take 1 min before the end of the workshop to get your feedback! </p>
-      <p><a href="https://lse.eu.qualtrics.com/jfe/form/SV_77M35cq1arxNcj3?course=Stata%201:Importing%20and%20inspecting%20Data&topic=Stata&link=https://lsecloud-my.sharepoint.com/:u:/g/personal/m_wiemers_lse_ac_uk/EU9fXeq9Mm9Ii363M_Eypf0B231Lx_NEpTkHgMGnr3SGzw?e=pm3D9J">Click here to open the survey!</a></p>
-   </div>
+Contains data
+obs:           426                          
+vars:            15                          
+size:        49,842                          
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+storage   display    value
+variable name   type    format     label      variable label
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+country         long    %24.0g     country_code
+                              country
+continent       str8    %9s                   continent
+subject         str9    %9s                   subject
+y1952           double  %10.0g                1952
+y1957           double  %10.0g                1957
+F               double  %10.0g                1962
+G               double  %10.0g                1967
+H               double  %10.0g                1972
+I               double  %10.0g                1977
+J               double  %10.0g                1982
+K               double  %10.0g                1987
+L               double  %10.0g                1992
+M               double  %10.0g                1997
+N               double  %10.0g                2002
+O               double  %10.0g                2007
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Sorted by: 
+Note: Dataset has changed since last saved.
+</code></pre>
+<br>
+<p>Instead of doing this manually for all the reaiming variables, we can write a for loop that loops over the variables from&lt; i&gt;F</i> - <i>O</i>.</p>
+<p>Inside the loop, we extract the variable label from each variable. Just like above, we create a new local macro under the name <i>year</i> by extracting the variable label from the variable that is currently stored with the <i>var</i> macro.</p>
+<p>We then rename the variable stored with the <i>var</i> macro and replace it with the y followed by the year that is stored with the <i>year</i> macro.</p>
+<pre><code>
+. foreach var of varlist F-O{
+local year: variable label `var'
+rename `var' y`year'
+}
+</code></pre>
+<p>Let us check whether the renaming worked.</p>
+<pre><code>
+. describe
+
+Contains data
+obs:           426                          
+vars:            15                          
+size:        49,842                          
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+storage   display    value
+variable name   type    format     label      variable label
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+country         long    %24.0g     country_code
+                              country
+continent       str8    %9s                   continent
+subject         str9    %9s                   subject
+y1952           double  %10.0g                1952
+y1957           double  %10.0g                1957
+y1962           double  %10.0g                1962
+y1967           double  %10.0g                1967
+y1972           double  %10.0g                1972
+y1977           double  %10.0g                1977
+y1982           double  %10.0g                1982
+y1987           double  %10.0g                1987
+y1992           double  %10.0g                1992
+y1997           double  %10.0g                1997
+y2002           double  %10.0g                2002
+y2007           double  %10.0g                2007
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Sorted by: 
+Note: Dataset has changed since last saved.
+</code></pre>
+<br>
+<h4><a href="#exercise-5-renaming-variables-with-extracted-variable-labels" id="exercise-5-renaming-variables-with-extracted-variable-labels">Exercise 5: Renaming variables with extracted variable labels</a></h4>
+<ol>
+<li>Rename the C variable to y1980 without extracting the variable label with 
+a local macro</li>
+<li>Extract the year from the variable label using a local macro and then rename 
+the D variable using the local macro.</li>
+<li>Use a foreach loop for he remaining variables <i>E</i>-<i>AK</i>. Use the 
+local macro <i>var_name</i> for the variale name. Inside the foreach loop, first extract 
+the variable label from each varible using a local macro named <i>var_year</i>. 
+Then rename the variable using the <i>var_name</i> and <i>var_year</i> macros, so 
+that the new variables always start with the letter y followed by the year.</li>
+</ol>
+<br>
+<br>
+<h3><a href="#evaluation" id="evaluation">Final task: Please give us your feedback! </a></h3>
+<p>Upon completing the survey, <b>you will receive the link to the solution file</b>, to check how your commands compares to the sample solution.</p>
+<p>In order to adapt our training to your needs and provide the most valuable learning experience for you, we depend on your feedack.</p>
+<p>We would be grateful if you could take 1 min before the end of the workshop to get your feedback! </p>
+<p><a href="https://lse.eu.qualtrics.com/jfe/form/SV_77M35cq1arxNcj3?course=Stata%201:Importing%20and%20inspecting%20Data&topic=Stata&link=https://lsecloud-my.sharepoint.com/:u:/g/personal/m_wiemers_lse_ac_uk/EU9fXeq9Mm9Ii363M_Eypf0B231Lx_NEpTkHgMGnr3SGzw?e=pm3D9J">Click here to open the survey!</a></p>
+</div>
 
 
 </body>
