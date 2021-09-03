@@ -1,0 +1,588 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="/css/stmarkdown.css">
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+        src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+    </script>
+  </head>
+ 
+ <body>
+ 
+    <div class="sidenav">
+       <a href="#reshaping-the-gapminder-dataset">Reshaping the Gapminder dataset</a>
+       <a href="#creating-a-subset">Creating a subset</a>
+       <a href="#exercise-1-creating-a-subset">Exercise 1: Creating a subset</a>
+       <a href="#reshaping-and-storing-the-subset-in-a-new-file">Reshaping and storing the subset in a new file</a>
+       <a href="#exercise-2-reshaping-and-storing-the-subset">Exercise 2: Reshaping and storing the subset</a>
+       <a href="#using-preserve-and-restore">Using <b>preserve</b> and <b>restore</b></a>
+       <a href="#exercise-3-using-preserve-and-restore-with-the-weo-data-dataset">Exercise 3: Using preserve and restore with the weo_data dataset</a>
+       <a href="#merging-the-separate-subsets-with-merge">Merging the separate subsets with <b>merge</b></a>
+       <a href="#exercise-4-merging-the-different-subsets">Exercise 4: Merging the different subsets</a>
+       <a href="#bonus-using-a-for-loop-to-iterate-through-the-three-subjects">Bonus: Using a for loop to iterate through the three subjects</a>
+       <a href="#exercise-5-adding-a-for-loop">Exercise 5: Adding a for loop</a>
+       <a href="#evaluation">Final task: Please give us your feedback!</a>
+   </div>
+ 
+   <div class="main">
+<h1><a href="#data-cleaning-in-stata-merging-data" id="data-cleaning-in-stata-merging-data">Data cleaning in Stata - Merging data</a></h1>
+<p>The data cleaning series is going to teach you the most fundamental commands and techniques to prepare data in Stata for statistical analysis.</p>
+<p>The series is going to cover the following topics:</p>
+<ul>
+<li>Converting string to numerical</li>
+<li>Dealing with missings and duplicates</li>
+<li>Applying variable and value labels</li>
+<li>Reshaping between long and wide format</li>
+<li>Merging multiple datasets</li>
+</ul>
+<p>In this practical session, you will learn about:</p>
+<ul>
+<li>Long vs wide data formats</li>
+<li>Reshaping data from wide to long</li>
+<li>Reshaping data from long to wide</li>
+<li>Merging mulitple datasets into one</li>
+</ul>
+<br>
+<br>
+<h2>More information on how the session is run</h2>
+<b>How to work together</b>: 
+<ul>
+    <li>Please turn on your microphone and webcam.</li>
+    <li>One shares the screen and the other requests remote control. </li>
+    <li>Take turns on who types for each exercise.</li>
+</ul>
+<b>What to do when getting stuck</b>:
+<ol>
+    <li>Ask the trainer if you struggle to find a solution.</li>
+    <li>Use the help command. To get help with a specific command type <b>help "command name"</b></li>
+    <li>Search online. The statalist.org forum is usually the most useful resource.</li>
+</ol>
+<br>
+<p>In this unit you will learn about how to identify whether your data is in the long or wide orientation and how to change between long and wide orientation using the <b>reshape</b> command.</p>
+<p>In this section, we will go through a more complex example of how to create subsets of the gapminder dataset for each subject (GDP, population and life expectancy), reshape each subset to the long format and then merge all subsets. reshape the gapminder dataset from wide to long format.</p>
+<p>In the exercises you will apply the same steps independently to the weo_data dataset. You will create subsets of the weo_data dataset for three different subjects (GDP per capita, unemployment rate and the general government structural balance), reshape each subset to the long format, store it in a separate file and merge all three files into a single dataset.</p>
+<br>
+<h2><a href="#reshaping-the-gapminder-dataset" id="reshaping-the-gapminder-dataset">Reshaping the Gapminder dataset</a></h2>
+<p>The gapminder dataset in its original format contains a variable that codes for the subject, that is, GDP per capita, life expectancy and population, and the actual values for each year in separate variables.</p>
+<pre><code>. import excel using &quot;https://github.com/mwiemers/datasets/blob/main/gapminder_dirty_reshape.xlsx?raw=true&quot;, firstrow clear
+
+. list in 1/10
+
+     +------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+     |     country   contin~t     subject       y1952       y1957       y1962       y1967       y1972       y1977       y1982       y1987       y1992       y1997       y2002       y2007 |
+     |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+  1. | Afghanistan       Asia   gdpPercap   779.44531   820.85303   853.10071   836.19714   739.98111   786.11336   978.01144   852.39594    649.3414   635.34135   726.73405   974.58034 |
+  2. | Afghanistan       Asia     lifeExp      28.801      30.332      31.997       34.02      36.088      38.438      39.854      40.822      41.674      41.763      42.129      43.828 |
+  3. | Afghanistan       Asia         pop     8425333     9240934    10267083    11537966    13079460    14880372    12881816    13867957    16317921    22227415    25268405    31889923 |
+  4. |     Albania     Europe   gdpPercap   1601.0561   1942.2842    2312.889   2760.1969   3313.4222   3533.0039   3630.8807   3738.9327   2497.4379   3193.0546   4604.2117   5937.0295 |
+  5. |     Albania     Europe     lifeExp       55.23       59.28       64.82       66.22       67.69       68.93       70.42          72      71.581       72.95      75.651      76.423 |
+     |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+  6. |     Albania     Europe         pop     1282697     1476505     1728137     1984060     2263554     2509048     2780097     3075321     3326498     3428038     3508512     3600523 |
+  7. |     Algeria     Africa   gdpPercap   2449.0082    3013.976   2550.8169   3246.9918   4182.6638   4910.4168   5745.1602   5681.3585   5023.2166   4797.2951   5288.0404   6223.3675 |
+  8. |     Algeria     Africa     lifeExp      43.077      45.685      48.303      51.407      54.518      58.014      61.368      65.799      67.744      69.152      70.994      72.301 |
+  9. |     Algeria     Africa         pop     9279525    10270856    11000948    12760499    14760787    17152804    20033753    23254956    26298373    29072015    31287142    33333216 |
+ 10. |      Angola     Africa   gdpPercap   3520.6103   3827.9405   4269.2767   5522.7764    5473.288   3008.6474   2756.9537   2430.2083   2627.8457   2277.1409   2773.2873   4797.2313 |
+     +------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+</code></pre>
+<br>
+<p>We want to transform the structure of the dataset so that there is a variable <i>year</i> and the subjects are each presented in three separate variables as you can see below.</p>
+<pre><code>
+
+     +-----------------------------------------------------------------+
+     |     country   continent   year   gdpPercap   lifeExp        pop |
+     |-----------------------------------------------------------------|
+  1. | Afghanistan        Asia   1952   779.44531    28.801    8425333 |
+  2. | Afghanistan        Asia   1957   820.85303    30.332    9240934 |
+  3. | Afghanistan        Asia   1962   853.10071    31.997   10267083 |
+  4. | Afghanistan        Asia   1967   836.19714     34.02   11537966 |
+  5. | Afghanistan        Asia   1972   739.98111    36.088   13079460 |
+     |-----------------------------------------------------------------|
+  6. | Afghanistan        Asia   1977   786.11336    38.438   14880372 |
+  7. | Afghanistan        Asia   1982   978.01144    39.854   12881816 |
+  8. | Afghanistan        Asia   1987   852.39594    40.822   13867957 |
+  9. | Afghanistan        Asia   1992    649.3414    41.674   16317921 |
+ 10. | Afghanistan        Asia   1997   635.34135    41.763   22227415 |
+     |-----------------------------------------------------------------|
+ 11. | Afghanistan        Asia   2002   726.73405    42.129   25268405 |
+ 12. | Afghanistan        Asia   2007   974.58034    43.828   31889923 |
+ 13. |     Albania      Europe   1952   1601.0561     55.23    1282697 |
+ 14. |     Albania      Europe   1957   1942.2842     59.28    1476505 |
+ 15. |     Albania      Europe   1962    2312.889     64.82    1728137 |
+     |-----------------------------------------------------------------|
+ 16. |     Albania      Europe   1967   2760.1969     66.22    1984060 |
+ 17. |     Albania      Europe   1972   3313.4222     67.69    2263554 |
+ 18. |     Albania      Europe   1977   3533.0039     68.93    2509048 |
+ 19. |     Albania      Europe   1982   3630.8807     70.42    2780097 |
+ 20. |     Albania      Europe   1987   3738.9327        72    3075321 |
+     +-----------------------------------------------------------------+
+
+</code></pre>
+<br>
+<br>
+<h3><a href="#creating-a-subset" id="creating-a-subset">Creating a subset</a></h3>
+<p>In order to restructure the whole dataset in that way, we have to create subsets of the data for each subject, reshape that subset from wide to long and in a final step merge all three subsets back together into a single dataset.</p>
+<p>We will first create a subset for the life expectancy subject with the <b>keep</b> command. With the <b>keep</b> command we can select those observations and variables that we want to keep. Every other observation and/or variable will be removed from the data.</p>
+<p>In order to only select those observations in our dataset where the <i>subject</i> variable is equal to life_exp, we add an if qualifier with the expression <i>subject==&ldquo;life_exp&rdquo;</i>.</p>
+<pre><code></code></pre>
+<pre><code>. keep if subject==&quot;lifeExp&quot;
+(284 observations deleted)
+
+</code></pre>
+<br>
+<h3><a href="#exercise-1-creating-a-subset" id="exercise-1-creating-a-subset">Exercise 1: Creating a subset</a></h3>
+<p>We will start by practicing with the <b>keep</b> command.</p>
+<ol>
+<li>Load the weo_data dataset using the url &ldquo;https://github.com/mwiemers/datasets/blob/main/weo_data_dirty_reshape.xlsx?raw=true&rdquo;</li>
+<li>Use the <b>keep</b> command to only keep the GDP per capita data. Which command can you use to quickly verify that you only have data for life expectancy without looking at each row in the data editor?</li>
+<li>Reload the data, create a subset for the unemployment values and verify that the subset only consists of population values.</li>
+</ol>
+<br>
+<br>
+<h3><a href="#reshaping-and-storing-the-subset-in-a-new-file" id="reshaping-and-storing-the-subset-in-a-new-file">Reshaping and storing the subset in a new file</a></h3>
+<p>In the next step, we are going to reshape and store the subset in a new file.</p>
+<p>In order to reshape the data to the long format with the <b>reshape</b> command, we need to provide following information:</p>
+<ul>
+<li>The orientation of the new dataset, which should be long.</li>
+<li>The stub: The repeated measurements for the years 1952 - 2007 use the stub <i>y</i></li>
+<li>The variables that identify a single case in the data: 
+The countries are uniquely identified by the variable <i>country</i>, since there 
+is only one row per country.</li>
+<li>The name for the new variable.</li>
+</ul>
+<p>The reshape command generates a long version of the data.</p>
+<pre><code>. reshape long y, i(country) j(year)
+(note: j = 1952 1957 1962 1967 1972 1977 1982 1987 1992 1997 2002 2007)
+
+Data                               wide   -&gt;   long
+-----------------------------------------------------------------------------
+Number of obs.                      142   -&gt;    1704
+Number of variables                  15   -&gt;       5
+j variable (12 values)                    -&gt;   year
+xij variables:
+                  y1952 y1957 ... y2007   -&gt;   y
+-----------------------------------------------------------------------------
+
+. list in 1/10
+
+     +--------------------------------------------------+
+     |     country   year   contin~t   subject        y |
+     |--------------------------------------------------|
+  1. | Afghanistan   1952       Asia   lifeExp   28.801 |
+  2. | Afghanistan   1957       Asia   lifeExp   30.332 |
+  3. | Afghanistan   1962       Asia   lifeExp   31.997 |
+  4. | Afghanistan   1967       Asia   lifeExp    34.02 |
+  5. | Afghanistan   1972       Asia   lifeExp   36.088 |
+     |--------------------------------------------------|
+  6. | Afghanistan   1977       Asia   lifeExp   38.438 |
+  7. | Afghanistan   1982       Asia   lifeExp   39.854 |
+  8. | Afghanistan   1987       Asia   lifeExp   40.822 |
+  9. | Afghanistan   1992       Asia   lifeExp   41.674 |
+ 10. | Afghanistan   1997       Asia   lifeExp   41.763 |
+     +--------------------------------------------------+
+
+</code></pre>
+<br>
+<p>We can drop the <i>subject</i> variable and rename the y variable to <i>lifeExp</i>.</p>
+<pre><code>. drop subject
+
+. rename y lifeExp
+
+. list in 1/10
+
+     +-----------------------------------------+
+     |     country   year   contin~t   lifeExp |
+     |-----------------------------------------|
+  1. | Afghanistan   1952       Asia    28.801 |
+  2. | Afghanistan   1957       Asia    30.332 |
+  3. | Afghanistan   1962       Asia    31.997 |
+  4. | Afghanistan   1967       Asia     34.02 |
+  5. | Afghanistan   1972       Asia    36.088 |
+     |-----------------------------------------|
+  6. | Afghanistan   1977       Asia    38.438 |
+  7. | Afghanistan   1982       Asia    39.854 |
+  8. | Afghanistan   1987       Asia    40.822 |
+  9. | Afghanistan   1992       Asia    41.674 |
+ 10. | Afghanistan   1997       Asia    41.763 |
+     +-----------------------------------------+
+
+</code></pre>
+<br>
+<p>Next, we are going to save the new subset under the file name gapminder_lifeExp.</p>
+<pre><code>. save gapminder_lifeExp, replace
+(note: file gapminder_lifeExp.dta not found)
+file gapminder_lifeExp.dta saved
+
+</code></pre>
+<br>
+<p>Let us look at all commands together.</p>
+<pre><code>keep if subject==&quot;lifeExp&quot;
+reshape long y, i(country) j(year)
+drop subject
+rename y lifeExp
+save gapminder_lifeExp, replace
+</code></pre>
+<h3><a href="#exercise-2-reshaping-and-storing-the-subset" id="exercise-2-reshaping-and-storing-the-subset">Exercise 2: Reshaping and storing the subset</a></h3>
+<ol>
+<li>Load the weo_data dataset using the url &ldquo;https://github.com/mwiemers/datasets/blob/main/weo_data_dirty_reshape.xlsx?raw=true&rdquo;</li>
+<li>Create a subset for the GDP per capita data.</li>
+<li>Reshape the subset to the long format.</li>
+<li>Rename the variable holding the gdp per capita values to <i>gdpPercap</i> and delete the <i>SubjectDescriptor</i> variable.</li>
+<li>Store the subset under the name weo_data_gdpPercap.</li>
+</ol>
+<br>
+<br>
+<h3><a href="#repeating-the-process-for-the-remaining-variables" id="repeating-the-process-for-the-remaining-variables">Repeating the process for the remaining variables</a></h3>
+<br>
+<h4><a href="#using-preserve-and-restore" id="using-preserve-and-restore">Using <b>preserve</b> and <b>restore</b></a></h4>
+<p>In order to continue with the next subset of data, the population data, we would have to reload the original gapminder dataset first. Instead of reloading the original gapminder dataset, we can use the <b>preserve restore</b> combination.</p>
+<p>The <b>preserve</b> command stores a copy of the open dataset in its current state. With the <b>restore</b> command we can reload the dataset in the state it was stored in with <b>preserve</b>.</p>
+<p>Therefore, we add a <b>preserve</b> command before we create a subset of the data for the population. After having saved the reshaped subset in a new file, we use <b>restore</b> to reload the original dataset, so that we can proceed with creating the next subset.</p>
+<p>We start by loading the original dataset.</p>
+<pre><code>. import excel using &quot;https://github.com/mwiemers/datasets/blob/main/gapminder_dirty_reshape.xlsx?raw=true&quot;, firstrow clear
+
+
+. * create subset for life_exp, reshape to long and save as new file
+. preserve
+
+. keep if subject==&quot;lifeExp&quot;
+(284 observations deleted)
+
+. reshape long y, i(country) j(year)
+(note: j = 1952 1957 1962 1967 1972 1977 1982 1987 1992 1997 2002 2007)
+
+Data                               wide   -&gt;   long
+-----------------------------------------------------------------------------
+Number of obs.                      142   -&gt;    1704
+Number of variables                  15   -&gt;       5
+j variable (12 values)                    -&gt;   year
+xij variables:
+                  y1952 y1957 ... y2007   -&gt;   y
+-----------------------------------------------------------------------------
+
+. rename y lifeExp
+
+. drop subject
+
+. save gapminder_lifeExp, replace
+file gapminder_lifeExp.dta saved
+
+. restore
+
+</code></pre>
+<br>
+<p>Next, we are going to carry out the same steps for the next subject. We simply have to replace life_exp with pop for the <b>keep</b>, <b>rename</b>, <b>reshape</b> and <b>save</b> commands.</p>
+<pre><code>. * create subset for pop, reshape to long and save as new file
+. preserve
+
+. keep if subject==&quot;pop&quot;
+(284 observations deleted)
+
+. reshape long y, i(country) j(year)
+(note: j = 1952 1957 1962 1967 1972 1977 1982 1987 1992 1997 2002 2007)
+
+Data                               wide   -&gt;   long
+-----------------------------------------------------------------------------
+Number of obs.                      142   -&gt;    1704
+Number of variables                  15   -&gt;       5
+j variable (12 values)                    -&gt;   year
+xij variables:
+                  y1952 y1957 ... y2007   -&gt;   y
+-----------------------------------------------------------------------------
+
+. rename y pop
+
+. drop subject
+
+. save gapminder_pop, replace
+(note: file gapminder_pop.dta not found)
+file gapminder_pop.dta saved
+
+. restore
+
+</code></pre>
+<br>
+<p>Finally, we run the same set of commands again for the subset of the data where the subject is <i>gdpPercap</i>.</p>
+<pre><code>. * create subset for gdpPercap and reshape to long
+. preserve
+
+. keep if subject==&quot;gdpPercap&quot;
+(284 observations deleted)
+
+. reshape long y, i(country) j(year)
+(note: j = 1952 1957 1962 1967 1972 1977 1982 1987 1992 1997 2002 2007)
+
+Data                               wide   -&gt;   long
+-----------------------------------------------------------------------------
+Number of obs.                      142   -&gt;    1704
+Number of variables                  15   -&gt;       5
+j variable (12 values)                    -&gt;   year
+xij variables:
+                  y1952 y1957 ... y2007   -&gt;   y
+-----------------------------------------------------------------------------
+
+. rename y gdpPercap
+
+. drop subject
+
+. save gapminder_gdpPercap, replace
+(note: file gapminder_gdpPercap.dta not found)
+file gapminder_gdpPercap.dta saved
+
+. restore
+
+</code></pre>
+<br>
+<h3><a href="#exercise-3-using-preserve-and-restore-with-the-weo-data-dataset" id="exercise-3-using-preserve-and-restore-with-the-weo-data-dataset">Exercise 3: Using preserve and restore with the weo_data dataset</a></h3>
+<ol>
+<li>Update the first code chunk that you wrote to create the subset for the gdpPercap data and add the <b>preserve</b> and <b>restore</b> commands at the beginning and end.</li>
+<li>Continue with the second code chunk using <b>preserve</b> and <b>restore</b> to create the subset for the population data.</li>
+<li>Write the last code chunk to create the subset for the uenmployment rate.</li>
+</ol>
+<br>
+<br>
+<h3><a href="#merging-the-separate-subsets-with-merge" id="merging-the-separate-subsets-with-merge">Merging the separate subsets with <b>merge</b></a></h3>
+<p>In the final step of restructuring the dataset, we are going to combine the three previously created subsets using the <b>merge</b> command.</p>
+<p>We will combine the three different datasets in such a way that the final dataset will have separate variables for the GDP per capita, population and life expectancy data (see below). We do this by opening the gapminder_gdpPercap.dta dataset first and then adding the <i>pop</i> and <i>life_exp</i> variables from the gapminder_pop.dta and gapminder_lifeExp.dta datasets using the <b>merge</b> command. In the last step we save the new dataset under a new filename.</p>
+<pre><code>
+
+     +----------------------------------------------------------------+
+     |     country   contin~t   year   gdpPercap   lifeExp        pop |
+     |----------------------------------------------------------------|
+  1. | Afghanistan       Asia   1952   779.44531    28.801    8425333 |
+  2. | Afghanistan       Asia   1957   820.85303    30.332    9240934 |
+  3. | Afghanistan       Asia   1962   853.10071    31.997   10267083 |
+  4. | Afghanistan       Asia   1967   836.19714     34.02   11537966 |
+  5. | Afghanistan       Asia   1972   739.98111    36.088   13079460 |
+     |----------------------------------------------------------------|
+  6. | Afghanistan       Asia   1977   786.11336    38.438   14880372 |
+  7. | Afghanistan       Asia   1982   978.01144    39.854   12881816 |
+  8. | Afghanistan       Asia   1987   852.39594    40.822   13867957 |
+  9. | Afghanistan       Asia   1992    649.3414    41.674   16317921 |
+ 10. | Afghanistan       Asia   1997   635.34135    41.763   22227415 |
+     |----------------------------------------------------------------|
+ 11. | Afghanistan       Asia   2002   726.73405    42.129   25268405 |
+ 12. | Afghanistan       Asia   2007   974.58034    43.828   31889923 |
+ 13. |     Albania     Europe   1952   1601.0561     55.23    1282697 |
+ 14. |     Albania     Europe   1957   1942.2842     59.28    1476505 |
+ 15. |     Albania     Europe   1962    2312.889     64.82    1728137 |
+     |----------------------------------------------------------------|
+ 16. |     Albania     Europe   1967   2760.1969     66.22    1984060 |
+ 17. |     Albania     Europe   1972   3313.4222     67.69    2263554 |
+ 18. |     Albania     Europe   1977   3533.0039     68.93    2509048 |
+ 19. |     Albania     Europe   1982   3630.8807     70.42    2780097 |
+ 20. |     Albania     Europe   1987   3738.9327        72    3075321 |
+     +----------------------------------------------------------------+
+
+</code></pre>
+<br>
+<h4><a href="#merging-and-appending-data" id="merging-and-appending-data">Merging and appending data</a></h4>
+<p>There are fundamentally two ways you can combine datasets by either appending them using the <b>append</b> command or merging them using <b>merge</b>. You use <b>append</b> to add observations from another dataset with the same variables. Appending your dataset will therefore make your dataset longer.</p>
+<p>In the illustration below GPD per capita data from the continents Africa, Asia and Europe are being combined using <b>append</b>. Another example for when to use <b>append</b> would be if you collected new data for subsequent years and would like to combine new and old data into a single dataset. In order to append two or more datasets, they must have the same variables.</p>
+<img src="/screenshots/append_01.png" alt="Illustration of append datasets" width="80%">
+<br>
+<p>You would use <b>merge</b>, in contrast, in order to add variables from another dataset containing the same observations, that is, data from the same countries or individuals. Merging two or more datasets will make the combined dataset wider but not longer than the original datasets. In the example we create a new dataset gapminder_2.dta by adding the <i>pop</i> and <i>life_exp</i> variables from from the pop.dta and life_exp.dta datasets to the gdp_pc.dta dataset.</p>
+<img src="https://www.dropbox.com/s/gb3868wuqtoby2q/illustration_merge.gif?raw=1" width="80%">
+<br>
+<h4><a href="#combining-the-gapminder-gdppercapdta-gapminder-lifeexpdta-and-gapminder-popdta-datasets" id="combining-the-gapminder-gdppercapdta-gapminder-lifeexpdta-and-gapminder-popdta-datasets">Combining the gapminder_gdpPercap.dta, gapminder_lifeExp.dta and gapminder_pop.dta datasets</a></h4>
+<p>In order to combine the three subsets for the GDP per capita, life expectancy and population data, we will start by opening the gapminder_gdpPercap.dta dataset and merge it with the gapminder_lifeExp.dta dataset.</p>
+<p>Following <b>merge</b> we add <i>1:1</i> as the first argument, since the data from each row in the gdp_pc.dta dataset will be merged with a single row from the gapminder_lifeExp.dta dataset.</p>
+<p>As the next argument the <b>merge</b> command expects the variables that identify an observation in the datasets, which is the combination of the <i>country</i> and <i>year</i> variables.</p>
+<p>Finally, following <b>using</b> we must specify the other dataset with which the gdp_pc.dta dataset should be merged, which is the life_exp.dta dataset.</p>
+<pre><code>. use gapminder_gdpPercap.dta, clear
+
+. merge 1:1 country year using gapminder_lifeExp.dta
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             1,704  (_merge==3)
+    -----------------------------------------
+
+</code></pre>
+<br>
+<p>If we now take a look at the data, we notice that the <i>lifeExp</i> and <i>_merge</i> variables have been added to the dataset. Befoe we will address the newly created <i>_merge</i> variable, let us first recap how the above <b>merge 1:1</b> command has combined both datasets.</p>
+<p>The data from every country for each year in the gapminder_gdpPercap.dta dataset has been merged with the data from every country for each year in the gapminder_lifeExp.dta dataset. The <b>merge</b> command first identifies the variables that exist in both datasets, which are the <i>country</i>, <i>continent</i> and <i>year</i> variables and then adds all other variables that are unique to the gapminder_lifeExp.dta dataset, which is the <i>lifeExp</i> variables.</p>
+<pre><code>. list in 1/10
+
+     +-------------------------------------------------------------------+
+     |     country   year   contin~t   gdpPercap   lifeExp        _merge |
+     |-------------------------------------------------------------------|
+  1. | Afghanistan   1952       Asia   779.44531    28.801   matched (3) |
+  2. | Afghanistan   1957       Asia   820.85303    30.332   matched (3) |
+  3. | Afghanistan   1962       Asia   853.10071    31.997   matched (3) |
+  4. | Afghanistan   1967       Asia   836.19714     34.02   matched (3) |
+  5. | Afghanistan   1972       Asia   739.98111    36.088   matched (3) |
+     |-------------------------------------------------------------------|
+  6. | Afghanistan   1977       Asia   786.11336    38.438   matched (3) |
+  7. | Afghanistan   1982       Asia   978.01144    39.854   matched (3) |
+  8. | Afghanistan   1987       Asia   852.39594    40.822   matched (3) |
+  9. | Afghanistan   1992       Asia    649.3414    41.674   matched (3) |
+ 10. | Afghanistan   1997       Asia   635.34135    41.763   matched (3) |
+     +-------------------------------------------------------------------+
+
+</code></pre>
+<br>
+<p>The <i>_merge</i> variable indicates whether a merge has been successful, that is, whether an observation from gdp_pc.dta could be matched with an observation in the life_exp.dta dataset based on the <i>country</i> and <i>year</i> variables.</p>
+<p>We can use the <b>tab</b> command to create a table of the <i>_merge</i> variable. All observations could be matched.</p>
+<pre><code>. tab _merge
+
+                 _merge |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+            matched (3) |      1,704      100.00      100.00
+------------------------+-----------------------------------
+                  Total |      1,704      100.00
+
+</code></pre>
+<br>
+<p>Before we continue with merging the current dataset with the pop.dta dataset in order to add the <i>pop</i> variable, we will have to delete the <i>_merge</i> variable so that a new <i>_merge</i> variable can be created for the next merge.</p>
+<pre><code>. drop _merge
+
+</code></pre>
+<br>
+<p>Now we are going to merge the existing dataset with the pop.dta dataset.</p>
+<pre><code>. merge 1:1 country year using gapminder_pop.dta
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             1,704  (_merge==3)
+    -----------------------------------------
+
+</code></pre>
+<br>
+<p>The <i>pop</i> variable and another <i>_merge</i> have been added to the dataset.</p>
+<pre><code>. list in 1/10
+
+     +------------------------------------------------------------------------------+
+     |     country   year   contin~t   gdpPercap   lifeExp        pop        _merge |
+     |------------------------------------------------------------------------------|
+  1. | Afghanistan   1952       Asia   779.44531    28.801    8425333   matched (3) |
+  2. | Afghanistan   1957       Asia   820.85303    30.332    9240934   matched (3) |
+  3. | Afghanistan   1962       Asia   853.10071    31.997   10267083   matched (3) |
+  4. | Afghanistan   1967       Asia   836.19714     34.02   11537966   matched (3) |
+  5. | Afghanistan   1972       Asia   739.98111    36.088   13079460   matched (3) |
+     |------------------------------------------------------------------------------|
+  6. | Afghanistan   1977       Asia   786.11336    38.438   14880372   matched (3) |
+  7. | Afghanistan   1982       Asia   978.01144    39.854   12881816   matched (3) |
+  8. | Afghanistan   1987       Asia   852.39594    40.822   13867957   matched (3) |
+  9. | Afghanistan   1992       Asia    649.3414    41.674   16317921   matched (3) |
+ 10. | Afghanistan   1997       Asia   635.34135    41.763   22227415   matched (3) |
+     +------------------------------------------------------------------------------+
+
+</code></pre>
+<br>
+<p>Let us verify that all observations have been matched.</p>
+<pre><code>. tab _merge
+
+                 _merge |      Freq.     Percent        Cum.
+------------------------+-----------------------------------
+            matched (3) |      1,704      100.00      100.00
+------------------------+-----------------------------------
+                  Total |      1,704      100.00
+
+</code></pre>
+<br>
+<p>To clean up the dataset, we are going to remove the <i>_merge</i> variable since it is no longer needed.</p>
+<p>We also move the <i>year</i> variable after the <i>continent</i> variable, because it makes our dataset look more organized.</p>
+<pre><code>. drop _merge
+
+. order year, after(continent)
+
+. list in 1/10
+
+     +----------------------------------------------------------------+
+     |     country   contin~t   year   gdpPercap   lifeExp        pop |
+     |----------------------------------------------------------------|
+  1. | Afghanistan       Asia   1952   779.44531    28.801    8425333 |
+  2. | Afghanistan       Asia   1957   820.85303    30.332    9240934 |
+  3. | Afghanistan       Asia   1962   853.10071    31.997   10267083 |
+  4. | Afghanistan       Asia   1967   836.19714     34.02   11537966 |
+  5. | Afghanistan       Asia   1972   739.98111    36.088   13079460 |
+     |----------------------------------------------------------------|
+  6. | Afghanistan       Asia   1977   786.11336    38.438   14880372 |
+  7. | Afghanistan       Asia   1982   978.01144    39.854   12881816 |
+  8. | Afghanistan       Asia   1987   852.39594    40.822   13867957 |
+  9. | Afghanistan       Asia   1992    649.3414    41.674   16317921 |
+ 10. | Afghanistan       Asia   1997   635.34135    41.763   22227415 |
+     +----------------------------------------------------------------+
+
+</code></pre>
+<br>
+<h4><a href="#recap-of-merging-the-gapminder-gdppercapdta-gapminder-lifeexpdta-and-gapminder-popdta-datasets" id="recap-of-merging-the-gapminder-gdppercapdta-gapminder-lifeexpdta-and-gapminder-popdta-datasets">Recap of merging the gapminder_gdpPercap.dta, gapminder_lifeExp.dta and gapminder_pop.dta datasets</a></h4>
+<p>Below are all commands we were carrying out in order to merge the three subsets. In the last step we save the new dataset under the file name gapminder_merged.dta.</p>
+<pre><code>* Merging the subsets
+use gapminder_gdpPercap.dta, clear
+merge 1:1 country year using gapminder_lifeExp.dta
+drop _merge
+merge 1:1 country year using gapminder_pop.dta
+drop _merge
+order year, after(continent)
+save gapminder_merged, replace
+</code></pre>
+<br>
+<h4><a href="#exercise-4-merging-the-different-subsets" id="exercise-4-merging-the-different-subsets">Exercise 4: Merging the different subsets</a></h4>
+<ol>
+<li>Open the weo_data_gdpPercap.dta dataset and merge it with the weo_data_pop.dta dataset.</li>
+<li>Merge the data again with the weo_data_ue_rate.dta dataset.</li>
+</ol>
+<br> 
+<br>
+<h3><a href="#bonus-using-a-for-loop-to-iterate-through-the-three-subjects" id="bonus-using-a-for-loop-to-iterate-through-the-three-subjects">Bonus: Using a for loop to iterate through the three subjects</a></h3>
+<p>If we look back at our code to create the three subsets, we realize that the three code chunks only differ where we pass the name of the subject for the <b>keep</b>, <b>rename</b> and <b>save</b> command.</p>
+<p>We can simplify our code and reduce the number of lines, by applying a foreach loop that loops over the three subject names using a local macro.</p>
+<pre><code>* create subset for gdpPercap and reshape to long
+preserve
+keep if subject==&quot;gdpPercap&quot;
+reshape long y, i(country) j(year)
+rename y gdpPercap
+drop subject
+save gapminder_gdpPercap, replace
+restore
+
+* create subset for lifeExp and reshape to long
+preserve
+keep if subject==&quot;lifeExp&quot;
+reshape long y, i(country) j(year)
+rename y lifeExp
+drop subject
+save gapminder_lifeExp, replace
+restore
+
+* create subset for pop and reshape to long
+preserve
+keep if subject==&quot;pop&quot;
+reshape long y, i(country) j(year)
+rename y pop
+drop subject
+save gapminder_pop, replace
+restore
+</code></pre>
+<p>Below you can see how this can be done.</p>
+<p>We first create the string macro <i>subjects</i> for the three subjects GPD, life expectancy and population. We can iterate through each of the values of the <i>subjects</i> macro with the <b>foreach</b> commmand. Since we want to iterate through a local macro, we have to use <b>of local</b> in the <b>foreach</b> command.</p>
+<p>Inside the main for loop we have to add double quotations around the slanted quotes for the <i>sub</i> macro, when creating the subset with <b>keep</b>, because it here should represent a string value as opposed to when renaming the <i>y</i> variable or saving the dataset.</p>
+<p>There are comments added inside the for loop that explain each step</p>
+<pre><code>* creating subsets for lifeExp pop and gdpPercap and reshaping to long
+local subjects &quot;lifeExp pop gdpPercap&quot;
+foreach sub of local subjects{
+	preserve   /*Creating a retrievable copy of the original dataset*/
+	keep if subject==&quot;`sub'&quot; /*Creating subset for the selected subject*/
+	reshape long y, i(country) j(year)    /*Reshaping the subset to long*/
+	rename y `sub'
+	drop y
+	save gapminder`sub', replace    /*Storing subset in new file*/
+	restore    /*Restoring back to original dataset*/
+}
+</code></pre>
+<br>
+<h4><a href="#exercise-5-adding-a-for-loop" id="exercise-5-adding-a-for-loop">Exercise 5: Adding a for loop</a></h4>
+<p>Apply a for loop to create the three subsets for the GDP per capita, unemployment and the general government structural balance.</p>
+<br>
+<br>
+<h3><a href="#evaluation" id="evaluation">Final task: Please give us your feedback! </a></h3>
+	   <p>Upon completing the survey, <b>you will receive the link to the solution file</b>, to check how your commands compares to the sample solution.</p>
+<p>In order to adapt our training to your needs and provide the most valuable learning experience for you, we depend on your feedack.</p>
+	   <p>We would be grateful if you could take 1 min before the end of the workshop to get your feedback! </p>
+<p><a href="https://lse.eu.qualtrics.com/jfe/form/SV_77M35cq1arxNcj3?course=Stata%201:Importing%20and%20inspecting%20Data&topic=Stata&link=https://lsecloud-my.sharepoint.com/:u:/g/personal/m_wiemers_lse_ac_uk/EU9fXeq9Mm9Ii363M_Eypf0B231Lx_NEpTkHgMGnr3SGzw?e=pm3D9J">Click here to open the survey!</a></p>
+</div>
+ </body>
