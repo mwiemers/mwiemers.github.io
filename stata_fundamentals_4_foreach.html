@@ -47,133 +47,129 @@
     <p>All macros are deleted from memory when you close Stata.</p>
     <h3><a href="#local-macros" id="local-macros">Local macros</a></h3>
     <p>In the example below we load the auto dataset and want to run the <b>describe</b>, <b>list</b> and <b>summarize</b> command on the <i>rep78</i>, <i>turn</i> and <i>length</i> variables.</p>
-    <pre><code>
-    . sysuse auto, clear
-    (1978 Automobile Data)
+<pre><code>. sysuse auto, clear
+(1978 Automobile Data)
 
-    . describe rep78 turn length
+. describe rep78 turn length
 
-                  storage   display    value
-    variable name   type    format     label      variable label
-    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    rep78           int     %8.0g                 Repair Record 1978
-    turn            int     %8.0g                 Turn Circle (ft.)
-    length          int     %8.0g                 Length (in.)
+              storage   display    value
+variable name   type    format     label      variable label
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+rep78           int     %8.0g                 Repair Record 1978
+turn            int     %8.0g                 Turn Circle (ft.)
+length          int     %8.0g                 Length (in.)
 
-    . list rep78 turn length in 1/10
+. list rep78 turn length in 1/10
 
-        +-----------------------+
-        | rep78   turn   length |
-        |-----------------------|
-     1. |     3     40      186 |
-     2. |     3     40      173 |
-     3. |     .     35      168 |
-     4. |     3     40      196 |
-     5. |     4     43      222 |
-        |-----------------------|
-     6. |     3     43      218 |
-     7. |     .     34      170 |
-     8. |     3     42      200 |
-     9. |     3     43      207 |
-    10. |     3     42      200 |
-        +-----------------------+
+    +-----------------------+
+    | rep78   turn   length |
+    |-----------------------|
+ 1. |     3     40      186 |
+ 2. |     3     40      173 |
+ 3. |     .     35      168 |
+ 4. |     3     40      196 |
+ 5. |     4     43      222 |
+    |-----------------------|
+ 6. |     3     43      218 |
+ 7. |     .     34      170 |
+ 8. |     3     42      200 |
+ 9. |     3     43      207 |
+10. |     3     42      200 |
+    +-----------------------+
 
-    . summarize rep78 turn length
+. summarize rep78 turn length
 
-        Variable |        Obs        Mean    Std. Dev.       Min        Max
-    -------------+---------------------------------------------------------
-           rep78 |         69    3.405797    .9899323          1          5
-            turn |         74    39.64865    4.399354         31         51
-          length |         74    187.9324    22.26634        142        233
-    </code></pre>
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       rep78 |         69    3.405797    .9899323          1          5
+        turn |         74    39.64865    4.399354         31         51
+      length |         74    187.9324    22.26634        142        233
+</code></pre>
     <p>We now modify the script and use a local macro to store the variables <i>rep78</i>, <i>turn</i> and <i>length</i>. In the subsequent lines, where we use the <b>describe</b>, <b>list</b> and <b>summarize</b> commands, we now substitute the local macro with the variable names.</p>
     <p>Following <b>local</b>, we first specify the name of the local macro as <i>vars</i> and then enter all variables that should be assigned to the macro.</p>
-    <pre><code>
-    . sysuse auto, clear
-    (1978 Automobile Data)
+<pre><code>. sysuse auto, clear
+(1978 Automobile Data)
 
-    . local vars rep78 turn length
-    </code></pre>
-    <p>We can now use the local macro <i>vars</i> anywhere inside our do-file as a placeholder for the variables <i>rep78</i>, <i>turn</i> and <i>length</i>. In order to use the <i>vars</i> macro with a command, we have to put it in single quotes as in the example. NB: the first single quote is the forward slanted single quote `.</p>
-    <pre><code>
-    . describe `vars'
-                  storage   display    value
-    variable name   type    format     label      variable label
-    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    rep78           int     %8.0g                 Repair Record 1978
-    turn            int     %8.0g                 Turn Circle (ft.)
-    length          int     %8.0g                 Length (in.)
+. local vars rep78 turn length
+</code></pre>
+<p>We can now use the local macro <i>vars</i> anywhere inside our do-file as a placeholder for the variables <i>rep78</i>, <i>turn</i> and <i>length</i>. In order to use the <i>vars</i> macro with a command, we have to put it in single quotes as in the example. NB: the first single quote is the forward slanted single quote `.</p>
+<pre><code>. describe `vars'
+              storage   display    value
+variable name   type    format     label      variable label
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+rep78           int     %8.0g                 Repair Record 1978
+turn            int     %8.0g                 Turn Circle (ft.)
+length          int     %8.0g                 Length (in.)
 
-    . list `vars' in 1/10
+. list `vars' in 1/10
 
-        +-----------------------+
-        | rep78   turn   length |
-        |-----------------------|
-     1. |     3     40      186 |
-     2. |     3     40      173 |
-     3. |     .     35      168 |
-     4. |     3     40      196 |
-     5. |     4     43      222 |
-        |-----------------------|
-     6. |     3     43      218 |
-     7. |     .     34      170 |
-     8. |     3     42      200 |
-     9. |     3     43      207 |
-    10. |     3     42      200 |
-        +-----------------------+
+    +-----------------------+
+    | rep78   turn   length |
+    |-----------------------|
+ 1. |     3     40      186 |
+ 2. |     3     40      173 |
+ 3. |     .     35      168 |
+ 4. |     3     40      196 |
+ 5. |     4     43      222 |
+    |-----------------------|
+ 6. |     3     43      218 |
+ 7. |     .     34      170 |
+ 8. |     3     42      200 |
+ 9. |     3     43      207 |
+10. |     3     42      200 |
+    +-----------------------+
 
-    . summarize `vars'
+. summarize `vars'
 
-        Variable |        Obs        Mean    Std. Dev.       Min        Max
-    -------------+---------------------------------------------------------
-           rep78 |         69    3.405797    .9899323          1          5
-            turn |         74    39.64865    4.399354         31         51
-          length |         74    187.9324    22.26634        142        233
-    </code></pre>
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       rep78 |         69    3.405797    .9899323          1          5
+        turn |         74    39.64865    4.399354         31         51
+      length |         74    187.9324    22.26634        142        233
+</code></pre>
     <h3><a href="#global-macros" id="global-macros">Global macros</a></h3>
     <p>See the example below to create a global macro instead of a local one. We use <b>global</b> instead of <b>local</b> to create the macro. In order to use the macro, we have to prefix it with the <i>$</i> symbol.</p>
     <p>It is recommended to use local macros unless you must use a variable across do-files. Using global macros where it is not necessary can cause conflicts when working across do-files. For instance, you might use the same name for global macros in different do-files. Running sub-sections of the different do-files might cause errors when using global macros because the value that has been assigned to the macro in one do-file, would not work with the commands in another do-file.</p>
-    <pre><code>
-    . sysuse auto, clear
-    (1978 Automobile Data)
+<pre><code>. sysuse auto, clear
+(1978 Automobile Data)
 
-    . global vars rep78 turn length
- 
-    . describe $vars
+. global vars rep78 turn length
 
-                  storage   display    value
-    variable name   type    format     label      variable label
-    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    rep78           int     %8.0g                 Repair Record 1978
-    turn            int     %8.0g                 Turn Circle (ft.)
-    length          int     %8.0g                 Length (in.)
+. describe $vars
 
-    . list $vars in 1/10
+              storage   display    value
+variable name   type    format     label      variable label
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+rep78           int     %8.0g                 Repair Record 1978
+turn            int     %8.0g                 Turn Circle (ft.)
+length          int     %8.0g                 Length (in.)
 
-         +-----------------------+
-         | rep78   turn   length |
-         |-----------------------|
-      1. |     3     40      186 |
-      2. |     3     40      173 |
-      3. |     .     35      168 |
-      4. |     3     40      196 |
-      5. |     4     43      222 |
-         |-----------------------|
-      6. |     3     43      218 |
-      7. |     .     34      170 |
-      8. |     3     42      200 |
-      9. |     3     43      207 |
-     10. |     3     42      200 |
-         +-----------------------+
+. list $vars in 1/10
 
-    . summarize $vars
+     +-----------------------+
+     | rep78   turn   length |
+     |-----------------------|
+  1. |     3     40      186 |
+  2. |     3     40      173 |
+  3. |     .     35      168 |
+  4. |     3     40      196 |
+  5. |     4     43      222 |
+     |-----------------------|
+  6. |     3     43      218 |
+  7. |     .     34      170 |
+  8. |     3     42      200 |
+  9. |     3     43      207 |
+ 10. |     3     42      200 |
+     +-----------------------+
 
-        Variable |        Obs        Mean    Std. Dev.       Min        Max
-    -------------+---------------------------------------------------------
-           rep78 |         69    3.405797    .9899323          1          5
-            turn |         74    39.64865    4.399354         31         51
-          length |         74    187.9324    22.26634        142        233
-    </code></pre>
+. summarize $vars
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+       rep78 |         69    3.405797    .9899323          1          5
+        turn |         74    39.64865    4.399354         31         51
+      length |         74    187.9324    22.26634        142        233
+</code></pre>
     <h3><a href="#why-bother-using-macros" id="why-bother-using-macros">Why bother using macros?</a></h3>
     <p>Having a macro for a set of variables might come in very handy when, for instance, running a number of regression analysis with the same set of predictors or different predictors but the same set of control variables. If you remove or add a variable in the macro it will take effect in every analysis that uses the macro. You only have to change the macro at the beginning of the analyses and not every set of predictors inside each regression command. More importantly, you will have to use macros when running for loops in your script, which we will explore in the next section.</p>
     <h3><a href="#exercise-1-local-macros" id="exercise-1-local-macros">Exercise 1: Local macros</a></h3>
@@ -193,64 +189,62 @@
     <br>
     <h3><a href="#using-a-for-loop-to-create-codebooks-for-a-set-of-variables" id="using-a-for-loop-to-create-codebooks-for-a-set-of-variables">Using a for loop to create codebooks for a set of variables</a></h3>
     <p>For this exercise we will use the auto dataset and we start with loading it from the Stata server.</p>
-    <pre><code>
-    . webuse auto, clear
-    (1978 Automobile Data)
+<pre><code>. webuse auto, clear
+(1978 Automobile Data)
 
-    </code></pre>
+</code></pre>
     <br>
     <p>We will now write a for loop with the <b>foreach</b> command, that will use the <b>codebook</b> command on a set of variables in the auto dataset. We could have done this by simply using the <b>codebook</b> command with all variable names, but this is just an example to illustrate how you create for loops with <b>foreach</b>.</p>
     <p>Let us first run these two lines and see how they produce a codebook for the variables <i>price</i>, <i>make</i> and <i>weight</i>.</p>
-    <pre><code>
-    . foreach var of varlist price make weight{
-      codebook `var'
-    }
+<pre><code>. foreach var of varlist price make weight{
+  codebook `var'
+}
 
-    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    price                                                                                                                                                                                                                                                Price
-    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+price                                                                                                                                                                                                                                                Price
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-                      type:  numeric (int)
+                  type:  numeric (int)
 
-                    range:  [3291,15906]                 units:  1
-            unique values:  74                       missing .:  0/74
+                range:  [3291,15906]                 units:  1
+        unique values:  74                       missing .:  0/74
 
-                     mean:   6165.26
-                 std. dev:    2949.5
+                 mean:   6165.26
+             std. dev:    2949.5
 
-              percentiles:        10%       25%       50%       75%       90%
-                                  3895      4195    5006.5      6342     11385
+          percentiles:        10%       25%       50%       75%       90%
+                              3895      4195    5006.5      6342     11385
 
-    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    make                                                                                                                                                                                                                                        Make and Model
-    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+make                                                                                                                                                                                                                                        Make and Model
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-                      type:  string (str18), but longest is str17
+                  type:  string (str18), but longest is str17
 
-            unique values:  74                       missing &quot;&quot;:  0/74
+         unique values:  74                       missing &quot;&quot;:  0/74
 
-                  examples:  &quot;Cad. Deville&quot;
-                             &quot;Dodge Magnum&quot;
-                             &quot;Merc. XR-7&quot;
-                             &quot;Pont. Catalina&quot;
+              examples:  &quot;Cad. Deville&quot;
+                         &quot;Dodge Magnum&quot;
+                         &quot;Merc. XR-7&quot;
+                         &quot;Pont. Catalina&quot;
 
-                  warning:  variable has embedded blanks
+              warning:  variable has embedded blanks
 
-    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    weight                                                                                                                                                                                                                                       Weight (lbs.)
-    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+weight                                                                                                                                                                                                                                       Weight (lbs.)
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-                      type:  numeric (int)
+                  type:  numeric (int)
 
-                     range:  [1760,4840]                  units:  10
-             unique values:  64                       missing .:  0/74
+                 range:  [1760,4840]                  units:  10
+         unique values:  64                       missing .:  0/74
 
-                      mean:   3019.46
-                  std. dev:   777.194
+                  mean:   3019.46
+              std. dev:   777.194
 
-              percentiles:        10%       25%       50%       75%       90%
-                                  2020      2240      3190      3600      4060
-    </code></pre>
+          percentiles:        10%       25%       50%       75%       90%
+                              2020      2240      3190      3600      4060
+</code></pre>
     <br>
     <p>Let us break down how the <b>foreach</b> command works. The <b>foreach</b> command takes two arguments: the list of variables, which is specified after <i>of varlist</i> and the name of the local macro, that is being used to store the variables, just after <b>foreach</b>.</p>
     <p>After <b>of varlist</b> we give a list of variables that we want to select one by one. Everytime a variable from the list is selected is has to be stored in the local macro, so that we can use that variable for the codebook command inside the for loop. In this example, we named that macro <i>var</i>.</p>
@@ -263,129 +257,121 @@
     <h3><a href="#using-a-for-loop-to-create-graphs-for-a-set-of-variables" id="using-a-for-loop-to-create-graphs-for-a-set-of-variables">Using a for loop to create graphs for a set of variables</a></h3>
     <p>Let us now look at another example of how we can use a for loop to create several histograms.</p>
     <p>We can use the <b>hist</b> command to create a histogram. As you can see this command per default produces a histogram with a density scale, which you could change with the <i>frequency</i> option.</p>
-    <pre><code>
-    . hist price
-    (bin=8, start=3291, width=1576.875)
-    </code></pre>
-    <img src="/screenshots/hist1.png" width="60%">
-    <pre><code>
-    . hist price, frequency
-    (bin=8, start=3291, width=1576.875)
-    </code></pre>
-    <img src="/screenshots/hist2.png" width="60%">
-    <p>If we want to create more than one histogram in separate windows, we have to use the <i>name()</i> option. The <i>name</i> option works with every plot type.</p>
-    <pre><code>
-    . hist price, name(hist_price)
-    . hist weight, name(hist_weight)
-    </code></pre>
-    <img src="/screenshots/hist3.png" width="100%">
-    <p>If we had a large number of histograms we wanted to plot, we could also use <b>foreach</b> to create all histograms in separate windows with a for loop.</p>
-    <p>As you can see, we have to use the local macro <i>var</i> to create the histogram with the <b>hist</b> command and to provide a name with the <i>name</i> option, so that the histograms will be created in separate windows.</p>
-    <pre><code>
-    . foreach var of varlist price weight length{
-        hist `var', name(hist_`var')
-    }
-    (bin=8, start=3291, width=1576.875)
-    (bin=8, start=1760, width=385)
-    (bin=8, start=142, width=11.375)
+<pre><code>. hist price
+(bin=8, start=3291, width=1576.875)
+</code></pre>
+<img src="/screenshots/hist1.png" width="60%">
+<pre><code>. hist price, frequency
+(bin=8, start=3291, width=1576.875)
+</code></pre>
+<img src="/screenshots/hist2.png" width="60%">
+<p>If we want to create more than one histogram in separate windows, we have to use the <i>name()</i> option. The <i>name</i> option works with every plot type.</p>
+<pre><code>. hist price, name(hist_price)
+. hist weight, name(hist_weight)
+</code></pre>
+<img src="/screenshots/hist3.png" width="100%">
+<p>If we had a large number of histograms we wanted to plot, we could also use <b>foreach</b> to create all histograms in separate windows with a for loop.</p>
+<p>As you can see, we have to use the local macro <i>var</i> to create the histogram with the <b>hist</b> command and to provide a name with the <i>name</i> option, so that the histograms will be created in separate windows.</p>
+<pre><code>. foreach var of varlist price weight length{
+    hist `var', name(hist_`var')
+}
+(bin=8, start=3291, width=1576.875)
+(bin=8, start=1760, width=385)
+(bin=8, start=142, width=11.375)
 
-    </code></pre>
-    <img src="/screenshots/hist4.png" width="100%">
-    <h3><a href="#exercise-2-foreach-loop" id="exercise-2-foreach-loop">Exercise 2: foreach loop</a></h3>
-    <ol>
-    <li>Load auto dataset</li>
-    <li>Write a for loop to display summary statistics (mean and standard deviation) for the variables price, weight and length.</li>
-    <li>Write a for loop to create three separate scatter plots to predict <i>price</i> from <i>weight</i>, <i>length</i> and <i>trunk</i>. Use the <i>name</i> option to create each plot in a separate window.</li>
-    </ol>
-    <br>
-    <br>
-    <h3><a href="#generating-new-variables-with-a-for-loop" id="generating-new-variables-with-a-for-loop">Generating new variables with a for loop</a></h3>
-    <p>In the next example we will explore how we can apply a for loop to compute a set of variables more efficiently.</p>
-    <p>We will first load the income.csv dataset, which we import with a URL. The URL has to be preceded by <i>using</i>.</p>
-    <pre><code>
-    . import delimited using &quot;https://raw.githubusercontent.com/mwiemers/datasets/main/income.csv&quot;, varnames(1) clear
-    (7 vars, 20 obs)
-    </code></pre>
-    <p>We print the data in the results panel with the <b>list</b> command to take a closer look at the data.</p>
-    <p>We can see that the dataset has 20 entries on income for the years 2015 to 2020.</p>
-    <pre><code>
-    . list, ab(12)
+</code></pre>
+<img src="/screenshots/hist4.png" width="100%">
+<h3><a href="#exercise-2-foreach-loop" id="exercise-2-foreach-loop">Exercise 2: foreach loop</a></h3>
+<ol>
+<li>Load auto dataset</li>
+<li>Write a for loop to display summary statistics (mean and standard deviation) for the variables price, weight and length.</li>
+<li>Write a for loop to create three separate scatter plots to predict <i>price</i> from <i>weight</i>, <i>length</i> and <i>trunk</i>. Use the <i>name</i> option to create each plot in a separate window.</li>
+</ol>
+<br>
+<br>
+<h3><a href="#generating-new-variables-with-a-for-loop" id="generating-new-variables-with-a-for-loop">Generating new variables with a for loop</a></h3>
+<p>In the next example we will explore how we can apply a for loop to compute a set of variables more efficiently.</p>
+<p>We will first load the income.csv dataset, which we import with a URL. The URL has to be preceded by <i>using</i>.</p>
+<pre><code>
+. import delimited using &quot;https://raw.githubusercontent.com/mwiemers/datasets/main/income.csv&quot;, varnames(1) clear
+(7 vars, 20 obs)
+</code></pre>
+<p>We print the data in the results panel with the <b>list</b> command to take a closer look at the data.</p>
+<p>We can see that the dataset has 20 entries on income for the years 2015 to 2020.</p>
+<pre><code>. list, ab(12)
 
-         +----------------------------------------------------------------------------------------+
-         | id   income_2015   income_2016   income_2017   income_2018   income_2019   income_2020 |
-         |----------------------------------------------------------------------------------------|
-      1. |  1      28847.44      29710.65      30599.68      31515.32      32458.36      33429.61 |
-      2. |  2      24473.48       25217.9      25984.97      26775.37      27589.81      28429.02 |
-      3. |  3      31362.19      32339.06      33346.36      34385.04      35456.07      36560.45 |
-      4. |  4      40859.16      42049.73         43275      44535.97      45833.69      47169.21 |
-      5. |  5      21124.44      21829.08      22557.22      23309.65      24087.18      24890.64 |
-         |----------------------------------------------------------------------------------------|
-      6. |  6      35068.35      36084.98      37131.08       38207.5      39315.14      40454.88 |
-      7. |  7      30960.02      31904.47      32877.74       33880.7      34914.25      35979.33 |
-      8. |  8      30989.45      31928.93      32896.89      33894.19      34921.73      35980.41 |
-      9. |  9      32260.77      33228.51      34225.28      35251.95      36309.42      37398.61 |
-     10. | 10      28416.77      29326.73      30265.84      31235.01      32235.22      33267.46 |
-         |----------------------------------------------------------------------------------------|
-     11. | 11      28859.97       29704.6      30573.95      31468.75      32389.73      33337.66 |
-     12. | 12      39773.75      41003.82      42271.93      43579.26      44927.02      46316.47 |
-     13. | 13      33917.85      34998.52      36113.61      37264.23      38451.52      39676.63 |
-     14. | 14       23364.9      24086.37      24830.12      25596.83      26387.22      27202.02 |
-     15. | 15      29212.08      30066.21      30945.31      31850.12      32781.38      33739.87 |
-         |----------------------------------------------------------------------------------------|
-     16. | 16      21223.29      21870.35      22537.13      23224.23      23932.29      24661.94 |
-     17. | 17      32021.43      32986.71      33981.09      35005.44      36060.67      37147.71 |
-     18. | 18      39241.28      40356.02      41502.44      42681.42      43893.89      45140.81 |
-     19. | 19      26426.72      27233.36      28064.63      28921.28      29804.07      30713.81 |
-     20. | 20       37565.7      38727.93      39926.12      41161.39      42434.87      43747.75 |
-        +----------------------------------------------------------------------------------------+
-    </code></pre>
-    <p>For our net income computation, we assume that there is tax free amount of £10000 and of the remaining income 40% are taxed.</p>
-    <p>We are now going to create new variables for the income after taxes. To do so, we use the <b>generate</b> command.</p>
-    <p>Following <b>generate</b> we specify the name of the newly computed variable and after the equal sign we write our expression to calculate the net income.</p>
-    <pre><code>
-    . generate net_income_2015 = 10000 + (income_2015-10000)*.6
-    . generate net_income_2016 = 10000 + (income_2016-10000)*.6 
-    . generate net_income_2017 = 10000 + (income_2017-10000)*.6 
-    . generate net_income_2018 = 10000 + (income_2018-10000)*.6 
-    . generate net_income_2019 = 10000 + (income_2019-10000)*.6 
-    . generate net_income_2020 = 10000 + (income_2020-10000)*.6 
-    </code></pre>
-    <br>
-    <p>All of the <b>generate</b> commands have the same format. The only part that changes is the variable name. Therefore, we can use <b>foreach</b> to loop through all income vairables and replace the income variables in the <b>generate</b> commands with a local macro.</p>
-    <pre><code>
-    . drop net_income*
- 
-    . foreach var of varlist income_2015 income_2016 income_2017 income_2018 income_2019 income_2020{
-        generate net_`var' = (10000) + (`var'-10000) * 0.6
-    }
+     +----------------------------------------------------------------------------------------+
+     | id   income_2015   income_2016   income_2017   income_2018   income_2019   income_2020 |
+     |----------------------------------------------------------------------------------------|
+  1. |  1      28847.44      29710.65      30599.68      31515.32      32458.36      33429.61 |
+  2. |  2      24473.48       25217.9      25984.97      26775.37      27589.81      28429.02 |
+  3. |  3      31362.19      32339.06      33346.36      34385.04      35456.07      36560.45 |
+  4. |  4      40859.16      42049.73         43275      44535.97      45833.69      47169.21 |
+  5. |  5      21124.44      21829.08      22557.22      23309.65      24087.18      24890.64 |
+     |----------------------------------------------------------------------------------------|
+  6. |  6      35068.35      36084.98      37131.08       38207.5      39315.14      40454.88 |
+  7. |  7      30960.02      31904.47      32877.74       33880.7      34914.25      35979.33 |
+  8. |  8      30989.45      31928.93      32896.89      33894.19      34921.73      35980.41 |
+  9. |  9      32260.77      33228.51      34225.28      35251.95      36309.42      37398.61 |
+ 10. | 10      28416.77      29326.73      30265.84      31235.01      32235.22      33267.46 |
+     |----------------------------------------------------------------------------------------|
+ 11. | 11      28859.97       29704.6      30573.95      31468.75      32389.73      33337.66 |
+ 12. | 12      39773.75      41003.82      42271.93      43579.26      44927.02      46316.47 |
+ 13. | 13      33917.85      34998.52      36113.61      37264.23      38451.52      39676.63 |
+ 14. | 14       23364.9      24086.37      24830.12      25596.83      26387.22      27202.02 |
+ 15. | 15      29212.08      30066.21      30945.31      31850.12      32781.38      33739.87 |
+     |----------------------------------------------------------------------------------------|
+ 16. | 16      21223.29      21870.35      22537.13      23224.23      23932.29      24661.94 |
+ 17. | 17      32021.43      32986.71      33981.09      35005.44      36060.67      37147.71 |
+ 18. | 18      39241.28      40356.02      41502.44      42681.42      43893.89      45140.81 |
+ 19. | 19      26426.72      27233.36      28064.63      28921.28      29804.07      30713.81 |
+ 20. | 20       37565.7      38727.93      39926.12      41161.39      42434.87      43747.75 |
+    +----------------------------------------------------------------------------------------+
+</code></pre>
+<p>For our net income computation, we assume that there is tax free amount of £10000 and of the remaining income 40% are taxed.</p>
+<p>We are now going to create new variables for the income after taxes. To do so, we use the <b>generate</b> command.</p>
+<p>Following <b>generate</b> we specify the name of the newly computed variable and after the equal sign we write our expression to calculate the net income.</p>
+<pre><code>. generate net_income_2015 = 10000 + (income_2015-10000)*.6
+. generate net_income_2016 = 10000 + (income_2016-10000)*.6 
+. generate net_income_2017 = 10000 + (income_2017-10000)*.6 
+. generate net_income_2018 = 10000 + (income_2018-10000)*.6 
+. generate net_income_2019 = 10000 + (income_2019-10000)*.6 
+. generate net_income_2020 = 10000 + (income_2020-10000)*.6 
+</code></pre>
+<br>
+<p>All of the <b>generate</b> commands have the same format. The only part that changes is the variable name. Therefore, we can use <b>foreach</b> to loop through all income vairables and replace the income variables in the <b>generate</b> commands with a local macro.</p>
+<pre><code>. drop net_income*
 
-    </code></pre>
-    <p>This for loop will iterate through each of the income variables in turn. On each iteration the local macro <i>var</i> will be assigned one of the variables and then that local macro <i>var</i> will be used in the <b>generate</b> command inside the loop.</p>
-    <p>The first argument for the <b>generate</b> command is the name for the new variable that we are generating. The name of each new variable will always start with <i>net_</i> and then be followed by the name of the selected income variable (<i>income_2015</i>, <i>income_2016</i> etc.).</p>
-    <p>Since we want to select all of the income variables, we can write income* in the <b>foreach</b> command to do so. Whenever you want to select a list of variables starting with the same letter or word, you can add the asterisk after that letter or word. In our case, we might even use <b>foreach var of i*</b>, since the only variables in our dataset starting with an i are the income variables.</p>
-    <p>To select all variables in the dataset simply type *.</p>
-    <pre><code>
-    . drop net_income*
-    
-    . foreach var of varlist income*{
-        gen net_`var' = (10000) + (`var'-10000) * 0.6
-    }
-    </code></pre>
-    <h3><a href="#exercise-3-generating-new-variables-with-a-for-loop" id="exercise-3-generating-new-variables-with-a-for-loop">Exercise 3: Generating new variables with a for loop</a></h3>
-    <ol>
-    <li>Load the income.csv dataset using the URL <a href="https://raw.githubusercontent.com/mwiemers/datasets/main/income.csv">https://raw.githubusercontent.com/mwiemers/datasets/main/income.csv</a></li>
-    <li>Write a for loop to generate the variables net_income_2015 - net_income_2020. Calcuate the net income with a 30% tax rate.</li>
-    <li>Write a for loop to rename the original income variables to gross_income_2015, gross_income_2016 etc.</li>
-    <li>Verify that the variables have been renamed by using the <b>describe</b> command with the <i>fullname</i> option.</li>
-    </ol>
-  
-    <h3><a href="#evaluation" id="evaluation">Final task: Please give us your feedback! </a></h3>
-       <p>Upon completing the survey, <b>you will receive the link to the solution file</b>, to check how your commands compares to the sample solution.</p>
-    <p>In order to adapt our training to your needs and provide the most valuable learning experience for you, we depend on your feedack.</p>
-         <p>We would be grateful if you could take 1 min before the end of the workshop to get your feedback! </p>
+. foreach var of varlist income_2015 income_2016 income_2017 income_2018 income_2019 income_2020{
+    generate net_`var' = (10000) + (`var'-10000) * 0.6
+}
 
-    <a href="https://lse.eu.qualtrics.com/jfe/form/SV_77M35cq1arxNcj3?course=&topic=Stata&link=">Click here to open the survey!</a>
+</code></pre>
+<p>This for loop will iterate through each of the income variables in turn. On each iteration the local macro <i>var</i> will be assigned one of the variables and then that local macro <i>var</i> will be used in the <b>generate</b> command inside the loop.</p>
+<p>The first argument for the <b>generate</b> command is the name for the new variable that we are generating. The name of each new variable will always start with <i>net_</i> and then be followed by the name of the selected income variable (<i>income_2015</i>, <i>income_2016</i> etc.).</p>
+<p>Since we want to select all of the income variables, we can write income* in the <b>foreach</b> command to do so. Whenever you want to select a list of variables starting with the same letter or word, you can add the asterisk after that letter or word. In our case, we might even use <b>foreach var of i*</b>, since the only variables in our dataset starting with an i are the income variables.</p>
+<p>To select all variables in the dataset simply type *.</p>
+<pre><code>. drop net_income*
 
-  </div>
+. foreach var of varlist income*{
+    gen net_`var' = (10000) + (`var'-10000) * 0.6
+}
+</code></pre>
+<h3><a href="#exercise-3-generating-new-variables-with-a-for-loop" id="exercise-3-generating-new-variables-with-a-for-loop">Exercise 3: Generating new variables with a for loop</a></h3>
+<ol>
+<li>Load the income.csv dataset using the URL <a href="https://raw.githubusercontent.com/mwiemers/datasets/main/income.csv">https://raw.githubusercontent.com/mwiemers/datasets/main/income.csv</a></li>
+<li>Write a for loop to generate the variables net_income_2015 - net_income_2020. Calcuate the net income with a 30% tax rate.</li>
+<li>Write a for loop to rename the original income variables to gross_income_2015, gross_income_2016 etc.</li>
+<li>Verify that the variables have been renamed by using the <b>describe</b> command with the <i>fullname</i> option.</li>
+</ol>
+
+<h3><a href="#evaluation" id="evaluation">Final task: Please give us your feedback! </a></h3>
+   <p>Upon completing the survey, <b>you will receive the link to the solution file</b>, to check how your commands compares to the sample solution.</p>
+<p>In order to adapt our training to your needs and provide the most valuable learning experience for you, we depend on your feedack.</p>
+     <p>We would be grateful if you could take 1 min before the end of the workshop to get your feedback! </p>
+
+<a href="https://lse.eu.qualtrics.com/jfe/form/SV_77M35cq1arxNcj3?course=&topic=Stata&link=">Click here to open the survey!</a>
+
+</div>
 </body>
 
