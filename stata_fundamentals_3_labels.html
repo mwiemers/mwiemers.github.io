@@ -74,7 +74,7 @@ obs:            74                          1978 Automobile Data
 vars:            12                          13 Apr 2016 17:45
 size:         3,182                          (_dta has notes)
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-storage   display    value
+              storage   display    value
 variable name   type    format     label      variable label
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 make            str18   %-18s                 Make and Model
@@ -102,7 +102,7 @@ Sorted by: foreign
 <pre><code>
 . describe  price
 
-storage   display    value
+              storage   display    value
 variable name   type    format     label      variable label
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 price           int     %8.0gc                Price (USD)
@@ -164,17 +164,17 @@ gender_lab:
 <pre><code>
 . list
 
-+-------------------------------+
-| id   gender   sector   income |
-|-------------------------------|
+   +-------------------------------+
+   | id   gender   sector   income |
+   |-------------------------------|
 1. |  1        1        4    30000 |
 2. |  2        2        2    50000 |
 3. |  3        1        3    10000 |
 4. |  4        2        2    40000 |
 5. |  5        1        1   120000 |
-|-------------------------------|
+   |-------------------------------|
 6. |  6        2        4    20000 |
-+-------------------------------+
+   +-------------------------------+
 </code></pre>
 <p>With the <b>label define</b> command we have only created the value label <i>gender_lab</i>, that is, the mapping of numerical values and labels (1 = male, 2 = female).</p>
 <p>In order to apply the value label <i>gender_lab</i> to the variable <i>gender</i>, we can use the <b>label value</b> command. The <b>label value</b> command takes as first argument the name of the variable (<i>gender</i>) and as second argument the name of the value label (<i>gender_lab</i>)that should be applied to that variable.</p>
@@ -186,34 +186,34 @@ gender_lab:
 <pre><code>
 . list 
 
-+-------------------------------+
-| id   gender   sector   income |
-|-------------------------------|
+   +-------------------------------+
+   | id   gender   sector   income |
+   |-------------------------------|
 1. |  1     male        4    30000 |
 2. |  2   female        2    50000 |
 3. |  3     male        3    10000 |
 4. |  4   female        2    40000 |
 5. |  5     male        1   120000 |
-|-------------------------------|
+   |-------------------------------|
 6. |  6   female        4    20000 |
-+-------------------------------+
+   +-------------------------------+
 </code></pre>
 <br>
 <p>The labels male and female, however, have not replaced the raw numerical values 1 and 2. They are simply displayed instead of the raw numerical values. We can use the <i>nolab</i> option to display the numerical values instead.</p>
 <pre><code>
 . list, nolab
 
-+-------------------------------+
-| id   gender   sector   income |
-|-------------------------------|
+   +-------------------------------+
+   | id   gender   sector   income |
+   |-------------------------------|
 1. |  1        1        4    30000 |
 2. |  2        2        2    50000 |
 3. |  3        1        3    10000 |
 4. |  4        2        2    40000 |
 5. |  5        1        1   120000 |
-|-------------------------------|
+   |-------------------------------|
 6. |  6        2        4    20000 |
-+-------------------------------+
+   +-------------------------------+
 </code></pre>
 <br>
 <p>To quickly check which value label has been applied to a variable, we can use <b>codebook</b>. In the second row it says label: gender_lab, which means that the value label <i>gender_lab</i> has been applied to the <i>gender</i> variable.</p>
@@ -224,10 +224,10 @@ gender_lab:
 gender                                                                                                                                                                                                                                         (unlabeled)
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-   type:  numeric (float)
-  label:  gender_lab
+       type:  numeric (float)
+      label:  gender_lab
 
-  range:  [1,2]                        units:  1
+      range:  [1,2]                        units:  1
 unique values:  2                        missing .:  0/6
 
 tabulation:  Freq.   Numeric  Label
@@ -284,18 +284,18 @@ id     gender     sector     income
 <pre><code>
 . list
 
-+-------------------------------+
-| id   gender   sector   income |
-|-------------------------------|
+   +-------------------------------+
+   | id   gender   sector   income |
+   |-------------------------------|
 1. |  1     male        4    30000 |
 2. |  2   female        2    50000 |
 3. |  3     male        3    10000 |
 4. |  4   female        2    40000 |
 5. |  5     male        1   120000 |
-|-------------------------------|
+   |-------------------------------|
 6. |  6   female        4    20000 |
 7. |  7        3        3    35000 |
-+-------------------------------+
+   +-------------------------------+
 
 </code></pre>
 <br>
@@ -309,18 +309,18 @@ id     gender     sector     income
 <pre><code>
 . list
 
-+-------------------------------------+
-| id         gender   sector   income |
-|-------------------------------------|
+   +-------------------------------------+
+   | id         gender   sector   income |
+   |-------------------------------------|
 1. |  1           male        4    30000 |
 2. |  2         female        2    50000 |
 3. |  3           male        3    10000 |
 4. |  4         female        2    40000 |
 5. |  5           male        1   120000 |
-|-------------------------------------|
+   |-------------------------------------|
 6. |  6         female        4    20000 |
 7. |  7   trans_female        3    35000 |
-+-------------------------------------+
+   +-------------------------------------+
 </code></pre>
 <br>
 <h4><a href="#exercise-3-modfying-value-labels" id="exercise-3-modfying-value-labels">Exercise 3: Modfying value labels</a></h4>
@@ -376,11 +376,10 @@ obs:           426
 vars:            15                          
 size:        49,842                          
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-storage   display    value
+              storage   display    value
 variable name   type    format     label      variable label
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-country         long    %24.0g     country_code
-                               country
+country         long    %24.0g     country_code country
 continent       str8    %9s                   continent
 subject         str9    %9s                   subject
 D               double  %10.0g                1952
@@ -411,11 +410,10 @@ obs:           426
 vars:            15                          
 size:        49,842                          
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-storage   display    value
+              storage   display    value
 variable name   type    format     label      variable label
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-country         long    %24.0g     country_code
-                              country
+country         long    %24.0g     country_code country
 continent       str8    %9s                   continent
 subject         str9    %9s                   subject
 y1952           double  %10.0g                1952
@@ -451,15 +449,14 @@ Note: Dataset has changed since last saved.
 . describe
 
 Contains data
-obs:           426                          
+obs:            426                          
 vars:            15                          
 size:        49,842                          
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-storage   display    value
+              storage   display    value
 variable name   type    format     label      variable label
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-country         long    %24.0g     country_code
-                              country
+country         long    %24.0g     country_code country
 continent       str8    %9s                   continent
 subject         str9    %9s                   subject
 y1952           double  %10.0g                1952
@@ -497,11 +494,10 @@ obs:           426
 vars:            15                          
 size:        49,842                          
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-storage   display    value
+              storage   display    value
 variable name   type    format     label      variable label
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-country         long    %24.0g     country_code
-                              country
+country         long    %24.0g     country_code country
 continent       str8    %9s                   continent
 subject         str9    %9s                   subject
 y1952           double  %10.0g                1952
