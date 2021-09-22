@@ -37,8 +37,10 @@
       <li>Reshaping between long and wide format</li>
       <li>Merging multiple datasets</li>
     </ul>
-  
-    <p>In this practical session, you will learn to:</p>
+    
+    <p>This sessions teaches you how to prepare string columns to a format that is suitable for data analysis and how to convert a string column with numerical values.</p>
+    
+    <p>By the end of this session, you will know how to:</p>
     <ul>
       <li>Identify numerical values that have been imported as strings</li>
       <li>Modifying string values</li>
@@ -95,7 +97,7 @@
     </code></pre>
   
     <img src="/screenshots/browse_gapminder.png" height="500" />
-  
+  <br>
     <h3><a href="#identifying-numerical-values-in-string-format" id="identifying-numerical-values-in-string-format">Identifying numerical values in string format</a></h3>
   
     <p>In this unit you are going to learn how to convert variables that contain numerical data but have been imported into Stata as string, i.e. text variables, into a numerical format.</p>
@@ -151,7 +153,7 @@ Sorted by:
    +---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 </code></pre>
-  
+  <br>
     <h3><a href="#removing-illegal-characters-before-converting" id="removing-illegal-characters-before-converting">Removing illegal characters before converting</a></h3>
   
     <p>In order to convert a variable that is in string format to numeric, we first have to remove any illegal characters. We have identified the commas in the D-O variables in the previous step. We can remove the commas with the replace command in combination with the <b>subinstr()</b> function.</p>
@@ -221,7 +223,7 @@ Sorted by:
 (0 real changes made)
 
 </code></pre>
-    
+    <br>
     <h2><a href="#convert-to-numeric" id="convert-to-numeric">Convert to numeric</a></h2>
     
     <p>Now that we have removed all commas in the D-O variables, we can convert the<br />
@@ -313,7 +315,7 @@ I: contains nonnumeric characters; replaced as double
 (1 missing value generated)
 
 </code></pre>
-  
+  <br>
     <h3><a href="#exercise-1-converting-strings-to-numerical-format" id="exercise-1-converting-strings-to-numerical-format">Exercise 1: Converting strings to numerical format</a></h3>
   
     <ol>
@@ -381,7 +383,7 @@ I: contains nonnumeric characters; replaced as double
 ------------+-----------------------------------
       Total |        432      100.00
 </code></pre>
-  
+  <br>
     <h3><a href="#exercise-2-removing-leading-and-trailing-spaces" id="exercise-2-removing-leading-and-trailing-spaces">Exercise 2: Removing leading and trailing spaces</a></h3>
     
     <ol>
@@ -394,7 +396,7 @@ I: contains nonnumeric characters; replaced as double
     <br>
     <br>
     
-    <pre><code></code></pre>
+
   
     <h2><a href="#splitting-and-combining-strings" id="splitting-and-combining-strings">Splitting and combining strings</a></h2>
   
@@ -505,7 +507,7 @@ name1  name2  name3
   3. |  James Pritchard      Mr     James   Pritchard |
      +------------------------------------------------+
 </code></pre>
-  
+  <br>
     <h3><a href="#exercise-3-splitting-and-combining-strings" id="exercise-3-splitting-and-combining-strings">Exercise 3: Splitting and combining strings</a></h3>
   
     <ol>
