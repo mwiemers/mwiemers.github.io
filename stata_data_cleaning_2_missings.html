@@ -8,18 +8,17 @@
 </head>
 
 <body>
-
-  <div class="sidenav">
-      <a href="##access-to-datasets">Access to Datasets</a>
-      <a href="#changing-the-working-directory_section" >Changing the working directory</a>
-      <a href="#exercise-changing-the-working-directory">Exercise: Changing the workign directory</a>
-      <a href="#loading-data-into-stata">Loading data into Stata</a>
-      <a href="#exercise-loading-data">Exercise: Loading data</a>
-      <a href="#inspecting-a-dataset">Inspecting a dataset</a>
-      <a href="#exercise-inspecting-data">Exercise: Inspecting data</a>
-      <a href="#summary-statistics">Summary statistics</a>
-      <a href="#exercise-summary-statistics">Exercise: Summary statistics</a>
-      <a href="#evaluation">Final task: Please give us your feedback!</a>
+	<div class="sidenav">
+		<a href="#loading-the-gapminder-dataset">Loading the gapminder dataset</a>
+		<a href="#find-and-delete-duplicates">Find and delete duplicates</a>
+		<a href="#exercise-1-duplicates">Exercise 1: Duplicates</a>
+		<a href="#missing-values">Missing values</a>
+		<a href="#correctly-label-missings">Correctly label missings</a>
+		<a href="#exercise-2-missings-1">Exercise 2: Identify and label missings</a>
+		<a href="#exploring-missings">Exploring missing missings</a>
+		<a href="#exercise-3-missings-2">Exercise 3: Exploring missings</a>
+		<a href="#dealing-with-missing-values">Dealing with missing values</a>
+		<a href="#evaluation">Final task: Please give us your feedback!</a>
   </div>
   <div class="main">
 
@@ -61,6 +60,7 @@
 <pre><code>. import excel using https://raw.githubusercontent.com/mwiemers/datasets/main/gapminder_dirty_missings.xlsx, firstrow clear
 
 </code></pre>
+	  <br>
 <h2><a href="#find-and-delete-duplicates" id="find-and-delete-duplicates">Find and delete duplicates</a></h2>
 <p>The <b>duplicate</b> commands can help us to identify duplicated observations in our data. You can check out <b>help duplicates</b> to get a full list of all available commands.</p>
 <p>To get an overview of whether the dataset contains any duplicates at all, we can use <b>duplicates report</b>.</p>
@@ -121,13 +121,13 @@ Duplicates in terms of all variables
 <h3><a href="#how-does-stata-represent-missing-values" id="how-does-stata-represent-missing-values">How does Stata represent missing values?</a></h3>
 <p>In Stata the . is the default symbol to represent missing numerical values. The extended missing values, .a, .b., c., &hellip;, .z can be used to represent specific types of numerical missings (don&rsquo;t know, corrupted, etc.).</p>
 <p>Empty quotes, &quot;&quot;, are used to represent missing strings values.</p>
-<h2><a href="#identify-missings" id="identify-missings">Identify missings</a></h2>
+<h3><a href="#identify-missings" id="identify-missings">Identify missings</a></h3>
 <p>When working with csv files, missings could be labelled as negative numbers in a variable that can only be positive, string values in a numerical variable or &ldquo;n/a&rdquo; in a categorical variable.</p>
 <p>The first step in dealing with missing values, is therefore, to identify missing values. In the previous workshop on string variables, all numerical variables were imported as strings because of the comma and dollar symbol that they contained. When we converted them to numeric with the <b>destring, replace force</b> command any non-numerical values were directly converted into missing, that is, the . symbol.</p>
 <p>A convenient way to get an overview of the number of missing values per variable, is the <b>mdesc</b> command, which is a user written command that is not part of Stata per default. You can install it with <b>ssc install mdesc</b>.</p>
 <pre><code>ssc install mdesc
 </code></pre>
-<p>Once installed, <b>mdesc<b/> gives us the number of missing values and the percentage of missing values for each variable. As we can see, there is one values from the <i>D - I</i> variables that have been turned into a missing when we used the <b>destring, force replace</b> command in the previous workshop.</p>
+<p>Once installed, <b>mdesc</b> gives us the number of missing values and the percentage of missing values for each variable. As we can see, there is one values from the <i>D - I</i> variables that have been turned into a missing when we used the <b>destring, force replace</b> command in the previous workshop.</p>
 <pre><code>. mdesc
 
     Variable    |     Missing          Total     Percent Missing
@@ -178,7 +178,7 @@ Duplicates in terms of all variables
 duplicated_n |        426    .0140845     .117978          0          1
 
 </code></pre>
-<h2><a href="#correctly-label-missings" id="correctly-label-missings">Correctly label missings</a></h2>
+<h3><a href="#correctly-label-missings" id="correctly-label-missings">Correctly label missings</a></h3>
 <p>Once the data has been imported into Stata, we should use the . symbol to represent missing numerical values. Let us therefore replace the -99 values with the . symbol for the variables v5, v10, v1 and v15 using a foreach loop.</p>
 <pre><code>. foreach var of varlist D-H L{
 	replace `var'=. if `var' == -99
@@ -242,7 +242,7 @@ missing values for the <i>D-H</i> and <i>L</i> variables.</p>
 ----------------+-----------------------------------------------
 
 </code></pre>
-<h3><a href="#exercise-2-missings-1" id="exercise-2-missings-1">Exercise 2: Missings 1</a></h3>
+<h3><a href="#exercise-2-missings-1" id="exercise-2-missings-1">Exercise 2: Identify and label missings</a></h3>
 <ol>
 	<li>Install the <b>mdesc>/b> command.</li>
 	<li>Create an overview of the missings per variable.</li>
@@ -251,7 +251,7 @@ missing values for the <i>D-H</i> and <i>L</i> variables.</p>
 	<li>Use <b>sum</b> and <b>mdesc</b> commands to verify that the -99 values 
 	have been changed to missing.</li>
 </ol>
-<h2><a href="#finding-observations-with-missing-values" id="finding-observations-with-missing-values">Finding observations with missing values</a></h2>
+<h3><a href="#exploring-missings" id="exploring-missings">Exploring missing values</a></h3>
 <p>Once all missing values have been correctly labelled, we might want to inspect observations with missing values more closely. We can generate a new variable with the number of missing values per observation with the <b>rowmiss</b> command.</p>
 <pre><code>. egen nmiss=rowmiss(*)
 
@@ -311,13 +311,14 @@ Patterns of missing values
   +------------------------+
 
 </code></pre>
-<h3><a href="#exercise-3-missings-2" id="exercise-3-missings-2">Exercise 3: Missings 2</a></h3>
+<h3><a href="#exercise-3-missings-2" id="exercise-3-missings-2">Exercise 3: Exploring missing values</a></h3>
 <ol>
 	<li>Create a new variable for the number of missing values per row.</li>
 	<li>Have a look at all observations with missing values in the Data Editor.</li>
 	<li>Install the mvpatterns command.</li>
 	<li>Print the pattern of missing values. What is the most common pattern?</li>
 </ol>
+	  <br>
 <h2><a href="#dealing-with-missing-values" id="dealing-with-missing-values">Dealing with missing values</a></h2>
 <h3><a href="#dropping-variables" id="dropping-variables">Dropping variables</a></h3>
 <p>If a substantial amount of the values for a specific variable is missing, you might consider to remove it from your dataset. This is usually only adviced if<br />
@@ -325,6 +326,7 @@ at least 60% of the values are missing and the variable itself doesn&rsquo;t see
 <p>We can drop a variable using the drop command. Since there are only 3 percent of the values missing for the D variable, it wouldn&rsquo;t make sense to remove the variable.</p>
 <pre><code>drop D
 </code></pre>
+	  <br>
 <h3><a href="#mean-imputation" id="mean-imputation">Mean imputation</a></h3>
 <p>Imputing missing data is a complex topic that we cannot cover comprehensively in this workshop. A very basic approach to dealing with missings values<br />
 is replacing them with the mean or median of the variable. In order to do that, we first have to use the <b>summarize</b> command, so that we can retrieve the mean of the <i>D</i> variable with <i>`r(mean)&rsquo;</i> in the <b>replace</b> command.</p>
@@ -333,9 +335,11 @@ replace D=`r(mean)' if D==.
 </code></pre>
 <p>This is a common approach that is generally not advised, since it requires the values to be missing completely at random (MCAR). MCAR means, that neither the missing values itself nor other variables in the dataset can predict the missing values. This is rather strong assumption, that almost never is met. Missing values for an income variable, for instance, are likely to be extreme values, either very high or low incomes and are therefore <u>predicting itself</u>. Missing values might also be <u>predicted based on another variable</u> in the data. For instance, male respondents might be less likely to report income compared to women because of perceived social norms and stereotypes.</p>
 <p>If the missigs are not MCAR, mean imputation will lead to biases in how the model parameters are estimated. Even if the MCAR assumption is met, mean imputation reduces the variance of the imputed variable and reduces the correlation with other variables in the data, which will impair your regression models.</p>
-<h3><a href="#complete-case-analysis" id="complete-case-analysis">Complete case analysis</a></h3>
+<br>
+	  <h3><a href="#complete-case-analysis" id="complete-case-analysis">Complete case analysis</a></h3>
 <p>Complete case analysis or listwise deletion is the technique of disregarding any non-complete cases for your statistical analyses. If your dependent or predictor variable have missing values, Stata will remove those cases from your data before running the analysis per default. Similar to mean imputation, this approach is only advided when data is missing MCAR, since it otherwise will induce biased parameter estimations. It also will lead to a loss of power, which might not be a problem depending on the size of your data.</p>
-<h3><a href="#multiple-imputation" id="multiple-imputation">Multiple imputation</a></h3>
+<br>
+	  <h3><a href="#multiple-imputation" id="multiple-imputation">Multiple imputation</a></h3>
 <p>There are more advanced techniques that have weaker assumptions about how the data are missing and will lead to less biased estimations. Multiple imputation (MI) is one of these techniques, that can be applied in Stata rather easily although you will have to consult the documentation to chose the most appropriate imputation method. MI does assume your data to be missing at random (MAR). Data is assumed to be MAR, when the variable itself does not predict its own missings, but other variables in the data do predict the missing values.</p>
 <p>In basic terms, multiple imputation predicts missing values based on the available values in your data using a specific imputation method and creates a number of imputed datasets. All of the imputed versions of the data are then being analysed with the specific model to test your research hypothesis and the results are being pooled to provide a combined model.</p>
 <p>If you want to know more about MI in Stata, you can read <a href="https://stats.idre.ucla.edu/stata/seminars/mi_in_stata_pt1_new/">this tutorial</a>. The Stata documentation also provides very detailed description of it, which you can access with <b>help mi</b> command.</p>
@@ -343,8 +347,11 @@ replace D=`r(mean)' if D==.
 </code></pre>
 <p>The main mi help page provides links to the manual, the comprehensive introduction, a simple example and links to the specific sub commands.</p>
 <img src="/screenshots/viewer_mi_01.png" width="60%">
+	  <br>
 <p>Below is a complete simple example of applying MI with Stata.</p>
 <img src="/screenshots/viewer_mi_02.png" width="60%">
+	  <br>
+	  <br>
 <h3><a href="#evaluation" id="evaluation">Final task: Please give us your feedback! </a></h3>
 	   <p>Upon completing the survey, <b>you will receive the link to the solution file</b>, to check how your commands compares to the sample solution.</p>
 <p>In order to adapt our training to your needs and provide the most valuable learning experience for you, we depend on your feedack.</p>
