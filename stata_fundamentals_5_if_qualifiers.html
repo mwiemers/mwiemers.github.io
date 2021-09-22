@@ -26,8 +26,7 @@
 <h1><a href="#stata-practical-5-if-qualifiers" id="stata-practical-5-if-qualifiers">Stata practical 5: If qualifiers</a></h1>
         
         <p>In this unit, you are going to learn about if qualifiers. The if qualifier enables you to carry out a command on a subset of the dataset for which the expression being used in the if qualifier is true.</p>
-<p>This way you can run a command for specific categories, that is, for instance, only female participants, but also for a specific range of values of a continuous variable, for instance only participants with a minimum amount of income or a combination of both.</p>
-<br>
+<p>This way you can run a command for specific categories, that is, for instance, only female participants, but also for a specific range of values of a continuous variable, for instance, only participants with a minimum amount of income or a combination of both.</p>
 <br>
         
 <p>In this practical session, you will learn:</p>
@@ -39,21 +38,24 @@
 <br>
 <br>
 <h2>More information on how the session is run</h2>
-<b>How to work together</b>: 
+<b>How to work together in the Zoom sessions</b>: 
 <ul>
-<li>Please turn on your microphone and webcam.</li>
-<li>One shares the screen and the other requests remote control. </li>
-<li>Take turns on who types for each exercise.</li>
+    <li>Plesase turn on your microphone and webcam.</li>
+    <li>One shares the screen and the other requests remote control. </li>
+    <li>Take turns on who types for each exercise.</li>
 </ul>
 <b>What to do when getting stuck</b>:
 <ol>
-<li>Ask the trainer if you struggle to find a solution.</li>
-<li>Use the help command. To get help with a specific command type <b>help "command name"</b></li>
-<li>Search online. The statalist.org forum is usually the most useful resource.</li>
+    <li>Ask the trainer if you struggle to find a solution.</li>
+    <li>Use the help command. To get help with a specific command type <b>help "command name"</b></li>
+    <li>Search online. The statalist.org forum is usually the most useful resource.</li>
 </ol>
+        
+<br>
+<br>
+        
 
 <h3><a href="#if-qualifiers-single-expressions" id="if-qualifiers-single-expressions">if qualifiers: single expressions</a></h3>
-<br>
 <p>With an if qualifier you can limit the scope of a command to those observations for which the expression you use after the <b>if</b> is true.</p>
 <p>Let us look at a few examples to explain how if qualifiers work.</p>
 <p>If we use the <b>list</b> command on the variables <i>make</i> and <i>price</i>, Stata will print all observations for those two variables.</p>
@@ -467,7 +469,6 @@ cars to determine which is more expensive on average - Dodge or VW?</li>
 <br>
 <br>
 <h3><a href="#if-qualifiers-multiple-expressions" id="if-qualifiers-multiple-expressions">if qualifiers: multiple expressions</a></h3>
-<br>
 <p>Sometimes you might want to run commands on a subset that is defined by a combination of conditions or variables. To do so, we have to combine two or more expressions in an if qualifier.</p>
 <p>For instance, to only list cars with a price above 6000 and lower than 7000, you would have to use the expression <i>price &gt; 6000 &amp; price &lt; 7000</i>. Notice, that you only use one <b>if</b> qualifier and combine both expressions with the <b>&amp;</b> symbol. By using the <b>&amp;</b> Stata knows that both conditions, that is, <b>price &gt; 6000</b> and <b>price &lt; 7000</b> have to be true for an observation to be included in the subset on which the <b>list</b> command will be executed.</p>
 <pre><code>. list if price &gt; 6000 &amp; price &lt; 7000
@@ -632,10 +633,14 @@ or not.
 </li>
 <li>What is the mean price of german cars?</li>
 </ol>
+        <br>
+        
 <h3><a href="#evaluation" id="evaluation">Final task: Please give us your feedback! </a></h3>
 <p>Upon completing the survey, <b>you will receive the link to the solution file</b>, to check how your commands compares to the sample solution.</p>
 <p>In order to adapt our training to your needs and provide the most valuable learning experience for you, we depend on your feedack.</p>
 <p>We would be grateful if you could take 1 min before the end of the workshop to get your feedback! </p>
 <p><a href="https://lse.eu.qualtrics.com/jfe/form/SV_77M35cq1arxNcj3?course=Stata%201:Importing%20and%20inspecting%20Data&topic=Stata&link=https://lsecloud-my.sharepoint.com/:u:/g/personal/m_wiemers_lse_ac_uk/EU9fXeq9Mm9Ii363M_Eypf0B231Lx_NEpTkHgMGnr3SGzw?e=pm3D9J">Click here to open the survey!</a></p>
+  <br>
+        <br>
     </div>
 </body>
