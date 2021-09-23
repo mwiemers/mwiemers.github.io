@@ -35,10 +35,15 @@
 <li>Reshaping between long and wide format</li>
 <li>Merging multiple datasets</li>
 </ul>
-<p>In this practical session, you will learn about:</p>
+	   <p>Data for different economical or sociological variables often has to be downloaded as separate files. 
+		   This session teaches you how to combine multiple datasets into a single file. It also provides an opportunity to put into practice several commands and 
+	   techniques that were covered in the previous workshops.</p>
+	   <p><b>By the end of this session, you will know:</b></p>
 <ul>
-<li>Long vs wide data formats</li>
-<li>Reshaping data from wide to long</li>
+	<li>how to revert data back to a previous state</li>
+	<li>how to create a subset of your data</li>
+	<li>how to merge multiple datasets into one dataset</li>
+	
 <li>Reshaping data from long to wide</li>
 <li>Merging mulitple datasets into one</li>
 </ul>
@@ -509,7 +514,7 @@ file gapminder_gdpPercap.dta saved
 
 </code></pre>
 <br>
-<h4><a href="#recap-of-merging-the-gapminder-gdppercapdta-gapminder-lifeexpdta-and-gapminder-popdta-datasets" id="recap-of-merging-the-gapminder-gdppercapdta-gapminder-lifeexpdta-and-gapminder-popdta-datasets">Recap of merging the gapminder_gdpPercap.dta, gapminder_lifeExp.dta and gapminder_pop.dta datasets</a></h4>
+<h4><a href="#recap-of-merging-the-gapminder-gdppercapdta-gapminder-lifeexpdta-and-gapminder-popdta-datasets" id="recap-of-merging-the-gapminder-gdppercapdta-gapminder-lifeexpdta-and-gapminder-popdta-datasets">Recap of merging the three subsets</a></h4>
 <p>Below are all commands we were carrying out in order to merge the three subsets. In the last step we save the new dataset under the file name gapminder_merged.dta.</p>
 <pre><code>* Merging the subsets
 use gapminder_gdpPercap.dta, clear
@@ -521,7 +526,7 @@ order year, after(continent)
 save gapminder_merged, replace
 </code></pre>
 <br>
-<h4><a href="#exercise-4-merging-the-different-subsets" id="exercise-4-merging-the-different-subsets">Exercise 4: Merging the different subsets</a></h4>
+<h3><a href="#exercise-4-merging-the-different-subsets" id="exercise-4-merging-the-different-subsets">Exercise 4: Merging the different subsets</a></h3>
 <ol>
 <li>Open the weo_data_gdpPercap.dta dataset and merge it with the weo_data_pop.dta dataset.</li>
 <li>Merge the data again with the weo_data_ue_rate.dta dataset.</li>
@@ -575,7 +580,7 @@ foreach sub of local subjects{
 }
 </code></pre>
 <br>
-<h4><a href="#exercise-5-adding-a-for-loop" id="exercise-5-adding-a-for-loop">Exercise 5: Adding a for loop</a></h4>
+<h3><a href="#exercise-5-adding-a-for-loop" id="exercise-5-adding-a-for-loop">Exercise 5: Adding a for loop</a></h3>
 <p>Apply a for loop to create the three subsets for the GDP per capita, unemployment and the general government structural balance.</p>
 <br>
 <br>
