@@ -39,6 +39,7 @@
 <li>Correctly label missing values.</li>
 <li>Dealing with missing values.</li>
 </ul>
+	    <br>
 <h2>More information on how the session is run</h2>
 <b>How to work together</b>: 
 <ul>
@@ -103,6 +104,7 @@ Duplicates in terms of all variables
 --------------------------------------
 
 </code></pre>
+	    <br>
 <h3><a href="#exercise-1-duplicates" id="exercise-1-duplicates">Exercise 1: Duplicates</a></h3>
 <p>weo_data.csv url</p>
 <p><a href="https://raw.githubusercontent.com/mwiemers/datasets/main/weo_data_dirty_missings.xlsx">https://raw.githubusercontent.com/mwiemers/datasets/main/weo_data_dirty_missings.xlsx</a></p>
@@ -121,6 +123,7 @@ Duplicates in terms of all variables
 <h3><a href="#how-does-stata-represent-missing-values" id="how-does-stata-represent-missing-values">How does Stata represent missing values?</a></h3>
 <p>In Stata the . is the default symbol to represent missing numerical values. The extended missing values, .a, .b., c., &hellip;, .z can be used to represent specific types of numerical missings (don&rsquo;t know, corrupted, etc.).</p>
 <p>Empty quotes, &quot;&quot;, are used to represent missing strings values.</p>
+	    <br>
 <h3><a href="#identify-missings" id="identify-missings">Identify missings</a></h3>
 <p>When working with csv files, missings could be labelled as negative numbers in a variable that can only be positive, string values in a numerical variable or &ldquo;n/a&rdquo; in a categorical variable.</p>
 <p>The first step in dealing with missing values, is therefore, to identify missing values. In the previous workshop on string variables, all numerical variables were imported as strings because of the comma and dollar symbol that they contained. When we converted them to numeric with the <b>destring, replace force</b> command any non-numerical values were directly converted into missing, that is, the . symbol.</p>
@@ -178,6 +181,7 @@ Duplicates in terms of all variables
 duplicated_n |        426    .0140845     .117978          0          1
 
 </code></pre>
+	    <br>
 <h3><a href="#correctly-label-missings" id="correctly-label-missings">Correctly label missings</a></h3>
 <p>Once the data has been imported into Stata, we should use the . symbol to represent missing numerical values. Let us therefore replace the -99 values with the . symbol for the variables v5, v10, v1 and v15 using a foreach loop.</p>
 <pre><code>. foreach var of varlist D-H L{
@@ -242,6 +246,7 @@ missing values for the <i>D-H</i> and <i>L</i> variables.</p>
 ----------------+-----------------------------------------------
 
 </code></pre>
+	    <br>
 <h3><a href="#exercise-2-missings-1" id="exercise-2-missings-1">Exercise 2: Identify and label missings</a></h3>
 <ol>
 	<li>Install the <b>mdesc</b> command.</li>
@@ -251,6 +256,7 @@ missing values for the <i>D-H</i> and <i>L</i> variables.</p>
 	<li>Use <b>sum</b> and <b>mdesc</b> commands to verify that the -99 values 
 	have been changed to missing.</li>
 </ol>
+	    <br>
 <h3><a href="#exploring-missings" id="exploring-missings">Exploring missing values</a></h3>
 <p>Once all missing values have been correctly labelled, we might want to inspect observations with missing values more closely. We can generate a new variable with the number of missing values per observation with the <b>rowmiss</b> command.</p>
 <pre><code>. egen nmiss=rowmiss(*)
@@ -311,6 +317,7 @@ Patterns of missing values
   +------------------------+
 
 </code></pre>
+	    <br>
 <h3><a href="#exercise-3-missings-2" id="exercise-3-missings-2">Exercise 3: Exploring missing values</a></h3>
 <ol>
 	<li>Create a new variable for the number of missing values per row.</li>
@@ -319,6 +326,7 @@ Patterns of missing values
 	<li>Print the pattern of missing values. What is the most common pattern?</li>
 </ol>
 	  <br>
+	    <br>
 <h2><a href="#dealing-with-missing-values" id="dealing-with-missing-values">Dealing with missing values</a></h2>
 <h3><a href="#dropping-variables" id="dropping-variables">Dropping variables</a></h3>
 <p>If a substantial amount of the values for a specific variable is missing, you might consider to remove it from your dataset. This is usually only adviced if<br />
@@ -352,6 +360,7 @@ replace D=`r(mean)' if D==.
 <img src="/screenshots/viewer_mi_02.png" width="60%">
 	  <br>
 	  <br>
+	    <br>
 <h3><a href="#evaluation" id="evaluation">Final task: Please give us your feedback! </a></h3>
 	   <p>Upon completing the survey, <b>you will receive the link to the solution file</b>, to check how your commands compares to the sample solution.</p>
 <p>In order to adapt our training to your needs and provide the most valuable learning experience for you, we depend on your feedack.</p>
