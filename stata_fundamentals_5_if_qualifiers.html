@@ -27,8 +27,7 @@
         
         <p>In this unit, you are going to learn about if qualifiers. The if qualifier enables you to carry out a command on a subset of the dataset for which the expression being used in the if qualifier is true.</p>
 <p>This way you can run a command for specific categories, that is, for instance, only female participants, but also for a specific range of values of a continuous variable, for instance, only participants with a minimum amount of income or a combination of both.</p>
-<br>
-        
+
 <p>In this practical session, you will learn:</p>
 <ul>
 <li>about the purpose of if qualifiers</li>
@@ -55,7 +54,7 @@
 <br>
         
 
-<h3><a href="#if-qualifiers-single-expressions" id="if-qualifiers-single-expressions">if qualifiers: single expressions</a></h3>
+<h2><a href="#if-qualifiers-single-expressions" id="if-qualifiers-single-expressions">if qualifiers: single expressions</a></h2>
 <p>With an if qualifier you can limit the scope of a command to those observations for which the expression you use after the <b>if</b> is true.</p>
 <p>Let us look at a few examples to explain how if qualifiers work.</p>
 <p>If we use the <b>list</b> command on the variables <i>make</i> and <i>price</i>, Stata will print all observations for those two variables.</p>
@@ -449,7 +448,7 @@ foreign                                                                         
 
 </code></pre>
 <br>
-<h4><a href="#exercise-1-if-qualifiers-with-single-expressions" id="exercise-1-if-qualifiers-with-single-expressions">Exercise 1: if qualifiers with single expressions</a></h4>
+<h3><a href="#exercise-1-if-qualifiers-with-single-expressions" id="exercise-1-if-qualifiers-with-single-expressions">Exercise 1: if qualifiers with single expressions</a></h3>
 <ol>
 <li>Load the auto dataset</li>
 <li>List cars with a weight below 2000</li>
@@ -576,7 +575,7 @@ select observations where the variable make is equal to &ldquo;Buick&rdquo; and 
 
 </code></pre>
 <br>
-<h4><a href="#exercise-2-if-qualifiers-with-multiple-expressions" id="exercise-2-if-qualifiers-with-multiple-expressions">Exercise 2: if qualifiers with multiple expressions</a></h4>
+<h3><a href="#exercise-2-if-qualifiers-with-multiple-expressions" id="exercise-2-if-qualifiers-with-multiple-expressions">Exercise 2: if qualifiers with multiple expressions</a></h3>
 <ol>
 <li>List cars with a price between 6000 and 7000 including both values.</li>
 <li>Create a histogram with the <b>hist</b> command of the car prices for all Buick or Chevrolet cars.</li>
@@ -584,7 +583,7 @@ select observations where the variable make is equal to &ldquo;Buick&rdquo; and 
 </ol>
 <br>
 <br>
-<h3><a href="#using-if-qualifiers-to-replace-values-and-create-variables" id="using-if-qualifiers-to-replace-values-and-create-variables">Using if qualifiers to replace values and create variables</a></h3>
+<h2><a href="#using-if-qualifiers-to-replace-values-and-create-variables" id="using-if-qualifiers-to-replace-values-and-create-variables">Using if qualifiers to replace values and create variables</a></h2>
 <p>If qualifiers are particularly useful to replace values in an existing variable. Similarly, you can use if qualifiers to create variables that recode existing variables.</p>
 <p>In the following example we are creating a categorical recoding of the <i>price</i> variable under the new variable <i>price_cat</i>. The new variable <i>price_cat</i> categorizes the price variable into three bands:</p>
 <ul>
@@ -616,7 +615,7 @@ select observations where the variable make is equal to &ldquo;Buick&rdquo; and 
 
 </code></pre>
 <br>
-<h4><a href="#exercise-3-replacing-values-using-if-qualifiers" id="exercise-3-replacing-values-using-if-qualifiers">Exercise 3: Replacing values using if qualifiers</a></h4>
+<h3><a href="#exercise-3-replacing-values-using-if-qualifiers" id="exercise-3-replacing-values-using-if-qualifiers">Exercise 3: Replacing values using if qualifiers</a></h3>
 <ol>
 <li>Create a new variable called <i>german</i> that codes for a car being german 
 or not. 
