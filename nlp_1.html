@@ -14259,16 +14259,17 @@ a.anchor-link {
 
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="NLP-&lt;&gt;-DSL-PART-1">NLP &lt;&gt; DSL PART 1<a class="anchor-link" href="#NLP-&lt;&gt;-DSL-PART-1">&#182;</a></h1>
+<h1 id="NLP-with-Python-Part-1:-Normalization-and-Word-Frequency">NLP with Python Part 1: Normalization and Word Frequency<a class="anchor-link" href="#NLP-with-Python-Part-1:-Normalization-and-Word-Frequency">&#182;</a></h1>
 </div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="Prerequisites">Prerequisites<a class="anchor-link" href="#Prerequisites">&#182;</a></h2><ul>
-<li>Basic knowledge of Python at the level of our workshops</li>
+<li>Basic knowledge of programming and visualizing data with Python, which can be acquired with the <a href="https://info.lse.ac.uk/current-students/digital-skills-lab/python">Python Fundamentals</a> and <a href="https://info.lse.ac.uk/current-students/digital-skills-lab/python">Data Visualization in Python</a> series.</li>
 <li>We will need a working installation of<ul>
 <li>Python and Jupyter notebooks</li>
 <li>Matplotlib and NLTK</li>
+<li>Using Anaconda is a simple way to install Python, Jupyter Notebooks and the required libraries on your <a href="https://repo.anaconda.com/archive/Anaconda3-2020.11-Windows-x86_64.exe">Windows</a> machine or <a href="https://repo.anaconda.com/archive/Anaconda3-2020.11-MacOSX-x86_64.pkg">Mac</a>. </li>
 </ul>
 </li>
 </ul>
@@ -14285,6 +14286,12 @@ a.anchor-link {
 <li>Look into word frequency distribution</li>
 <li>Track and compare word occurences in time</li>
 </ul>
+
+</div>
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p><img src="screenshots/nlp01.jfif"></p>
 
 </div>
 </div>
@@ -14352,6 +14359,7 @@ a.anchor-link {
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p><strong>Tokenization</strong> refers to seperating our text into words or sentences.</p>
+<p>We can use the <code>.split()</code> method to split the string into separate elements in a list by whitespace. This however doesn't isolate the punctuation. For that we can use the <code>word_tokenize()</code> function which splits by whitespace and also by interpunction.</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -14434,7 +14442,7 @@ Tokens: [&#39;This&#39;, &#39;is&#39;, &#39;democracy&#39;, &#34;&#39;s&#34;, &#
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><strong>Stemming</strong> refers to reducing words into their stem without using a lot of structural information about the language. For example, <em>cat</em> would be a result of stemming tokens like <em>cats</em> or <em>catlike</em>. the process of stemming is very fast, but might not be as accurate as more complex methods, like lemmatization. Stems might not be words!</p>
+<p><strong>Stemming</strong> refers to reducing words into their stem without using a lot of structural information about the language. For example, <em>cat</em> would be a result of stemming tokens like <em>cats</em> or <em>catlike</em>. the process of stemming is very fast, but might not be as accurate as more complex methods, like lemmatization. Stems might not be dictionary words!</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -14484,7 +14492,7 @@ Stems: [&#39;this&#39;, &#39;is&#39;, &#39;democraci&#39;, &#34;&#39;s&#34;, &#3
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><strong>Lemmatization</strong> is a more elaborate form of stemming. It will incorporate structural information from e.g. WordNet to reduce words to a common form.</p>
+<p><strong>Lemmatization</strong> is a more elaborate form of stemming. It will incorporate structural information from e.g. WordNet to reduce words to stems that will be dictionary words.</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -14501,8 +14509,9 @@ Stems: [&#39;this&#39;, &#39;is&#39;, &#39;democraci&#39;, &#34;&#39;s&#34;, &#3
 <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">:</span>
     <span class="n">lemmas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lemmatizer</span><span class="o">.</span><span class="n">lemmatize</span><span class="p">(</span><span class="n">token</span><span class="p">))</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tokens:&quot;</span><span class="p">,</span> <span class="n">tokens</span><span class="p">[</span><span class="mi">106</span><span class="p">:</span><span class="mi">111</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Lemmas:&quot;</span><span class="p">,</span> <span class="n">lemmas</span><span class="p">[</span><span class="mi">106</span><span class="p">:</span><span class="mi">111</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tokens:&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">tokens</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Stems:&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">stems</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Lemmas:&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">lemmas</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
 </pre></div>
 
      </div>
@@ -14521,10 +14530,10 @@ Stems: [&#39;this&#39;, &#39;is&#39;, &#39;democraci&#39;, &#34;&#39;s&#34;, &#3
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>[nltk_data] Downloading package wordnet to
-[nltk_data]     C:\Users\micha\AppData\Roaming\nltk_data...
-[nltk_data]   Package wordnet is already up-to-date!
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>Tokens: 	 [&#39;this&#39;, &#39;is&#39;, &#39;democracy&#39;, &#34;&#39;s&#34;, &#39;day&#39;, &#39;a&#39;, &#39;day&#39;, &#39;of&#39;, &#39;history&#39;, &#39;and&#39;]
+Stems: 		 [&#39;this&#39;, &#39;is&#39;, &#39;democraci&#39;, &#34;&#39;s&#34;, &#39;day&#39;, &#39;a&#39;, &#39;day&#39;, &#39;of&#39;, &#39;histori&#39;, &#39;and&#39;]
+Lemmas: 	 [&#39;this&#39;, &#39;is&#39;, &#39;democracy&#39;, &#34;&#39;s&#34;, &#39;day&#39;, &#39;a&#39;, &#39;day&#39;, &#39;of&#39;, &#39;history&#39;, &#39;and&#39;]
 </pre>
 </div>
 </div>
@@ -14535,9 +14544,10 @@ Stems: [&#39;this&#39;, &#39;is&#39;, &#39;democraci&#39;, &#34;&#39;s&#34;, &#3
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Tokens: [&#39;we&#39;, &#39;come&#39;, &#39;together&#39;, &#39;as&#39;, &#39;one&#39;]
-Lemmas: [&#39;we&#39;, &#39;come&#39;, &#39;together&#39;, &#39;a&#39;, &#39;one&#39;]
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>[nltk_data] Downloading package wordnet to
+[nltk_data]     C:\Users\micha\AppData\Roaming\nltk_data...
+[nltk_data]   Package wordnet is already up-to-date!
 </pre>
 </div>
 </div>
@@ -14684,19 +14694,18 @@ Lemmas: [&#39;we&#39;, &#39;come&#39;, &#39;together&#39;, &#39;a&#39;, &#39;one
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">nltk</span> <span class="kn">import</span> <span class="n">FreqDist</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 
+<span class="c1"># FreqDist() returns a list of tuples containing the lemma and the frequency</span>
 <span class="n">fd</span> <span class="o">=</span> <span class="n">FreqDist</span><span class="p">(</span><span class="n">lemmas_no_stopwords</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">fd</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
 
 <span class="c1"># We need to switch from (&#39;token&#39;, frequency) pairs</span>
 <span class="c1"># into a list of tokens and a list of frequencies</span>
 <span class="n">xs</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">fd</span><span class="p">:</span>
-    <span class="n">xs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    
 <span class="n">ys</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">fd</span><span class="p">:</span>
+    <span class="n">xs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">ys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-
+    
 <span class="c1"># Rotate the labels by 90 degrees</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
 
@@ -14756,8 +14765,7 @@ Lemmas: [&#39;we&#39;, &#39;come&#39;, &#39;together&#39;, &#39;a&#39;, &#39;one
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>We might also we interested in <strong>tracking occurence of phrases</strong> in time. Since the data we've been working on is only a single address, we will now download all past inaugural addresses to get a sense of this subject evolving in time.</p>
-<p>We will compare the number of mentions of "america" and "people" and plot the results.</p>
+<p>We might also be interested in <strong>tracking occurence of phrases</strong> in time. Since the data we've been working on is only a single address, we will now download all past inaugural addresses to get a sense of this subject evolving in time.</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -14798,6 +14806,12 @@ Lemmas: [&#39;we&#39;, &#39;come&#39;, &#39;together&#39;, &#39;a&#39;, &#39;one
 
 </div>
 
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>We will compare the number of mentions of "america" and "people" and plot the results.</p>
+
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
@@ -14805,31 +14819,45 @@ Lemmas: [&#39;we&#39;, &#39;come&#39;, &#39;together&#39;, &#39;a&#39;, &#39;one
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">occur</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">word</span><span class="p">):</span>
-    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">)</span>
+    <span class="c1"># returns the number of occurences of a word in the list words</span>
+    <span class="n">occurences</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">words</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">w</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">word</span><span class="p">):</span>
+            <span class="n">occurences</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">occurences</span>
 
+<span class="c1"># create a list for speech names to be plotted on x-axis</span>
+<span class="c1"># the .fileids() method returns a list with the file names [&#39;1789-Washington.txt&#39;, &#39;1793-Washington.txt&#39;, ...]</span>
+<span class="c1"># we take first four characters which stand for the year of the speech</span>
 <span class="n">xs</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">fileid</span> <span class="ow">in</span> <span class="n">inaugural</span><span class="o">.</span><span class="n">fileids</span><span class="p">():</span>
     <span class="n">xs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fileid</span><span class="p">[:</span><span class="mi">4</span><span class="p">])</span>
 
+<span class="c1"># create a list of all speeches</span>
+<span class="c1"># the .words() method returns a list of the speech separated by whitespace</span>
 <span class="n">speeches</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">fileid</span> <span class="ow">in</span> <span class="n">inaugural</span><span class="o">.</span><span class="n">fileids</span><span class="p">():</span>
     <span class="n">speeches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inaugural</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="n">fileid</span><span class="p">))</span>
-            
+
+<span class="c1"># tokenize the speeches        </span>
 <span class="n">speech_tokens</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">speech</span> <span class="ow">in</span> <span class="n">speeches</span><span class="p">:</span>
-    <span class="n">inner</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">inner</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># list for a speech&#39;s tokens</span>
     <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">speech</span><span class="p">:</span>
         <span class="n">inner</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lemmatizer</span><span class="o">.</span><span class="n">lemmatize</span><span class="p">(</span><span class="n">word</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
     <span class="n">speech_tokens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inner</span><span class="p">)</span>
 
+<span class="c1"># create list for occurences of america based on tokens</span>
 <span class="n">ys1</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">speech_token</span> <span class="ow">in</span> <span class="n">speech_tokens</span><span class="p">:</span>
     <span class="n">ys1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">occur</span><span class="p">(</span><span class="n">speech_token</span><span class="p">,</span> <span class="s2">&quot;america&quot;</span><span class="p">))</span>
     
+<span class="c1"># create list for occurences of people based on tokens</span>
 <span class="n">ys2</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">speech_token</span> <span class="ow">in</span> <span class="n">speech_tokens</span><span class="p">:</span>
     <span class="n">ys2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">occur</span><span class="p">(</span><span class="n">speech_token</span><span class="p">,</span> <span class="s2">&quot;peopl&quot;</span><span class="p">))</span>    
-    
+
+<span class="c1"># plot both occurences as lines</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
 <span class="n">am</span><span class="p">,</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys1</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;america&quot;</span><span class="p">)</span>
@@ -14871,7 +14899,7 @@ Lemmas: [&#39;we&#39;, &#39;come&#39;, &#39;together&#39;, &#39;a&#39;, &#39;one
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>How does it compare to our data?</p>
+<p>How does it compare to our data? The words America and People were used almost exactly as often in the Biden and Trump inauguration speeches.</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
