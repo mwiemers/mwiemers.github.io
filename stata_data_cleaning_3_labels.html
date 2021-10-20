@@ -482,8 +482,8 @@ Note: Dataset has changed since last saved.
 <p>We then rename the variable stored with the <i>var</i> macro and replace it with the y followed by the year that is stored with the <i>year</i> macro.</p>
 <pre><code>
 . foreach var of varlist F-O{
-local year: variable label `var'
-rename `var' y`year'
+      local year: variable label `var'
+      rename `var' y`year'
 }
 </code></pre>
 <p>Let us check whether the renaming worked.</p>
