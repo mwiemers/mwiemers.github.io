@@ -35,7 +35,7 @@
     </ul>
     
 	  <br>
-    <h2>More information on how the session is run</h2>
+    <h3>More information on how the session is run</h3>
 <b>How to work together in the Zoom sessions</b>: 
 <ul>
     <li>Plesase turn on your microphone and webcam.</li>
@@ -217,7 +217,7 @@ length          int     %8.0g                 Length (in.)
     <p>We will now write a for loop with the <b>foreach</b> command, that will use the <b>codebook</b> command on a set of variables in the auto dataset. We could have done this by simply using the <b>codebook</b> command with all variable names, but this is just an example to illustrate how you create for loops with <b>foreach</b>.</p>
     <p>Let us first run these two lines and see how they produce a codebook for the variables <i>price</i>, <i>make</i> and <i>weight</i>.</p>
 <pre><code>. foreach var of varlist price make weight{
-  codebook `var'
+  	codebook `var'
 }
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -266,6 +266,10 @@ weight                                                                          
                               2020      2240      3190      3600      4060
 </code></pre>
     <br>
+<pre><code>. foreach var of varlist price make weight{
+  	codebook `var'
+}
+</pre></code>
     <p>Let us break down how the <b>foreach</b> command works. The <b>foreach</b> command takes two arguments: the list of variables, which is specified after <i>of varlist</i> and the name of the local macro, that is being used to store the variables, just after <b>foreach</b>.</p>
     <p>After <b>of varlist</b> we give a list of variables that we want to select one by one. Everytime a variable from the list is selected is has to be stored in the local macro, so that we can use that variable for the codebook command inside the for loop. In this example, we named that macro <i>var</i>.</p>
     <p>Each time a variable is selected it will therefore be assigned to the local macro <i>var</i> and then the <b>codebook</b> command will be run using the <i>var</i> macro. Inside the <b>codebook</b> command <i>var</i> will be replaced with the variable that <i>var</i> is currently holding.</p>
