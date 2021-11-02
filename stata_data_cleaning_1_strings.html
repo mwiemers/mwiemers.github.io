@@ -145,7 +145,7 @@ Sorted by:
   
     <p>All variables have been imported as string, which makes sense for the first three variables, which are categorical variables that contain text data. The remaining variables for the years from 1952 - 2007 however all contain numerical data.</p>
     <p>We can get a quick overview of the data that is stored in the D-O variables with list.</p>
-    <p>Stata imported these variables as string because of the comma that is used to group the thousands as you can see in the third and fourth row.</p>
+    <p>The D-O variables use a comma to group the thousands as you can see in the third and fourth row.</p>
   
 <pre><code>. list D-O in 1/5
 
@@ -215,7 +215,7 @@ Sorted by:
     <p>We can write the code more efficient with a foreach loop.</p>
     
 <pre><code>. foreach var of varlist D-O{
-  replace `var'=subinstr(`var', &quot;,&quot;, &quot;&quot;, .)
+      replace `var'=subinstr(`var', &quot;,&quot;, &quot;&quot;, .)
 }
 (0 real changes made)
 (0 real changes made)
