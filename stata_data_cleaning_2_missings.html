@@ -336,7 +336,7 @@ at least 60% of the values are missing and the variable itself doesn&rsquo;t see
 </code></pre>
 	  <br>
 <h3><a href="#mean-imputation" id="mean-imputation">Mean imputation</a></h3>
-<p>Imputing missing data is a complex topic that we cannot cover comprehensively in this workshop. A very basic approach to dealing with missings values<br />
+<p>Imputing missing data is a complex topic that we cannot cover comprehensively in this workshop. A very basic approach to dealing with missings values 
 is replacing them with the mean or median of the variable. In order to do that, we first have to use the <b>summarize</b> command, so that we can retrieve the mean of the <i>D</i> variable with <i>`r(mean)&rsquo;</i> in the <b>replace</b> command.</p>
 <pre><code>sum D
 replace D=`r(mean)' if D==.
