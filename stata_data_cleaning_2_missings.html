@@ -183,7 +183,7 @@ duplicated_n |        426    .0140845     .117978          0          1
 </code></pre>
 	    <br>
 <h3><a href="#correctly-label-missings" id="correctly-label-missings">Correctly label missings</a></h3>
-<p>Once the data has been imported into Stata, we should use the . symbol to represent missing numerical values. Let us therefore replace the -99 values with the . symbol for the variables v5, v10, v1 and v15 using a foreach loop.</p>
+<p>Once the data has been imported into Stata, we should use the . symbol to represent missing numerical values. Let us therefore replace the -99 values with the . symbol for the variables D - H and L using a foreach loop.</p>
 <pre><code>. foreach var of varlist D-H L{
 	replace `var'=. if `var' == -99
 }
