@@ -1,0 +1,854 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="/css/stmarkdown.css">
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  </script>
+  <script type="text/javascript" async
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+  </script>
+  
+  </head>
+  
+  <body>
+  
+  
+  
+  <div class="sidenav">
+         <a href="#stata-practical-1-importing-and-inspecting-data">Stata Fundamentals 1</a>
+         <a href="#access-to-datasets1">Access to Datasets</a>
+         <a href="#changing-the-working-directory_section" >Changing the working directory</a>
+         <a href="#exercise-changing-the-working-directory">Exercise: Changing the workign directory</a>
+         <a href="#loading-data-into-stata">Loading data into Stata</a>
+         <a href="#exercise-loading-data">Exercise: Loading data</a>
+         <a href="#inspecting-a-dataset">Inspecting a dataset</a>
+         <a href="#exercise-inspecting-data">Exercise: Inspecting data</a>
+         <a href="#summary-statistics">Summary statistics</a>
+         <a href="#exercise-summary-statistics">Exercise: Summary statistics</a>
+         <a href="#stata-practical-2-do-files-and-computing-variables">Stata Fundamentals 2</a>
+         <a href="#access-to-datasets2">Access to Datasets</a>
+         <a href="#do-files" >Do-files</a>
+         <a href="#exercise-do-files">Exercise: Do-files</a>
+         <a href="#creating-frequency-tables">Frequency tables</a>
+         <a href="#exercise-creating-frequency-tables">Exercise: Frequency tables</a>
+         <a href="#computing-variables">Computing variables</a>
+         <a href="#exercise-computing-variables">Exercise: Computing variables</a>
+         <a href="#saving-data">Saving data</a>
+         <a href="#exercise-saving-data">Exercise: Saving data</a>
+         <a href="#evaluation">Final task: Please give us your feedback!</a>
+         <a href="#evaluation">Final task: Please give us your feedback!</a>
+  </div>
+  <div class="main">
+  
+  
+  <h1><a href="#stata-practical-1-importing-and-inspecting-data" id="stata-practical-1-importing-and-inspecting-data">Stata Fundamentals 1: Importing, inspecting and summarizing data</a></h1>
+  
+  <h2>What is Stata?</h2>
+  <p>Stata is a general purpose statistical analysis software, similar to SPSS. You can use it to preprocess, analyse and visualise data.</p>
+  <p>It is mostly used in research and particularly in the fields of economics, political science, and the social sciences in 
+      general.</p> 
+  <p>In Stata you can either use the menus from the graphical user interface or write commands yourself.
+      Most Stata users write commands and do not use the user interface. There are many advantages to learning commands. 
+      A script can be shared, edited by colleagues and collaborators and made available with publications. By using scripts 
+      for your research, you promote transparency and reproducibility. Since writing commands has many advantages and 
+      the majority of Stata users write scripts, we will also teach you how to write commands in this workshop series.
+  </p>
+  <h2>More information on how the session is run</h2>
+  <b>How to work together in the Zoom sessions</b>: 
+  <ul>
+      <li>Plesase turn on your microphone and webcam.</li>
+      <li>One shares the screen and the other requests remote control. </li>
+      <li>Take turns on who types for each exercise.</li>
+  </ul>
+  <b>What to do when getting stuck</b>:
+  <ol>
+      <li>Ask the trainer if you struggle to find a solution.</li>
+      <li>Use the help command. To get help with a specific command type <b>help "command name"</b></li>
+      <li>Search online. The statalist.org forum is usually the most useful resource.</li>
+  </ol>
+         
+  <b>In this practical session, you will learn to:</b>
+  <ul>
+         <li>change the working directory</li>
+         <li>import stata and csv documents</li>
+         <li>print an overview of the variables in a dataset</li>
+         <li>print a dataset and subsets of the data</li>
+         <li>create a summary of continuous variables</li>
+  </ul>
+  <br>
+  <br>
+         
+  <h2><a href="#access-to-datasets1" id="access-to-datasets1">Access to Datasets</a></h2>
+  <p>Please use <a href="https://lsecloud-my.sharepoint.com/:f:/g/personal/m_wiemers_lse_ac_uk/Ej_vhZWIz5RFthJmQLn-DBkB345HzPU5GGgGjsUHKv4UeA?e=uRRnNu"><b>this link</b></a> 
+     to get access to the datasets that you will be using in the exercises</p>
+  <br>
+  <br>
+  <h2><a href="#changing-the-working-directory_section" id="changing-the-working-directory_section">Changing the working directory</a></h2>
+  <p>When loading a dataset, Stata will always look for the file in the working directory, unless you specify the whole path to the file.</p>
+  <p>Although you can always specify the whole path to open a file that is not located in the working directory, it makes sense, to change the working directory to where your datasets are located at the beginning of your analysis. This will make it easier to load and switch between different datasets, since you only have to specify the file name and not the whole path to load a dataset.</p>
+  <br>
+  <br>
+  <h3><a href="#printing-the-current-working-directory" id="printing-the-current-working-directory">Printing the current working directory</a></h3>
+  <p>The working directory is displayed on the bottom of the main Stata window, just below the Command field.</p>
+  <p>You can also use the <b>pwd</b> command to print the working directory.</p>
+  <pre><code>. pwd
+  /Users/michaelwiemers
+  
+  </code></pre>
+  <br>
+  <h3><a href="#changing-the-working-directory" id="changing-the-working-directory">Changing the working directory</a></h3>
+  <p>You can change the working directory by using the <b>cd</b> command as below. Notice that the path has to be put in quotations.</p>
+  <pre><code>. cd &quot;/Users/michaelwiemers/OneDrive - London School of Economics/DSL/datasets/&quot;
+  /Users/michaelwiemers/OneDrive - London School of Economics/DSL/datasets
+  
+  </code></pre>
+  <p>Stata will return an error, as in the example below, when the folder does not exist on the computer.</p>
+  <pre><code>. cd &quot;/Users/mickey_mouse&quot;
+  unable to change to /Users/mickey_mouse
+  r(170);
+  
+  </code></pre>
+  <br>
+  <h3><a href="#exercise-changing-the-working-directory" id="exercise-changing-the-working-directory">Exercise: Changing the working directory</a></h3>
+  <ol>
+      <li>Print the current working directory.</li>
+      <li>Change the working directory to where the datasets lfs2017.dta,  
+      gapminder.csv and MCS_testscores.dta are located on your computer.</li>
+      <li>Print the working directory again to verify that it has been changed.</li>
+  </ol>
+  <br>
+  <br>
+  <h2><a href="#loading-data-into-stata" id="loading-data-into-stata">Loading data into Stata</a></h2>
+  <p>In this section you will learn how to import Stata datasets (.dta) and flat files, i.e. comma or tab separated value files (.csv or .tsv).</p>
+  <br>
+  <h3><a href="#loading-a-dta-file-stata-dataset" id="loading-a-dta-file-stata-dataset">loading a .dta file (Stata dataset)</a></h3>
+  <p>Now that Stata knows where your datasets are located, we can load a dataset without having to specify the whole path. We can simply refer to the file name.</p>
+  <p>We are going to load the lfs2017.dta file. This dataset contains data from the labour force survey from 2017. This dataset contains data on a persons age, sex, income, highest qualification and more.</p>
+  <p>We can load a .dta file, with the <b>use</b> command.</p>
+  <pre><code>. use lfs2017
+  
+  </code></pre>
+  <p>You can see that the variables pane on the right now lists all variables in the lfs2017 dataset.</p>
+  <img src="screenshots/use_01_mac.png" alt="Stata user interface showing variables in the variables pane after having loaded a dataset">
+  <br>
+  <br>
+  <h3><a href="#loading-a-public-dataset-from-stata-presscom" id="loading-a-public-dataset-from-stata-presscom">Loading a public dataset from stata-press.com</a></h3>
+  <p>There are a number of datasets in stata format available from the stata-press.com website. You can use this link for a list of all available datasets (unfortunately, without description):</p>
+  <pre><code>https://www.stata-press.com/data/r15/u.html
+  </code></pre>
+  <p>To load the auto dataset from the stata website, we use the <b>webuse</b> command followed by the name of the dataset.</p>
+  <pre><code>. webuse auto
+  (1978 Automobile Data)
+  
+  </code></pre>
+  <br>
+  <h3><a href="#loading-a-csv-file" id="loading-a-csv-file">Loading a csv file</a></h3>
+  <p>We can use the <b>import delimited</b> command to import a csv file. In the example below we are importing the data stored in the gapminder.csv file, which is from the gapminder.org website, and lists unemployment, life expectancy and gdp per capita, for a sample of countries from across the world.</p>
+  <p>As you can see below, this commad returns an error. This is because we already have a dataset loaded in Stata and the error warns us that by loading the new dataset, unsaved changes to the currently loaded dataset might be lost.</p>
+  <pre><code>. import delimited &quot;gapminder.csv&quot;
+  no; data in memory would be lost
+  r(4);
+  
+  </code></pre>
+  <p>We have to first remove the currently loaded dataset with the <b>clear</b> command.</p>
+  <pre><code>. clear
+  
+  . import delimited &quot;gapminder.csv&quot;
+  (15 vars, 427 obs)
+  
+  </code></pre>
+  <br>
+         
+  <p>Alternatively, we can add <i>clear</i> as an option to the <b>import delimited</b> command or any 
+      other command to import data.</p>
+  <pre><code>. import delimited &quot;gapminder.csv&quot;, clear
+  (15 vars, 427 obs)
+  
+  </code></pre>
+  <br>
+         
+  <h3><a href="#exercise-loading-data" id="exercise-loading-data">Exercise: Loading data</a></h3>
+  <ol>
+      <li>Load the lfs2017 dataset using the <b>use</b> command.</li>
+      <li>Load the citytemp.dta dataset from the Stata website.</li>
+      <li>Load the csv file gapminder.csv.</li>
+      <li>Notice how you can see the variables in the variables pane change everytime 
+      you load a different dataset.</li>
+  </ol>
+  <br>
+  <br>
+  <h2><a href="#inspecting-a-dataset" id="inspecting-a-dataset">Inspecting a dataset</a></h2>
+  <p>In this section, we will focus on a few commands to inspect a dataset.</p>
+  <p>We&rsquo;re first going to re-open the lfs2017 dataset.</p>
+  <pre><code>. use lfs2017, clear
+  
+  </code></pre>
+  <br>
+  <h3><a href="#summary-of-a-dataset" id="summary-of-a-dataset">Summary of a dataset</a></h3>
+  <p>The <b>describe</b> command produces a summary of a dataset. It lists the total number of observations, variables and the size of the dataset. Apart from the <i>variable name</i> and the <i>variable label</i>, which are also displayed in the Variables pane in the top right in the main Stata window, it also lists the <i>storage type</i>, <i>display format</i> and the <i>value label</i>.</p>
+  <p>The <i>storage type</i> refers to how the values of a variable are stored in memory. Different storage types can hold different types of information, i.e. numerical or text, and can store information of different size.</p>
+  <p>The <i>display format</i> refers to how the information is displayed, that is, the number of digits and decimals and the alignment.</p>
+  <p>The <i>value label</i> refers to the text labels that are being associated to the numerical values in the dataset. The sex variable has the numerical values 1 and 2, but when looking at the data you will see the labels &lsquo;Female&rsquo; and &lsquo;Male&rsquo; displayed. This is because the values 1 and 2 have received the corresponding labels &lsquo;Male&rsquo; and &lsquo;Female&rsquo;.</p>
+  <pre><code>describe
+  
+  Contains data from lfs2017.dta
+    obs:        10,096                          
+   vars:             9                          3 Aug 2020 17:50
+   size:       100,960                          
+  ------------------------------------------------------------------------------------------------------------------------
+                storage   display    value
+  variable name   type    format     label      variable label
+  ------------------------------------------------------------------------------------------------------------------------
+  age             byte    %8.0g      AGE        Age of respondent
+  durun           byte    %8.0g      DURUN      Duration of unemployment
+  edage           byte    %8.0g      EDAGE      Age when completed full time education
+  emplen          byte    %8.0g      EMPLEN     Length of time with current employer
+  ethnicity       byte    %8.0g      ETHUKEUL   Ethnicity (9 categories) UK level
+  grosswk         int     %8.0g      GRSSWK     Gross weekly pay in main job (Government scheme or employee)
+  hiqual          byte    %8.0g      HIQUL15D   Highest qualification (detailed grouping)
+  sex             byte    %8.0g      SEX        Sex of respondent
+  degreesub       byte    %8.0g      UNCOMBMA   Undergraduate main subject area
+  ------------------------------------------------------------------------------------------------------------------------
+  Sorted by: 
+  
+  </code></pre>
+  <br>
+  <h3><a href="#printing-the-data" id="printing-the-data">Printing the data</a></h3>
+  <p>With the <b>list</b> command, you can print the dataset in the results pane. Depending on the width of your Stata window, a single row might be spread out across several lines in the results pane.</p>
+  <pre><code>list
+  
+  
+         +------------------------------------------------------------------------------------------+
+         | age      durun      edage     emplen   ethnic~y   grosswk     hiqual      sex   degree~b |
+         |------------------------------------------------------------------------------------------|
+  10086. |  55   Does not         17   10 years      White       451   GCSE gra   Female   Does not |
+  10087. |  66   Does not         15   10 years      White       279   Higher e     Male   Does not |
+  10088. |  64   Does not         15   20 years      White       337   GCSE gra   Female   Does not |
+  10089. |  74   Does not         17   20 years      White        75   Other qu   Female   Does not |
+  10090. |  58   Does not         16   5 years,      White       525   No quali     Male   Does not |
+         |------------------------------------------------------------------------------------------|
+  10091. |  59   Does not         17   20 years      White       808   GCSE gra     Male   Does not |
+  10092. |  63   Does not         19   6 months      White       423   Higher e   Female   Does not |
+  10093. |  60   Does not   Never ha   10 years   Black/Af       208   Other qu   Female   Does not |
+  10094. |  59   Does not         16   2 years,      White       463   GCSE gra     Male   Does not |
+  10095. |  70   Does not         15   20 years      White       138   GCSE gra   Female   Does not |
+         |------------------------------------------------------------------------------------------|
+  10096. |  57   Does not         17   20 years      White       279   GCSE gra     Male   Does not |
+         +------------------------------------------------------------------------------------------+
+  
+  </code></pre>
+  <br>
+  <h3><a href="#printing-single-observations-or-a-range-of-observations" id="printing-single-observations-or-a-range-of-observations">Printing single observations or a range of observations</a></h3>
+  <p>To display only a specific observation, type <b>list in</b> followed by the observation to be displayed. For instance, to display the 10th observation use this command:</p>
+  <pre><code>list in 10
+  
+       +----------------------------------------------------------------------------------------+
+       | age      durun      edage     emplen   ethnic~y   grosswk     hiqual    sex   degree~b |
+       |----------------------------------------------------------------------------------------|
+   10. |  16   Does not   Still in   3 months      White        66   GCSE gra   Male   Does not |
+       +----------------------------------------------------------------------------------------+
+  
+  </code></pre>
+  <br>
+  <p>To display a range of observations, type <b>list in </b> followed by the first observation, a forward slash and the last observation. For instance, to display observations 1 to 20 use this command:</p>
+  <pre><code>list in 1/20
+  
+       +------------------------------------------------------------------------------------------+
+       | age      durun      edage     emplen   ethnic~y   grosswk     hiqual      sex   degree~b |
+       |------------------------------------------------------------------------------------------|
+    1. |  17   Does not   Still in   6 months      White        42   GCSE gra   Female   Does not |
+    2. |  16   Does not   Still in   3 months      White        20   GCE A le   Female   Does not |
+    3. |  17   Does not   Still in   6 months      White        60   GCSE gra   Female   Does not |
+    4. |  16   Does not   Still in    1 year,      White        46   GCSE gra   Female   Does not |
+    5. |  17   Does not   Still in   6 months      White        20   GCSE gra   Female   Does not |
+       |------------------------------------------------------------------------------------------|
+    6. |  16   Does not   Still in   3 months      White        65   No quali   Female   Does not |
+    7. |  17   Does not   Still in   3 months      White        36   GCSE gra   Female   Does not |
+    8. |  16   Does not   Still in   Less tha      White        24   GCSE gra     Male   Does not |
+    9. |  16   Does not   Still in   3 months      White        64   No quali   Female   Does not |
+   10. |  16   Does not   Still in   3 months      White        66   GCSE gra     Male   Does not |
+       |------------------------------------------------------------------------------------------|
+   11. |  17   Does not   Still in   6 months      White        62   GCSE gra   Female   Does not |
+   12. |  17   Does not   Still in   6 months      White        90   GCSE gra   Female   Does not |
+   13. |  16   Does not   Still in   6 months      White        75   GCSE gra     Male   Does not |
+   14. |  16   Does not   Still in   6 months      White        55   GCSE gra   Female   Does not |
+   15. |  17   Does not   Still in   3 months      White        40   GCSE gra   Female   Does not |
+       |------------------------------------------------------------------------------------------|
+   16. |  16   Does not   Still in   Less tha      White        55   GCSE gra   Female   Does not |
+   17. |  16   Does not   Still in   3 months      White        39   No quali   Female   Does not |
+   18. |  17   Does not         17    1 year,      White       169   GCSE gra   Female   Does not |
+   19. |  17   Does not         16   3 months      White        58   GCSE gra     Male   Does not |
+   20. |  16   Does not   Still in   Less tha      White        24   GCSE gra   Female   Does not |
+       +------------------------------------------------------------------------------------------+
+  
+  </code></pre>
+  <br>
+  <h3><a href="#printing-only-a-subset-of-variables" id="printing-only-a-subset-of-variables">Printing only a subset of variables</a></h3>
+  <p>To only display the observations for a specific variable, type <b>list</b> followed by the variable name. Here, we are only printing the values for the age variable.</p>
+  <pre><code>list age
+  
+  
+         +-----+
+         | age |
+         |-----|
+  10086. |  55 |
+  10087. |  66 |
+  10088. |  64 |
+  10089. |  74 |
+  10090. |  58 |
+         |-----|
+  10091. |  59 |
+  10092. |  63 |
+  10093. |  60 |
+  10094. |  59 |
+  10095. |  70 |
+         |-----|
+  10096. |  57 |
+         +-----+
+  
+  </code></pre>
+  <br>
+  <p>To display a subset of variables, type <b>list</b> followed by the different variable names separated with a space.</p>
+  <pre><code>list age grosswk sex
+  
+  
+         +------------------------+
+         | age   grosswk      sex |
+         |------------------------|
+  10086. |  55       451   Female |
+  10087. |  66       279     Male |
+  10088. |  64       337   Female |
+  10089. |  74        75   Female |
+  10090. |  58       525     Male |
+         |------------------------|
+  10091. |  59       808     Male |
+  10092. |  63       423   Female |
+  10093. |  60       208   Female |
+  10094. |  59       463     Male |
+  10095. |  70       138   Female |
+         |------------------------|
+  10096. |  57       279     Male |
+         +------------------------+
+  
+  </code></pre>
+  <br>
+  <p>To display a range of variables type <b>list</b> followed by the first variable, a hyphen and the last variable. The command <b>list grosswk - degreesub</b> will print the observations for the variables starting from ethnicity till sex in the order as appearing in the dataset from left to right.</p>
+  <pre><code>list grosswk - degreesub
+  
+  
+         +----------------------------------------+
+         | grosswk     hiqual      sex   degree~b |
+         |----------------------------------------|
+  10086. |     451   GCSE gra   Female   Does not |
+  10087. |     279   Higher e     Male   Does not |
+  10088. |     337   GCSE gra   Female   Does not |
+  10089. |      75   Other qu   Female   Does not |
+  10090. |     525   No quali     Male   Does not |
+         |----------------------------------------|
+  10091. |     808   GCSE gra     Male   Does not |
+  10092. |     423   Higher e   Female   Does not |
+  10093. |     208   Other qu   Female   Does not |
+  10094. |     463   GCSE gra     Male   Does not |
+  10095. |     138   GCSE gra   Female   Does not |
+         |----------------------------------------|
+  10096. |     279   GCSE gra     Male   Does not |
+         +----------------------------------------+
+  
+  </code></pre>
+  <br>
+  <h3><a href="#printing-only-a-subset-of-variables-for-specific-observations" id="printing-only-a-subset-of-variables-for-specific-observations">Printing only a subset of variables for specific observations</a></h3>
+  <p>You can also display a range of observations for a subset of variables. Type <b>list</b> followed by the variable names and then specify which observations should be displayed, with <b>in start/end</b>. For instance, to display the first 10 observations for the variables age, sex and grosswk use this command:</p>
+  <pre><code>list age sex grosswk in 1/10
+  
+       +------------------------+
+       | age      sex   grosswk |
+       |------------------------|
+    1. |  17   Female        42 |
+    2. |  16   Female        20 |
+    3. |  17   Female        60 |
+    4. |  16   Female        46 |
+    5. |  17   Female        20 |
+       |------------------------|
+    6. |  16   Female        65 |
+    7. |  17   Female        36 |
+    8. |  16     Male        24 |
+    9. |  16   Female        64 |
+   10. |  16     Male        66 |
+       +------------------------+
+  
+  </code></pre>
+  <br>
+  <p>You can do the same with a range of variables.</p>
+  <pre><code>list grosswk-sex in 1/10
+  
+       +-----------------------------+
+       | grosswk     hiqual      sex |
+       |-----------------------------|
+    1. |      42   GCSE gra   Female |
+    2. |      20   GCE A le   Female |
+    3. |      60   GCSE gra   Female |
+    4. |      46   GCSE gra   Female |
+    5. |      20   GCSE gra   Female |
+       |-----------------------------|
+    6. |      65   No quali   Female |
+    7. |      36   GCSE gra   Female |
+    8. |      24   GCSE gra     Male |
+    9. |      64   No quali   Female |
+   10. |      66   GCSE gra     Male |
+       +-----------------------------+
+  
+  </code></pre>
+  <br>
+  <h3><a href="#viewing-the-dataset-in-the-data-editor-window" id="viewing-the-dataset-in-the-data-editor-window">Viewing the dataset in the data-editor window</a></h3>
+  <p>The <b>browse</b> command is very similar to the list command, in the sense that it will list the observations in your dataset. In contrast to list, the output will be displayed in a new window, called the <i>data-editor</i>, and not in the results pane.</p>
+  <pre><code>browse
+  
+  </code></pre>
+  <br>
+  <img src="screenshots/browse_01.png" alt="the data editor in view only mode">
+  <p>Just as with the list command, you can chose to only display a subset of variables or a range of observations. For instance, to only display the first 10 observations for the variables from grosswk to sex, type the command as below.</p>
+  <pre><code>browse grosswk-sex in 1/10
+  
+  </code></pre>
+  <br>
+  <img src="screenshots/browse_02_mac.png" alt="the data editor in view only mode">
+  <br>
+  <h3><a href="#exercise-inspecting-data" id="exercise-inspecting-data">Exercise: Inspecting data</a></h3>
+  <ol>
+      <li>Open the census5 dataset from the stata website, which has data from 
+      the 1980 US census</li>
+      <li>Print an overview of the variables.</li>
+      <li>Print the first 10 observations.</li>
+      <li>Print only the marriage and divorce variables.</li>
+      <li>Print only the first 10 observations for the marriage and 
+      divorce variables.</li>
+  </ol>
+  <br>
+  <h2><a href="#summary-statistics" id="summary-statistics">Summary statistics</a></h2>
+  <p>The <strong>summarize</strong> command gives you a number of descriptive statistics like the mean, standard deviation and the minimum and maximum value. We can abbreviate the <strong>summarize</strong> command as <strong>sum</strong>.</p>
+  <pre><code>sum grosswk
+  
+      Variable |        Obs        Mean    Std. Dev.       Min        Max
+  -------------+---------------------------------------------------------
+       grosswk |     10,096    521.7672    522.8757          5      23076
+  
+  </code></pre>
+  <br>
+  <p>You can add the detail option to the command to also display the percentiles, variance, skewness and kurtosis.</p>
+  <pre><code>sum grosswk, detail
+  
+       Gross weekly pay in main job (Government scheme or
+                            employee)
+  -------------------------------------------------------------
+        Percentiles      Smallest
+   1%           34              5
+   5%           90              5
+  10%          135              5       Obs              10,096
+  25%          250              5       Sum of Wgt.      10,096
+  
+  50%          418                      Mean           521.7672
+                          Largest       Std. Dev.      522.8757
+  75%          664          10250
+  90%          962          13846       Variance         273399
+  95%         1269          13846       Skewness       13.48147
+  99%         1923          23076       Kurtosis       448.2789
+  
+  </code></pre>
+  <br>
+  <p>To summarize more than one continuous variable, add all variable names after <strong>sum</strong>.</p>
+  <pre><code>sum grosswk sex
+  
+      Variable |        Obs        Mean    Std. Dev.       Min        Max
+  -------------+---------------------------------------------------------
+       grosswk |     10,096    521.7672    522.8757          5      23076
+           sex |     10,096    1.520503    .4996042          1          2
+  
+  </code></pre>
+  <h3><a href="#customized-summary-statistics" id="customized-summary-statistics">Customized summary statistics</a></h3>
+  <p>The <strong>summarize</strong> command although useful to get a quick impression of a variable, doesn&rsquo;t feature any options to select specific descriptives to be displayed in the output. The <strong>tabstat</strong> command allows such customisation of the statistics to be displayed.</p>
+  <pre><code>tabstat age
+  
+      variable |      mean
+  -------------+----------
+           age |  42.37223
+  ------------------------
+  
+  </code></pre>
+  <br>
+  <p>The command as such only displays the mean of a variable. You can specify each descriptive statistic you want to be included in the output with the stat option. Below we use the stat option to display the mean, the standard deviation, the minimum, percentiles and the maximum.</p>
+  <pre><code>tabstat age, stat(mean, sd, min, p10, p25, p50, p75, p90, max)
+  
+      variable |      mean        sd       min       p10       p25       p50       p75       p90       max
+  -------------+------------------------------------------------------------------------------------------
+           age |  42.37223  12.81225        16        25        32        43        52        59        78
+  --------------------------------------------------------------------------------------------------------
+  
+  </code></pre>
+  <br>
+  <p>Here is a list of all the statistics that can be added with the stat() option.</p>
+  <pre><code>    statname       Definition
+      ---------------------------------------------------------------------
+      mean            mean
+      count           count of nonmissing observations
+      n               same as count
+      sum             sum
+      max             maximum
+      min             minimum
+      range           range = max - min
+      sd              standard deviation
+      variance        variance
+      cv              coefficient of variation (sd/mean)
+      semean          standard error of mean (sd/sqrt(n))
+      skewness        skewness
+      kurtosis        kurtosis
+      p1              1st percentile
+      p5              5th percentile
+      p10             10th percentile
+      p25             25th percentile
+      median          median (same as p50)
+      p50             50th percentile (same as median)
+      p75             75th percentile
+      p90             90th percentile
+      p95             95th percentile
+      p99             99th percentile
+      iqr             interquartile range = p75 - p25
+      q               equivalent to specifying p25 p50 p75
+  </code></pre>
+  <p>Both <strong>summarize</strong> and <strong>tabstat</strong> can be used to create descriptive statistics for a selection of variables. You can use a hyphen between two variable names to select a range of variables or select non-adjacent variables with a space inbetween their names.</p>
+  <pre><code>sum age edage grosswk
+  
+      Variable |        Obs        Mean    Std. Dev.       Min        Max
+  -------------+---------------------------------------------------------
+           age |     10,096    42.37223    12.81225         16         78
+         edage |     10,096    20.64352    12.94552         -8         97
+       grosswk |     10,096    521.7672    522.8757          5      23076
+  
+  </code></pre>
+  <br>
+  <p>When using multiple variables with the <strong>tabstat</strong> command, Stata per default lists the statistics in the rows of the table. To force the statistics to the columns, use the <strong>col(stat)</strong> option.</p>
+  <pre><code>tabstat age edage grosswk, stat(mean, sd, min, p10, p25, p50, p75, p90, max) col(stat)
+  
+      variable |      mean        sd       min       p10       p25       p50       p75       p90       max
+  -------------+------------------------------------------------------------------------------------------
+           age |  42.37223  12.81225        16        25        32        43        52        59        78
+         edage |  20.64352  12.94552        -8        16        16        18        21        23        97
+       grosswk |  521.7672  522.8757         5       135       250       418       664       962     23076
+  --------------------------------------------------------------------------------------------------------
+  
+  </code></pre>
+  <br>
+  <br>
+  <h3><a href="#exercise-summary-statistics" id="exercise-summary-statistics">Exercise: Summary statistics</a></h3>
+  <p>The MCS_testscore dataset contains data from the age 5 sweep from the Millenium Cohort Study, which examined the first year of primary schooling alongside childhood health, childcare, education, social and family circumstances.</p>
+  <ol>
+      <li>Open the MCS_testscore dataset.</li>
+      <li>Use <b>summarize</b> to create a table with descriptive 
+      statistics for the variables pse to fsptotal.</li>
+      <li>Use the <b>tabstat</b> command to create a table for the same 
+      variables that lists the mean, standard deviation, standard error of the mean, 
+      min, max and the 25th and 75th percentile.</li>
+      <li>Make sure that the statistics are displayed in the columns.</li>
+  </ol>
+  
+  <br>
+  <br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  <h1><a href="#stata-practical-2-do-files-and-computing-variables" id="stata-practical-2-do-files-and-computing-variables">Stata Fundamentals 2: Do-files and computing variables</a></h1>
+  
+  
+  <h2>More information on how the session is run</h2>
+  <b>How to work together</b>: 
+  <ul>
+      <li>Plesase turn on your microphone and webcam.</li>
+      <li>One shares the screen and the other requests remote control. </li>
+      <li>Take turns on who types for each exercise.</li>
+  </ul>
+  <b>What to do when getting stuck</b>:
+  <ol>
+      <li>Ask the trainer if you struggle to find a solution.</li>
+      <li>Use the help command. To get help with a specific command type <b>help "command name"</b></li>
+      <li>Search online. The statalist.org forum is usually the most useful resource.</li>
+  </ol>
+  
+  <b>In this practical session, you will learn to:</b>
+  <ul>
+    <li>use do-files to create analysis scripts</li>
+    <li>create frequency tables</li>
+    <li>compute new variables</li>
+    <li>save datasets</li>
+  </ul>
+  <br>
+  <br>
+  <h2><a href="#access-to-datasets2" id="access-to-datasets2">Access to Datasets</a></h2>
+  <p>Please use <a href="https://lsecloud-my.sharepoint.com/:f:/g/personal/m_wiemers_lse_ac_uk/Ej_vhZWIz5RFthJmQLn-DBkB345HzPU5GGgGjsUHKv4UeA?e=uRRnNu"><b>this link</b></a> 
+     to get access to the datasets that you will be using in the exercises</p>
+  <br>
+  <br>
+  <h2><a href="#do-files" id="do-files">Do files</a></h2>
+  <p>With do-files you can keep a record of your commands in a text file, which makes it easy to re-run commands for pre-processing, 
+    plotting and analysing your data. It also provides a means to keep a record of your analysis and to share it with colleagues or 
+    to attach it to your dissertation or make it available with your publications.</p>
+  <p>Just take the first section in which you changed the working directory and loaded a file into Stata as an example. By using a 
+    do-file you won’t have to re-type these commands in order to load the dataset the next time you want to work on your analysis.</p>
+  <br>
+  <br>
+  <h3><a href="#create-a-new-do-file" id="create-a-new-do-file">Create a new do file</a></h3>
+  <p>To create a new do-file use the shortcut Ctrl+9 (Windows) or Cmd+9 (Mac). A new do-file editor with an empty do-file script 
+    will open. To create additional do-files use the Ctrl+N (Windows) or Cmd+N (Mac) shortcut.</p>
+  <img src="screenshots/empty_do_file.png">
+  <br>
+  <br>
+  <h3><a href="#adding-comments" id="adding-comments">Adding comments</a></h3>
+  <p>Comments, which are always in green, will be ignored by Stata. That means, Stata will not try to execute it as a command. 
+    You can use comments to explain what your script does.</p>
+  <p>In the example do-file below, we use three differnt types of comments:</p>
+  <ul>
+  <li>double forward slash //</li>
+  <li>asterisk *</li>
+  <li>forward slash-asterisk combination /**/</li>
+  </ul>
+  <p>In line 1 the double forward slash is being used to turn the first line into a comment. The // can be used for the title of 
+    the do-file or a section title within your do-file.</p>
+  <p>The other character that can be used to create comments is the asterisk. In line 3-5, the astrisk is used to comment out each 
+    line of that three-line paragraph about the dataset.</p>
+  <p>The forward slash-asterisk combination /**/ can be used within a line to add a comment after a command (see line 7).</p>
+  <br>
+  <br>
+  <img src="screenshots/example_do_file.png">
+  <h3><a href="#running-a-do-file" id="running-a-do-file">Running a do-file</a></h3>
+  <p>You can use the Ctrl+D (Windows) Cmd+D (Mac) command to run the whole file. To only run a single line or a selection of 
+    lines, highlight the lines and then use the Ctrl+D (Windows) or Cmd+D (Mac) shortcut.</p>
+  <br>
+  <br>
+  <h3><a href="#exercise-do-files" id="exercise-do-files">Exercise: Do-files</a></h3>
+  <ul>
+  <li>Create a new do-file to reproduce the commands from the previous session on 
+  Inspecting a dataset. See the commands below.</li>
+  <li>Add a comment in the first line to describe what your do-file does.</li>
+  <li>Copy the commands from the previous exercise into your do-file.</li>
+  <li>Run the whole do-file.</li>
+  <li>Run only the first three commands.</li>
+  </ul>
+  <br>
+  <pre><code>clear all
+  webuse census5
+  describe
+  list in 1/10
+  list marriage_rate divorce_rate
+  list marriage_rate divorce_rate in 1/10
+  </code></pre>
+  <br>
+  <br>
+  <br>
+  <h2><a href="#creating-frequency-tables" id="creating-frequency-tables">Creating frequency tables</a></h2>
+  <h3><a href="#creating-one-and-two-way-frequency-tables" id="creating-one-and-two-way-frequency-tables">Creating one- and two-way 
+    frequency tables</a></h3>
+  <p>With the tabulate command, you can create one- and two-way frequency tables. We’re going to start with a simple frequency table 
+    for the hiqual variable. The tabulate command can be abbreviated as tab. In this example, we are again working with the lfs2017 dataset.</p>
+  <pre><code>. use lfs2017, clear
+  
+  . tab hiqual
+  
+           Highest qualification |
+             (detailed grouping) |      Freq.     Percent        Cum.
+  -------------------------------+-----------------------------------
+                       No answer |         11        0.11        0.11
+            Degree or equivalent |      3,446       34.13       34.24
+                Higher education |        982        9.73       43.97
+       GCE A level or equivalent |      2,312       22.90       66.87
+  GCSE grades A*-C or equivalent |      2,037       20.18       87.04
+             Other qualification |        728        7.21       94.26
+                No qualification |        503        4.98       99.24
+                      Don't know |         77        0.76      100.00
+  -------------------------------+-----------------------------------
+                           Total |     10,096      100.00
+  
+  </code></pre>
+  <br>
+  <p>You can also create a two-way frequency table with the tabulate command. In the example below we look at the relationship 
+    between the sex and hiqual variables. The first variable sex will go to the rows. The second variable hiqual will go to the columns.</p>
+  <pre><code>. tab sex hiqual
+  
+          Sex of |                        Highest qualification (detailed grouping)
+      respondent | No answer  Degree or  Higher ed  GCE A lev  GCSE grad  Other qua  No qualif  Don't kno |     Total
+  ---------------+----------------------------------------------------------------------------------------+----------
+            Male |         6      1,590        434      1,234        870        403        258         46 |     4,841 
+          Female |         5      1,856        548      1,078      1,167        325        245         31 |     5,255 
+  ---------------+----------------------------------------------------------------------------------------+----------
+           Total |        11      3,446        982      2,312      2,037        728        503         77 |    10,096 
+  
+  </code></pre>
+  <br>
+  <p>To display percentages instead of frequencies, we can add the row and col options. The row option will add the row percentages, 
+    while col will add the column percentages. Per cell, the values from top to bottom reflect the frequency, row percentage and column 
+    percentage.</p>
+  <p>For instance, in the first cell (Male, No answer) there are 6 observations. 0.12 % of male respondents answered with “No answer” 
+    and 54.55% of those that didn’t provide an answer were male.</p>
+  <pre><code>. tab sex hiqual, row col
+  
+  +-------------------+
+  | Key               |
+  |-------------------|
+  |     frequency     |
+  |  row percentage   |
+  | column percentage |
+  +-------------------+
+  
+          Sex of |                        Highest qualification (detailed grouping)
+      respondent | No answer  Degree or  Higher ed  GCE A lev  GCSE grad  Other qua  No qualif  Don't kno |     Total
+  ---------------+----------------------------------------------------------------------------------------+----------
+            Male |         6      1,590        434      1,234        870        403        258         46 |     4,841 
+                 |      0.12      32.84       8.97      25.49      17.97       8.32       5.33       0.95 |    100.00 
+                 |     54.55      46.14      44.20      53.37      42.71      55.36      51.29      59.74 |     47.95 
+  ---------------+----------------------------------------------------------------------------------------+----------
+          Female |         5      1,856        548      1,078      1,167        325        245         31 |     5,255 
+                 |      0.10      35.32      10.43      20.51      22.21       6.18       4.66       0.59 |    100.00 
+                 |     45.45      53.86      55.80      46.63      57.29      44.64      48.71      40.26 |     52.05 
+  ---------------+----------------------------------------------------------------------------------------+----------
+           Total |        11      3,446        982      2,312      2,037        728        503         77 |    10,096 
+                 |      0.11      34.13       9.73      22.90      20.18       7.21       4.98       0.76 |    100.00 
+                 |    100.00     100.00     100.00     100.00     100.00     100.00     100.00     100.00 |    100.00 
+  
+  </code></pre>
+  <br>
+  <h3><a href="#exercise-creating-frequency-tables" id="exercise-creating-frequency-tables">Exercise: Creating frequency tables</a></h3>
+  <p>There is growing evidence that breastfeeding improves cognitive development of infants. The MCS_testscore dataset contains data on 
+    the Foundation Stage Profile scores, which is a teacher assessment of children’s development at the end of reception year, and amongst 
+    many other data also data on the months a child has been breastfed. We can use a frequency table to explore whether we can find evidence 
+    for a relationship between the length of breastfeeding and the foundation stage profile scores on the descriptive level in this dataset.</p>
+  <ul>
+  <li>Open the MCS_testscore dataset, which is in the files folder.</li>
+  <li>The variables we are interested in are fsp (quartiles for the foundation 
+  stage profile score) and mbreastt (lenght of breastfeeding in months).
+  Create a two-way frequency table that lists the months of breastfeeding in the 
+  rows and the fsp score quartiles in the columns. Also include percentages for 
+  the rows.
+  </li>
+  <li>Is the data in line with the notion that breastfeeding improves cognitive 
+  development?</li>
+  </ul>
+  <br>
+  <br>
+  <br>
+  <h2><a href="#computing-variables" id="computing-variables">Computing variables</a></h2>
+  <h3><a href="#computing-a-new-variable" id="computing-a-new-variable">Computing a new variable</a></h3>
+  <p>With the generate command we can compute new variables in our dataset. For instance, we can calculate a new variable for the annual 
+    income based on the weekly income which is listed in the grosswk variable.</p>
+  <p>We can abbreviate the generate command with gen. After gen we specify the name of the new variable for the yearly income as grossyr. 
+    After the = sign, we write an expression to calculate the values of the new variable. We multiply the values from the grosswk variable, 
+    the weekly income, by 52 to calculate the approximate annual income and assign the calculated values to a new variable called grossyr.</p>
+  <pre><code>. use lfs2017, clear
+  
+  . gen grossyr = grosswk*52
+  
+  </code></pre>
+  <br>
+  <p>We can now use the summarize command to compare the mean and standard deviation of the grosswk and grossyr variables.</p>
+  <pre><code>. sum grossyr grosswk
+  
+      Variable |        Obs        Mean    Std. Dev.       Min        Max
+  -------------+---------------------------------------------------------
+       grossyr |     10,096     27131.9    27189.54        260    1199952
+       grosswk |     10,096    521.7672    522.8757          5      23076
+  
+  </code></pre>
+  <br>
+  <br>
+  <h3><a href="#replacing-a-variable" id="replacing-a-variable">Replacing a variable</a></h3>
+  <p>The replace command enables you to overwrite an existing variable in your dataset. As an illustration, let us replace the values of 
+    the newly created grossyr variable, using the same expression we used to create the grossyr variable.</p>
+  <pre><code>. replace grossyr = grosswk*52
+  (0 real changes made)
+  
+  </code></pre>
+  <br>
+  <p>Since we used the same formula, the values in grossyr haven’t effectively changed.</p>
+  <pre><code>. sum grossyr grosswk
+  
+      Variable |        Obs        Mean    Std. Dev.       Min        Max
+  -------------+---------------------------------------------------------
+       grossyr |     10,096     27131.9    27189.54        260    1199952
+       grosswk |     10,096    521.7672    522.8757          5      23076
+  
+  </code></pre>
+  <br>
+  <br>
+  <h3><a href="#exercise-computing-variables" id="exercise-computing-variables">Exercise: Computing variables</a></h3>
+  <p>The auto dataset lists the turn circle, which is the radius of the smallest circular turn a car can make. To determine in how far the 
+    turn circle depends on a car’s length, we want to calculate the ratio of the turn circle and the length.</p>
+  <ul>
+  <li>Open the auto dataset using the **webuse** command</li>
+  <li>Convert the length variable, which lists the length of a car in inches, 
+  to feet (12 inch = 1 ft). Overwrite the length variable.</li>
+  <li>Calculate a new variable TLrat as the ratio of the turn circle and the 
+  length in feet.</li>
+  <li>Print the mean and standard deviation of the new variable.</li>
+  </ul>
+  <br>
+  <br>
+  <br>
+  <h2><a href="#saving-data" id="saving-data">Saving data</a></h2>
+  <h2><a href="#saving-as-new-file-and-replacing-files" id="saving-as-new-file-and-replacing-files">Saving as new file and replacing files</a></h2>
+  <p>We have now added a new variable to our dataset, the grossyr variable. With the save command we can save changes we made to our dataset. 
+    If you want to save the dataset under a new name, you have to specify the new file name following save.</p>
+  <pre><code>use lfs2017, clear
+  
+  save lfs2017b
+  </code></pre>
+  <br>
+  <p>Alternatively, if you wanted to overwrite the existing file, you can use save with the replace option.</p>
+  <pre><code>save, replace
+  </code></pre>
+  <br>
+  <p>To replace an existing file, you have to specify the file to be replaced and also add the replace option. For instance, assuming I am 
+    currently working on the lfs2017_raw file, I made some changes to my dataset and now, I want to overwrite it under the already existing 
+    file lfs2017, I would have to use the command as below.</p>
+  <pre><code>save lfs2017, replace
+  </code></pre>
+  <br>
+  <br>
+  <h3><a href="#exercise-saving-data" id="exercise-saving-data">Exercise: Saving data</a></h3>
+  <ul>
+  <li>Save the lfs2017 dataset under the new name lfs2017_raw.</li>
+  <li>The grosswk variable lists the weekly income in Pound Sterling. 
+  Create a new variable for the weekly income in USD. The conversion is 1 
+  GBP = 1.24 USD.</li>
+  <li>Save the dataset with the newly calculated variable under lfs2017.</li>
+  </ul>
+    
+  <br>
+  <br>
+         
+  <h3><a href="#evaluation" id="evaluation">Final task: Please give us your feedback! </a></h3>
+         <p>Upon completing the survey, <b>you will receive the link to the solution file</b>, to check how your commands compares to the sample solution.</p>
+  <p>In order to adapt our training to your needs and provide the most valuable learning experience for you, we depend on your feedack.</p>
+         <p>We would be grateful if you could take 1 min before the end of the workshop to get your feedback! </p>
+  
+  <a href="https://lse.eu.qualtrics.com/jfe/form/SV_eflc2yj4pcryc62?coursename=Stata Fundamentals 2: Do-files and computing variables &topic=Stata&link=https://lsecloud-my.sharepoint.com/:u:/g/personal/m_wiemers_lse_ac_uk/EY3Wk-U6f9dFiHK_ejHvwO4B_SfwFl7tCZaNFmcyRUXmDA?e=csF7gp&prog=SR&version=21-22">Click here to open the survey!</a>
+  
+  <br>
+  <br>
+
+
+
+  </div>
+  
+  
+      
+  </body>
