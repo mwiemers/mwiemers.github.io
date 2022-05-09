@@ -1,0 +1,652 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="/css/stmarkdown.css">
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  </script>
+  <script type="text/javascript" async
+    src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+  </script>
+  
+  
+  </head>
+  
+  <body>
+  
+  <!-- Side navigation -->
+  <div class="sidenav">
+    <a href="#stata-practical-3-linear-regression">Stata Fundamentals 3</a>
+    <a href="#linear-regression">Simple Linear Regression</a>
+    <a href="#scatter-plots">Scatter plots</a>
+    <a href="#running-a-linear-regression">Running a simple linear regression</a>
+    <a href="#scatter-plot-with-fitted-line">Scatter plot with fitted line</a>
+    <a href="#exercise-simple-linear-regression">Exercise: Simple linear regression</a>
+    <a href="#multiple-linear-regression">Multiple Linear Regression</a>
+    <a href="#scatter-matrix">Scatter matrix</a>
+    <a href="#running-multiple-linear-regression">Running a multiple linear regression</a>
+    <a href="#correlation-matrix">Correlation matrix</a>
+    <a href="#exercise-multiple-linear-regression">Exercise: Running a multiple linear regression</a>
+    <a href="#evaluation">Final task: Please give us your feedback!</a>
+    <a href="#stata-fundamentals-4-macros-and-for-loops">Stata Fundamentals 4</a>
+    <a href="#macros">Macros</a>
+    <a href="#exercise-1-local-macros" >Exercise 1: Local macros</a>
+    <a href="#exercise-changing-the-working-directory">Exercise: Changing the workign directory</a>
+    <a href="#for-loops">For loops</a>
+    <a href="#exercise-2-foreach-loop">Exercise 2: Foreach loop</a>
+    <a href="#generating-new-variables-with-a-for-loop">Generating new variables with a for loop</a>
+    <a href="#exercise-3-generating-new-variables-with-a-for-loop">Exercise 3: Generating new variables with a for loop</a>
+    <a href="#evaluation">Final task: Please give us your feedback!</a>
+    </div>
+    
+    
+  <div class="main">
+  
+  <h1><a href="#stata-practical-3-linear-regression" id="stata-practical-3-linear-regression">Stata Fundamentals 3: Linear Regression</a></h1>
+  
+  
+  <h2>More information on how the session is run</h2>
+  <b>How to work together</b>: 
+  <ul>
+      <li>Plesase turn on your microphone and webcam.</li>
+      <li>One shares the screen and the other requests remote control. </li>
+      <li>Take turns on who types for each exercise.</li>
+  </ul>
+  <b>What to do when getting stuck</b>:
+  <ol>
+      <li>Ask the trainer if you struggle to find a solution.</li>
+      <li>Use the help command. To get help with a specific command type <b>help "command name"</b></li>
+      <li>Search online. The statalist.org forum is usually the most useful resource.</li>
+  </ol>
+  
+  <b>In this practical session, you will learn to:</b>
+  <ul>
+      <li>Use familiar Stata commands to explore a dataset prior to running a 
+    regression analysis.</li>
+      <li>Create and customize scatter plots</li>
+      <li>Run a simple linear regression and read the analysis output.</li>
+      <li>Create scatter plots for a set of variables using a scatter matrix</li>
+      <li>Run a multiple linear regression and read the analysis output.</li>
+      <li>Create a correlation matrix.</li>
+  </ul>
+  <br>
+  <br>
+  <h2><a href="#linear-regression" id="linear-regression">Linear Regression</a></h2>
+  <p>Stata allows you to easily perform and visualise simple linear regression.</p>
+  <p>For this example, we will use the sample dataset <strong>nlsw88.dta</strong> in-built in Stata. We can access this dataset with the <strong>sysuse</strong> command. Add the <em>clear</em> option, if a dataset is already loaded in Stata.</p>
+  <pre><code>. sysuse nlsw88.dta, clear
+  (NLSW, 1988 extract)
+  
+  </code></pre>
+  <p>Let us start by inspecting the variables in the dataset. We use the describe command, to get an overview of all variables in the dataset and what they represent.</p>
+  <pre><code>. describe
+  
+  Contains data from C:\Program Files (x86)\Stata15\ado\base/n/nlsw88.dta
+    obs:         2,246                          NLSW, 1988 extract
+   vars:            17                          1 May 2016 22:52
+   size:        60,642                          (_dta has notes)
+  --------------------------------------------------------------------------------
+                storage   display    value
+  variable name   type    format     label      variable label
+  --------------------------------------------------------------------------------
+  idcode          int     %8.0g                 NLS id
+  age             byte    %8.0g                 age in current year
+  race            byte    %8.0g      racelbl    race
+  married         byte    %8.0g      marlbl     married
+  never_married   byte    %8.0g                 never married
+  grade           byte    %8.0g                 current grade completed
+  collgrad        byte    %16.0g     gradlbl    college graduate
+  south           byte    %8.0g                 lives in south
+  smsa            byte    %9.0g      smsalbl    lives in SMSA
+  c_city          byte    %8.0g                 lives in central city
+  industry        byte    %23.0g     indlbl     industry
+  occupation      byte    %22.0g     occlbl     occupation
+  union           byte    %8.0g      unionlbl   union worker
+  wage            float   %9.0g                 hourly wage
+  hours           byte    %8.0g                 usual hours worked
+  ttl_exp         float   %9.0g                 total work experience
+  tenure          float   %9.0g                 job tenure (years)
+  --------------------------------------------------------------------------------
+  Sorted by: idcode
+  
+  </code></pre>
+  <p>Although it is possible to include categorical variables in a linear regression model, in this tutorial, we will only consider numerical non-categorical variables.</p>
+  <p>Examples of a categorical variable is sex, race or occupation. These have a limited set of values and there is no inherent order in the different values.</p>
+  <p>Examples of numerical non-categorical variables are age, wage, hours. These variables might have an unlimited set of values or they can be ordered in a pre-defined way.</p>
+  <p>To have a look at the whole dataset and to narrow down potential variables for our analysis, we use the <strong>browse</strong> command.</p>
+  <pre><code>. browse
+  
+  </code></pre>
+  <img src="/screenshots/browse.png" height="500" />
+  <p>We are interested in the two variables <strong>wage</strong> and <strong>tenure</strong>. Performing simple summary statistics can help you to better understand the distribution of the variables.</p>
+  <pre><code>. sum tenure wage
+  
+      Variable |        Obs        Mean    Std. Dev.       Min        Max
+  -------------+---------------------------------------------------------
+        tenure |      2,231     5.97785    5.510331          0   25.91667
+          wage |      2,246    7.766949    5.755523   1.004952   40.74659
+  
+  </code></pre>
+  <h3><a href="#scatter-plots" id="scatter-plots">Scatter Plots</a></h3>
+  <p>Stata has a very easy-to-use graphical interface to create all plots. However, it is useful to get used to using code instead of the graphical interface as early as possible to be able to work your way up to more sophisticated graphs.</p>
+  <p>Here&rsquo;s how you make a very simple scatter plot in Stata using the <strong>scatter</strong> command. Remember that the first variable is always displayed on the Y axis and the second variable is displayed on the X axis.</p>
+  <pre><code>. scatter wage tenure
+  </code></pre>
+  <img src="screenshots/first_scatter.png" height="300" />
+  <p>The command <strong>scatter</strong> has a range of options that you can tweak to customise your plot. For example, you could change the colour, symbol and size of the markets in the plot.</p>
+  <pre><code>. scatter wage tenure, msize(0.5) mcolor(black) msymbol(diamond)
+  </code></pre>
+  <img src="screenshots/second_scatter.png" height="300" />
+  <p>The best way to find out about all the different scatter plot options is to use the <strong>help</strong> command and to play around with the different options.</p>
+  <pre><code>. help scatter
+  
+  </code></pre>
+  <img src="screenshots/help_scatter.png" height="500" />
+  <h3><a href="#running-a-linear-regression" id="running-a-linear-regression">Running a linear regression</a></h3>
+  <p>Now that we have visualised the relationship between tenure and wage on a scatter plot, it is time to find out if there is an actual linear relationship between the two variables. We can find out by using the <strong>regress</strong> command, which will calculate a model to estimate the relationship between the wage and tenure variable.</p>
+  <p>Remember to type the <em>dependent</em> variable first and the <em>independent</em> variable second.</p>
+  <pre><code>. regress wage tenure
+  
+        Source |       SS           df       MS      Number of obs   =     2,231
+  -------------+----------------------------------   F(1, 2229)      =     72.66
+         Model |  2339.38077         1  2339.38077   Prob &gt; F        =    0.0000
+      Residual |  71762.4469     2,229  32.1949066   R-squared       =    0.0316
+  -------------+----------------------------------   Adj R-squared   =    0.0311
+         Total |  74101.8276     2,230  33.2295191   Root MSE        =    5.6741
+  
+  ------------------------------------------------------------------------------
+          wage |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
+  -------------+----------------------------------------------------------------
+        tenure |   .1858747   .0218054     8.52   0.000     .1431138    .2286357
+         _cons |   6.681316   .1772615    37.69   0.000     6.333702    7.028931
+  ------------------------------------------------------------------------------
+  
+  </code></pre>
+  <p>As a result, Stata gives me a range of useful statistics. Perhaps the most interesting is the first line lower table (tenure), in which we see that there is a regression coefficient of <strong>0.1858747</strong>, alongside a standard error of <strong>0.0218054</strong>.</p>
+  <p>We can interpret this as each year increase in work tenure is associated with an increase of 0.1858747 in hourly wage. The standard error gives us an indication of 
+  how certain this estimation is. The lower the standard error, the more certain we can be that the regression coefficient is a good estimation of the relationship between the two variables.</p>
+  <p>The p-value (P&gt;|t|) shows that the correlation is statistically significant, as it is below the critical level of 0.05. The _cons line shows us values about the <em>intercept</em>. These are usually not very interesting for the interpretation of the data. The intercept is the predicted value for a tenure of 0 years, which is <strong>6.681316</strong>.</p>
+  <h3><a href="#scatter-plot-with-fitted-line" id="scatter-plot-with-fitted-line">Scatter plot with fitted line</a></h3>
+  <p>Based on the model that Stata has calculated, we can now create a new variable with predicted values for wage. We can use the <strong>predict</strong> command to generate this new variable with predicted values. We create a new variable called <strong>pred_wage</strong> by typing:</p>
+  <pre><code>. predict pred_wage, xb
+  (15 missing values generated)
+  
+  </code></pre>
+  <p>Using the fitted values from <strong>pred_wage</strong>, we can now add a fitted line to our scatter plot.</p>
+  <p>With the <strong>twoway</strong> command, we can combine a scatter and a line plot in a single chart. We first plot the scatter and then the line on top. When using <strong>twoway</strong> the <strong>scatter</strong> and <strong>line</strong> command both have to be put in separate parentheses.</p>
+  <pre><code>. twoway (scatter wage tenure, msize(0.5)) (line pred_wage tenure)
+  </code></pre>
+  <img src="screenshots/third_scatter.png" height="300" />
+  <h3><a href="#exercise-simple-linear-regression" id="exercise-simple-linear-regression">Exercise: Simple linear regression</a></h3>
+  <p>Now it&rsquo;s your turn to perform a linear regression using another sample dataset of Stata. You can access this dataset by typing:</p>
+  <pre><code>. sysuse auto.dta, clear
+  (1978 Automobile Data)
+  
+  </code></pre>
+  <ol>
+      <li>Explore your dataset using the different commands that you have learned so far. In your opinion, on which variables could you perform a linear regression?</li>
+      <li>Make a scatter plot with the mileage of the car (<strong>mpg</strong>) and their weight (<strong>weight</strong>). What do you think is the most likely outcome of your regression analysis?</li>
+      <li>Customise your plot to show the markers in a different colour and symbol.
+          <ol>
+              <li><em>Bonus:</em> Can you show a label with the model of the car in your scatter plot?</li>
+          </ol>
+      </li>
+      <li>Perform a regression analysis with the variables <strong>mpg</strong> and <strong>weight</strong></li>
+      <li>Fit a regression line on your scatter plot.</li>
+  </ol>
+  <h2><a href="#multiple-linear-regression" id="multiple-linear-regression">Multiple Linear Regression</a></h2>
+  <p>In the next section, we look at an example of multiple linear regression. Here we have multiple predictors, or independent variables. For this, we will be using a life expectancy dataset from the Stata website:</p>
+  <pre><code>. use http://www.stata-press.com/data/r13/lifeexp, clear
+  (Life expectancy, 1998)
+  
+  </code></pre>
+  <h3><a href="#scatter-matrix" id="scatter-matrix">Scatter Matrix</a></h3>
+  <p>First, we can do a preliminary screening of the relationships by creating a scatter matrix using the <strong>graph matrix</strong> command passing all variables that we would like to explore.</p>
+  <pre><code>. graph matrix popgrowth lexp gnppc safewater
+  </code></pre>
+  <img src="screenshots/scatter_mat.png" height="300" />
+  <p>We can also group our scatter matrix by another variable using the <strong>by()</strong> option:</p>
+  <pre><code>. graph matrix popgrowth lexp gnppc safewater, by(region)
+  </code></pre>
+  <img src="screenshots/scatter_mat2.png" height="500" />
+  <p>Or we can only show half of the graph:</p>
+  <pre><code>. graph matrix popgrowth lexp gnppc safewater, half
+  </code></pre>
+  <img src="screenshots/scatter_mat3.png" height="300" />
+  <h3><a href="#running-multiple-linear-regression" id="running-multiple-linear-regression">Running a multiple Linear Regression</a></h3>
+  <p>Similar to the previous example, we can use the <strong>regress</strong> command for multiple variables, with the dependent variable going first.</p>
+  <pre><code>. regress popgrowth lexp gnppc safewater
+  
+        Source |       SS           df       MS      Number of obs   =        37
+  -------------+----------------------------------   F(3, 33)        =      4.28
+         Model |  8.66091026         3  2.88697009   Prob &gt; F        =    0.0117
+      Residual |  22.2693603        33  .674829098   R-squared       =    0.2800
+  -------------+----------------------------------   Adj R-squared   =    0.2146
+         Total |  30.9302705        36  .859174181   Root MSE        =    .82148
+  
+  ------------------------------------------------------------------------------
+     popgrowth |      Coef.   Std. Err.      t    P&gt;|t|     [95% Conf. Interval]
+  -------------+----------------------------------------------------------------
+          lexp |  -.0611253   .0480779    -1.27   0.212    -.1589404    .0366899
+         gnppc |   -.000031   .0000196    -1.58   0.124     -.000071    8.96e-06
+     safewater |   .0066364    .014125     0.47   0.642    -.0221012     .035374
+         _cons |   5.477221   2.803195     1.95   0.059     -.225923    11.18036
+  ------------------------------------------------------------------------------
+  
+  </code></pre>
+  <p>The resulting table looks very similar to the results of the simple linear regression and you can check the relevant statistics for each variable.</p>
+  <p>This analysis yields and interesting pattern. The upper right table gives us statistics on the model as such. The R-squared value indicates how well the model predicts the The p-value (Prob &gt; F) is below the critical value of 0.05, which means that there is sufficient evidence for us to conclude that the predictors (lexp, gnppc, safewater) together predict the independent variable popgrowth.</p>
+  <p>At the same time, we can see in the lower table that none of the regression coefficients is statistically significant. This indicates that there is high correlation between our predictors.</p>
+  <h3><a href="#correlation-matrix" id="correlation-matrix">Correlation matrix</a></h3>
+  <p>We can use the <strong>pwcorr</strong> command to get a correlation matrix for all variables in our analysis.</p>
+  <pre><code>. pwcorr popgrowth lexp gnppc safewater
+  
+               | popgro~h     lexp    gnppc safewa~r
+  -------------+------------------------------------
+     popgrowth |   1.0000 
+          lexp |  -0.4360   1.0000 
+         gnppc |  -0.3580   0.7182   1.0000 
+     safewater |  -0.4280   0.8297   0.7063   1.0000 
+  
+  </code></pre>
+  <h3><a href="#exercise-multiple-linear-regression" id="exercise-multiple-linear-regression">Exercise: Multiple linear regression</a></h3>
+  <p>Now, try to perform a multiple linear regression by yourself. We use the <strong>auto</strong> dataset again:</p>
+  <pre><code>. sysuse auto.dta, clear
+  (1978 Automobile Data)
+  
+  </code></pre>
+  <ol>
+      <li>Make a scatter matrix of the variables <strong>mpg</strong>, <strong>price</strong>, <strong>weight</strong> and <strong>length</strong>. What do you think is the most likely relationship between the variables?</li>
+      <li>Can you show two different plots for foreign and domestic cars?</li>
+      <li>Perform a regression analysis with the previously mentioned variables. What do the results mean?</li>
+  </ol>
+  
+    
+  <br>
+  <br>
+
+
+  <h1><a href="#stata-fundamentals-4-macros-and-for-loops" id="stata-fundamentals-4-macros-and-for-loops">Stata Fundamentals 4: Macros and For loops</a></h1>
+  <p>In this practical session, you will learn about:</p>
+  <ul>
+  <li>when and why to use local macros</li>
+  <li>how to create and use local macros in do-files</li>
+  <li>why and how to use foreach loops</li>
+  </ul>
+  <br>
+  <br>
+  <p>Macros and for loops are an essential tool in Stata that help you write more efficiently by reducing the total number of commands in your scripts. Another main benefit is that they make your scripts more readible and less susceptible to errors.</p>
+  <p>In this practical session, you will learn to:</p>
+  <ul>
+  <li>use local macros to store and retrieve values.</li>
+  <li>use foreach to loop over a set of variables</li>
+  <li>apply foreach loops to create multiple plots and new variables</li>
+  <li>use forvalues to loop over a series of numbers</li>
+  <li>apply forvalues loops to select variables based on numerical suffix</li>
+  </ul>
+  <h2><a href="#macros" id="macros">Macros</a></h2>
+  <p>Macros are very similar to a variable in programming and allow you to store information and retrieve that information at multiple places throughout your do-file. The most common use of macros are as a placeholder for a number of variables or for instance a file path as we will illustrate below.</p>
+  <p>There are two different types of macros:</p>
+  <p>Local macros only exist in the local memory of the do file in which they were created. You cannot access them from another do-file or from the command pane. Global macros exist inside the global memory of Stata and can be accessed and altered outside of the do-file in which they were created. For most purposes, global macros are not necessary and since having a macro available across scripts can introduce problems, we will focus on local macros in this tutorial.</p>
+  <p>All macros are deleted from memory when you close Stata.</p>
+  <h3><a href="#local-macros" id="local-macros">Local macros</a></h3>
+  <p>In the example below we load the auto dataset and want to run the <b>describe</b>, <b>list</b> and <b>summarize</b> command on the <i>rep78</i>, <i>turn</i> and <i>length</i> variables.</p>
+  <pre><code>. sysuse auto, clear
+  (1978 Automobile Data)
+
+  . 
+  . describe rep78 turn length
+
+                storage   display    value
+  variable name   type    format     label      variable label
+  ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  rep78           int     %8.0g                 Repair Record 1978
+  turn            int     %8.0g                 Turn Circle (ft.)
+  length          int     %8.0g                 Length (in.)
+
+  . list rep78 turn length in 1/10
+
+      +-----------------------+
+      | rep78   turn   length |
+      |-----------------------|
+    1. |     3     40      186 |
+    2. |     3     40      173 |
+    3. |     .     35      168 |
+    4. |     3     40      196 |
+    5. |     4     43      222 |
+      |-----------------------|
+    6. |     3     43      218 |
+    7. |     .     34      170 |
+    8. |     3     42      200 |
+    9. |     3     43      207 |
+  10. |     3     42      200 |
+      +-----------------------+
+
+  . summarize rep78 turn length
+
+      Variable |        Obs        Mean    Std. Dev.       Min        Max
+  -------------+---------------------------------------------------------
+        rep78 |         69    3.405797    .9899323          1          5
+          turn |         74    39.64865    4.399354         31         51
+        length |         74    187.9324    22.26634        142        233
+
+  </code></pre>
+  <p>We now modify the script and use a local macro to store the variables <i>rep78</i>, <i>turn</i> and <i>length</i>. In the subsequent lines, where we use the <b>describe</b>, <b>list</b> and <b>summarize</b> commands, we now substitute the local macro with the variable names.</p>
+  <p>Following <b>local</b>, we first specify the name of the local macro as <i>vars</i> and then enter all variables that should be assigned to the macro.</p>
+  <pre><code>. sysuse auto, clear
+  (1978 Automobile Data)
+
+  . 
+  . local vars rep78 turn length
+
+  </code></pre>
+  <p>We can now use the local macro <i>vars</i> anywhere inside our do-file as a placeholder for the variables <i>rep78</i>, <i>turn</i> and <i>length</i>. In order to use the <i>vars</i> macro with a command, we have to put it in single quotes as in the example. NB: the first single quote is the forward slanted single quote `.</p>
+  <pre><code>. describe `vars'
+
+                storage   display    value
+  variable name   type    format     label      variable label
+  ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  rep78           int     %8.0g                 Repair Record 1978
+  turn            int     %8.0g                 Turn Circle (ft.)
+  length          int     %8.0g                 Length (in.)
+
+  . list `vars' in 1/10
+
+      +-----------------------+
+      | rep78   turn   length |
+      |-----------------------|
+    1. |     3     40      186 |
+    2. |     3     40      173 |
+    3. |     .     35      168 |
+    4. |     3     40      196 |
+    5. |     4     43      222 |
+      |-----------------------|
+    6. |     3     43      218 |
+    7. |     .     34      170 |
+    8. |     3     42      200 |
+    9. |     3     43      207 |
+  10. |     3     42      200 |
+      +-----------------------+
+
+  . summarize `vars'
+
+      Variable |        Obs        Mean    Std. Dev.       Min        Max
+  -------------+---------------------------------------------------------
+        rep78 |         69    3.405797    .9899323          1          5
+          turn |         74    39.64865    4.399354         31         51
+        length |         74    187.9324    22.26634        142        233
+
+  </code></pre>
+  <h3><a href="#global-macros" id="global-macros">Global macros</a></h3>
+  <p>See the example below to create a global macro instead of a local one. We use <b>global</b> instead of <b>local</b> to create the macro. In order to use the macro, we have to prefix it with the <i>$</i> symbol.</p>
+  <p>It is recommended to use local macros unless you must use a variable across do-files. Using global macros where it is not necessary can cause conflicts when working across do-files. For instance, you might use the same name for global macros in different do-files. Running sub-sections of the different do-files might cause errors when using global macros because the value that has been assigned to the macro in one do-file, would not work with the commands in another do-file.</p>
+  <pre><code>. sysuse auto, clear
+  (1978 Automobile Data)
+
+  . 
+  . global vars rep78 turn length
+
+  . 
+  . describe $vars
+
+                storage   display    value
+  variable name   type    format     label      variable label
+  ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  rep78           int     %8.0g                 Repair Record 1978
+  turn            int     %8.0g                 Turn Circle (ft.)
+  length          int     %8.0g                 Length (in.)
+
+  . list $vars in 1/10
+
+      +-----------------------+
+      | rep78   turn   length |
+      |-----------------------|
+    1. |     3     40      186 |
+    2. |     3     40      173 |
+    3. |     .     35      168 |
+    4. |     3     40      196 |
+    5. |     4     43      222 |
+      |-----------------------|
+    6. |     3     43      218 |
+    7. |     .     34      170 |
+    8. |     3     42      200 |
+    9. |     3     43      207 |
+  10. |     3     42      200 |
+      +-----------------------+
+
+  . summarize $vars
+
+      Variable |        Obs        Mean    Std. Dev.       Min        Max
+  -------------+---------------------------------------------------------
+        rep78 |         69    3.405797    .9899323          1          5
+          turn |         74    39.64865    4.399354         31         51
+        length |         74    187.9324    22.26634        142        233
+
+  . 
+  </code></pre>
+  <h3><a href="#why-bother-using-macros" id="why-bother-using-macros">Why bother using macros?</a></h3>
+  <p>Having a macro for a set of variables might come in very handy when, for instance, running a number of regression analysis with the same set of predictors or different predictors but the same set of control variables. If you remove or add a variable in the macro it will take effect in every analysis that uses the macro. You only have to change the macro at the beginning of the analyses and not every set of predictors inside each regression command. More importantly, you will have to use macros when running for loops in your script, which we will explore in the next section.</p>
+  <h3><a href="#exercise-1-local-macros" id="exercise-1-local-macros">Exercise 1: Local macros</a></h3>
+  <ul>
+    <li>Load the auto dataset.</li>
+    <li>Create a local macro with the name variables and assign to it the variables 
+    weight, length and price.</li>
+    <li>Run the summarize and describe command using the variables macro.</li>
+    <li>Try to run the codebook command using the variables macro in the command 
+    command pane. What happens?</li>
+  </ul>
+  <h2><a href="#for-loops" id="for-loops">For loops</a></h2>
+  <p>For loops are a tool that you might not use that often, but which can save you a lot of lines of writing repetitive commands.</p>
+  <p>A for loop is used to iterate through a sequence of variables, numbers or strings. On each iteration the commands inside the for loop will be carried out with the currently selected element from the sequence of variables, numbers or strings. The main reason for using for loops is to make your code more readible and to save keystrokes.</p>
+  <p>As an example, to rename 10 variables you need 10 different <b>rename</b> commands, that is 10 lines of code. With a for loop you could rename the same 10 variables in two lines.</p>
+  <br>
+  <br>
+  <h3><a href="#using-a-for-loop-to-create-codebooks-for-a-set-of-variables" id="using-a-for-loop-to-create-codebooks-for-a-set-of-variables">Using a for loop to create codebooks for a set of variables</a></h3>
+  <p>For this exercise we will use the auto dataset and we start with loading it from the Stata server.</p>
+  <pre><code>. webuse auto, clear
+  (1978 Automobile Data)
+
+  </code></pre>
+  <br>
+  <p>We will now write a for loop with the <b>foreach</b> command, that will use the <b>codebook</b> command on a set of variables in the auto dataset. We could have done this by simply using the <b>codebook</b> command with all variable names, but this is just an example to illustrate how you create for loops with <b>foreach</b>.</p>
+  <p>Let us first run these two lines and see how they produce a codebook for the variables <i>price</i>, <i>make</i> and <i>weight</i>.</p>
+  <pre><code>. foreach var of varlist price make weight{
+    2.         codebook `var'
+    3.         }
+
+  ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  price                                                                                                                                                                                                                                                Price
+  ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                    type:  numeric (int)
+
+                  range:  [3291,15906]                 units:  1
+          unique values:  74                       missing .:  0/74
+
+                    mean:   6165.26
+                std. dev:    2949.5
+
+            percentiles:        10%       25%       50%       75%       90%
+                                3895      4195    5006.5      6342     11385
+
+  ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  make                                                                                                                                                                                                                                        Make and Model
+  ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                    type:  string (str18), but longest is str17
+
+          unique values:  74                       missing &quot;&quot;:  0/74
+
+                examples:  &quot;Cad. Deville&quot;
+                          &quot;Dodge Magnum&quot;
+                          &quot;Merc. XR-7&quot;
+                          &quot;Pont. Catalina&quot;
+
+                warning:  variable has embedded blanks
+
+  ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  weight                                                                                                                                                                                                                                       Weight (lbs.)
+  ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                    type:  numeric (int)
+
+                  range:  [1760,4840]                  units:  10
+          unique values:  64                       missing .:  0/74
+
+                    mean:   3019.46
+                std. dev:   777.194
+
+            percentiles:        10%       25%       50%       75%       90%
+                                2020      2240      3190      3600      4060
+
+  </code></pre>
+  <br>
+  <p>Let us break down how the <b>foreach</b> command works. The <b>foreach</b> command takes two arguments: the list of variables, which is specified after <i>of varlist</i> and the name of the local macro, that is being used to store the variables, just after <b>foreach</b>.</p>
+  <p>After <b>of varlist</b> we give a list of variables that we want to select one by one. Everytime a variable from the list is selected is has to be stored in the local macro, so that we can use that variable for the codebook command inside the for loop. In this example, we named that macro <i>var</i>.</p>
+  <p>Each time a variable is selected it will therefore be assigned to the local macro <i>var</i> and then the <b>codebook</b> command will be run using the <i>var</i> macro. Inside the <b>codebook</b> command <i>var</i> will be replaced with the variable that <i>var</i> is currently holding.</p>
+  <p>On the first iteration, <b>foreach</b> selects the variable price and assigns it to the local macro <i>var</i>. Then the <b>codebook</b> command will be run with the macro <i>var</i>, which holds the variable <i>price</i>, and<br />
+  will create a codebook for the variable &lt;iLprice</i>.</p>
+  <p>On the second iteration, <b>foreach</b> selects the variable <i>make</i> and assigns it to the local macro <i>var</i>. Then the <b>codebook</b> command will be run with the macro <i>var</i> and a codebook for <i>make</i> will be printed in the results pane.</p>
+  <p>On the third iteration, <b>foreach</b> selects the variable <i>weight</i> and assigns it to the local macro <i>var</i>. Then the <b>codebook</b> command will be run with the macro <i>var</i> and a codebook for the variable <i>weight</i> will be printed.</p>
+  <br>
+  <h3><a href="#using-a-for-loop-to-create-graphs-for-a-set-of-variables" id="using-a-for-loop-to-create-graphs-for-a-set-of-variables">Using a for loop to create graphs for a set of variables</a></h3>
+  <p>Let us now look at another example of how we can use a for loop to create several histograms.</p>
+  <p>We can use the <b>hist</b> command to create a histogram. As you can see this command per default produces a histogram with a density scale, which you could change with the <i>frequency</i> option.</p>
+  <pre><code>. hist price
+  (bin=8, start=3291, width=1576.875)
+
+  </code></pre>
+  <img src="/screenshots/hist1.png" width="60%">
+  <pre><code>. hist price, frequency
+  (bin=8, start=3291, width=1576.875)
+
+  </code></pre>
+  <img src="/screenshots/hist2.png" width="60%">
+  <p>If we want to create more than one histogram in separate windows, we have to use the <i>name()</i> option. The <i>name</i> option works with every plot type.</p>
+  <pre><code>hist price, name(hist_price)
+  hist weight, name(hist_weight)
+  </code></pre>
+  <img src="/screenshots/hist3.png" width="60%">
+  <p>If we had a large number of histograms we wanted to plot, we could also use <b>foreach</b> to create all histograms in separate windows with a for loop.</p>
+  <p>As you can see, we have to use the local macro <i>var</i> to create the histogram with the <b>hist</b> command and to provide a name with the <i>name</i> option, so that the histograms will be created in separate windows.</p>
+  <pre><code>. foreach var of varlist price weight length{
+    2.         hist `var', name(hist_`var')
+    3. }
+  (bin=8, start=3291, width=1576.875)
+  (bin=8, start=1760, width=385)
+  (bin=8, start=142, width=11.375)
+
+  </code></pre>
+  <img src="/screenshots/hist4.png" width="60%">
+  <h3><a href="#exercise-2-foreach-loop" id="exercise-2-foreach-loop">Exercise 2: foreach loop</a></h3>
+  <ol>
+  <li>Load auto dataset</li>
+  <li>Write a for loop to display summary statistics (mean and standard deviation) for the variables price, weight and length.</li>
+  <li>Write a for loop to create three separate scatter plots to predict <i>price</i> from <i>weight</i>, <i>length</i> and <i>trunk</i>. Use the <i>name</i> option to create each plot in a separate window.</li>
+  </ol>
+  <br>
+  <br>
+  <h3><a href="#generating-new-variables-with-a-for-loop" id="generating-new-variables-with-a-for-loop">Generating new variables with a for loop</a></h3>
+  <p>In the next example we will explore how we can apply a for loop to compute a set of variables more efficiently.</p>
+  <p>We will first load the income.csv dataset, which we import with a URL. The URL has to be preceded by <i>using</i>.</p>
+  <pre><code>. import delimited using &quot;https://raw.githubusercontent.com/mwiemers/datasets/main/income.csv&quot;, varnames(1) clear
+  (7 vars, 20 obs)
+
+  </code></pre>
+  <p>We print the data in the results panel with the <b>list</b> command to take a closer look at the data.</p>
+  <p>We can see that the dataset has 20 entries on income for the years 2015 to 2020.</p>
+  <pre><code>. list, ab(12)
+
+      +----------------------------------------------------------------------------------------+
+      | id   income_2015   income_2016   income_2017   income_2018   income_2019   income_2020 |
+      |----------------------------------------------------------------------------------------|
+    1. |  1      28847.44      29710.65      30599.68      31515.32      32458.36      33429.61 |
+    2. |  2      24473.48       25217.9      25984.97      26775.37      27589.81      28429.02 |
+    3. |  3      31362.19      32339.06      33346.36      34385.04      35456.07      36560.45 |
+    4. |  4      40859.16      42049.73         43275      44535.97      45833.69      47169.21 |
+    5. |  5      21124.44      21829.08      22557.22      23309.65      24087.18      24890.64 |
+      |----------------------------------------------------------------------------------------|
+    6. |  6      35068.35      36084.98      37131.08       38207.5      39315.14      40454.88 |
+    7. |  7      30960.02      31904.47      32877.74       33880.7      34914.25      35979.33 |
+    8. |  8      30989.45      31928.93      32896.89      33894.19      34921.73      35980.41 |
+    9. |  9      32260.77      33228.51      34225.28      35251.95      36309.42      37398.61 |
+  10. | 10      28416.77      29326.73      30265.84      31235.01      32235.22      33267.46 |
+      |----------------------------------------------------------------------------------------|
+  11. | 11      28859.97       29704.6      30573.95      31468.75      32389.73      33337.66 |
+  12. | 12      39773.75      41003.82      42271.93      43579.26      44927.02      46316.47 |
+  13. | 13      33917.85      34998.52      36113.61      37264.23      38451.52      39676.63 |
+  14. | 14       23364.9      24086.37      24830.12      25596.83      26387.22      27202.02 |
+  15. | 15      29212.08      30066.21      30945.31      31850.12      32781.38      33739.87 |
+      |----------------------------------------------------------------------------------------|
+  16. | 16      21223.29      21870.35      22537.13      23224.23      23932.29      24661.94 |
+  17. | 17      32021.43      32986.71      33981.09      35005.44      36060.67      37147.71 |
+  18. | 18      39241.28      40356.02      41502.44      42681.42      43893.89      45140.81 |
+  19. | 19      26426.72      27233.36      28064.63      28921.28      29804.07      30713.81 |
+  20. | 20       37565.7      38727.93      39926.12      41161.39      42434.87      43747.75 |
+      +----------------------------------------------------------------------------------------+
+
+  </code></pre>
+  <p>For our net income computation, we assume that there is tax free amount of £10000 and of the remaining income 40% are taxed.</p>
+  <p>We are now going to create new variables for the income after taxes. To do so, we use the <b>generate</b> command.</p>
+  <p>Following <b>generate</b> we specify the name of the newly computed variable and after the equal sign we write our expression to calculate the net income.</p>
+  <pre><code>generate net_income_2015 = 10000 + (income_2015-10000)*.6
+
+  generate net_income_2016 = 10000 + (income_2016-10000)*.6 
+
+  generate net_income_2017 = 10000 + (income_2017-10000)*.6 
+
+  generate net_income_2018 = 10000 + (income_2018-10000)*.6 
+
+  generate net_income_2019 = 10000 + (income_2019-10000)*.6 
+
+  generate net_income_2020 = 10000 + (income_2020-10000)*.6 
+
+  </code></pre>
+  <br>
+  <p>All of the <b>generate</b> commands have the same format. The only part that changes is the variable name. Therefore, we can use <b>foreach</b> to loop through all income vairables and replace the income variables in the <b>generate</b> commands with a local macro.</p>
+  <pre><code>. drop net_income*
+
+  . 
+  . foreach var of varlist income_2015 income_2016 income_2017 income_2018 income_2019 income_2020{
+    2.         generate net_`var' = (10000) + (`var'-10000) * 0.6
+    3.         }
+
+  </code></pre>
+  <p>This for loop will iterate through each of the income variables in turn. On each iteration the local macro <i>var</i> will be assigned one of the variables and then that local macro <i>var</i> will be used in the <b>generate</b> command inside the loop.</p>
+  <p>The first argument for the <b>generate</b> command is the name for the new variable that we are generating. The name of each new variable will always start with <i>net_</i> and then be followed by the name of the selected income variable (<i>income_2015</i>, <i>income_2016</i> etc.).</p>
+  <p>Since we want to select all of the income variables, we can write income* in the <b>foreach</b> command to do so. Whenever you want to select a list of variables starting with the same letter or word, you can add the asterisk after that letter or word. In our case, we might even use <b>foreach var of i*</b>, since the only variables in our dataset starting with an i are the income variables.</p>
+  <p>To select all variables in the dataset simply type *.</p>
+  <pre><code>. drop net_income*
+
+  . 
+  . foreach var of varlist income*{
+    2.         gen net_`var' = (10000) + (`var'-10000) * 0.6
+    3. }
+
+  </code></pre>
+  <h3><a href="#exercise-3-generating-new-variables-with-a-for-loop" id="exercise-3-generating-new-variables-with-a-for-loop">Exercise 3: Generating new variables with a for loop</a></h3>
+  <ol>
+  <li>Load the income.csv dataset using the URL <a href="https://raw.githubusercontent.com/mwiemers/datasets/main/income.csv">https://raw.githubusercontent.com/mwiemers/datasets/main/income.csv</a></li>
+  <li>Write a for loop to generate the variables net_income_2015 - net_income_2020. Calcuate the net income with a 30% tax rate.</li>
+  <li>Write a for loop to rename the original income variables to gross_income_2015, gross_income_2016 etc.</li>
+  <li>Verify that the variables have been renamed by using the <b>describe</b> command with the <i>fullname</i> option.</li>
+  </ol>        
+  
+  
+  
+  <br>
+  <br> 
+  
+  
+  <h3><a href="#evaluation" id="evaluation">Final task: Please give us your feedback! </a></h3>
+         <p>Upon completing the survey, <b>you will receive the link to the solution file</b>, to check how your commands compares to the sample solution.</p>
+  <p>In order to adapt our training to your needs and provide the most valuable learning experience for you, we depend on your feedack.</p>
+         <p>We would be grateful if you could take 1 min before the end of the workshop to get your feedback! </p>
+  
+  <a href="https://lse.eu.qualtrics.com/jfe/form/SV_eflc2yj4pcryc62?coursename=Fast-track:StataF12&topic=Stata&link=https://lsecloud-my.sharepoint.com/:u:/g/personal/m_wiemers_lse_ac_uk/EeF7nNN47XhNlkuZTNh7LhcBUHk3UTVc9YsnKbt9Gra8_g?e=M6Xufv&isSPOFile=1&prog=SR&version=21-22https://lsecloud-my.sharepoint.com/:u:/g/personal/m_wiemers_lse_ac_uk/EY3Wk-U6f9dFiHK_ejHvwO4B_SfwFl7tCZaNFmcyRUXmDA?e=csF7gp">Click here to open the survey!</a>
+  
+  <br>
+  <br>
+  </div>
+  
+  
+      
+  </body>
