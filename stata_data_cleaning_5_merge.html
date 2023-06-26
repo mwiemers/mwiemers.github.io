@@ -119,7 +119,10 @@
 
         <p>The different rows represent each a single participant in the survey. The variables inc80 - inc82 indicate
             that each participates income was measured for the years 1980 - 1982. These variables represent a
-            repeating measurement of income. Let us now reshape this data from the current wide format to the long
+            repeating measurement of income. This data is in the <b>wide orientation</b>, since the different levels 
+            of the repeated measurement year are represented through different columns.
+        </p>
+        <p>Let us now reshape this data from the current wide format to the long
             format.
         </p>
 
@@ -154,7 +157,11 @@
 
         <p>This command will reshape the income data to look like this. The repeated measurements of income
             are now represented in different rows, where each row represents a different year, as indicated by
-            the year column.
+            the year column. The data is now in the <b>long orientation</b>. The long orientation is generally considered 
+            to be a tidier way to represent data as the repeated measurement is made explicit through a separate column.
+            When looking at the data in the wide orientation, i.e. the way it was structured before the reshape, 
+            it is not immediately obvious that each respondent, as identified by the id and sex column, is measured in 1980, 1981, 
+            and 1982.
         </p>
         <pre><code style="color:black">
     . list
@@ -344,7 +351,7 @@
         <p>The gapminder dataset in its original format contains a variable that codes for the subject, that is,
             GDP per capita, life expectancy and population, and the actual values for each year in separate
             variables.</p>
-        <p>We call this format the wide format. Although year is not represented as a single column,
+        <p>The data is in the wide format. Although year is not represented as a single column,
             it is a variable in the study design. In particular, it is a repeated measurement or a
             within-subject variable. The dependent variables GDP, life expectancy and population are
             measured repeatedly, within each subject (country), across a series of years.
@@ -375,12 +382,12 @@
         <br>
         <p>We want to transform the orientation of the dataset so that there is a variable <i>year</i> and
             the subjects are each presented in three separate variables as you can see below.</p>
-        <p>The data is said to be in the long format, when there is a single column for each variable.
+        <p>The reshape is supposed to put the data in the long format, when there is a single column for each variable.
             Repeated measurements are no longer spread out across multiple columns, where each column
             represents a specific level (year), but instead each row represents a different level (year)
-            of the repeated measurement.
+            for each country.
         </p>
-        <pre><code>
+        <pre><code style="color:black; font-weight: bold;">
 
      +-----------------------------------------------------------------+
      |     country   continent   year   gdpPercap   lifeExp        pop |
@@ -425,8 +432,8 @@
         </p>
         <p>In order to only select those observations in our dataset where the <i>subject</i> variable is equal to
             life_exp, we add an if qualifier with the expression <i>subject==&ldquo;life_exp&rdquo;</i>.</p>
-        <pre><code></code></pre>
-        <pre><code>. keep if subject==&quot;lifeExp&quot;
+        <pre><code style="color:black; font-weight: bold;"></code></pre>
+        <pre><code style="color:black; font-weight: bold;">. keep if subject==&quot;lifeExp&quot;
 (284 observations deleted)
 
 </code></pre>
@@ -462,7 +469,7 @@
                 ie. the year..</li>
         </ul>
         <p>The reshape command generates a long version of the data.</p>
-        <pre><code>. reshape long y, i(country) j(year)
+        <pre><code style="color:black; font-weight: bold;">. reshape long y, i(country) j(year)
 (note: j = 1952 1957 1962 1967 1972 1977 1982 1987 1992 1997 2002 2007)
 
 Data                               wide   -&gt;   long
@@ -495,7 +502,7 @@ xij variables:
 </code></pre>
         <br>
         <p>We can drop the <i>subject</i> variable and rename the y variable to <i>lifeExp</i>.</p>
-        <pre><code>. drop subject
+        <pre><code style="color:black; font-weight: bold;">. drop subject
 
 . rename y lifeExp
 
@@ -520,14 +527,14 @@ xij variables:
 </code></pre>
         <br>
         <p>Next, we are going to save the new subset under the file name gapminder_lifeExp.</p>
-        <pre><code>. save gapminder_lifeExp, replace
+        <pre><code style="color:black; font-weight: bold;">. save gapminder_lifeExp, replace
 (note: file gapminder_lifeExp.dta not found)
 file gapminder_lifeExp.dta saved
 
 </code></pre>
         <br>
         <p>Let us look at all commands together.</p>
-        <pre><code>keep if subject==&quot;lifeExp&quot;
+        <pre><code style="color:black; font-weight: bold;">keep if subject==&quot;lifeExp&quot;
 reshape long y, i(country) j(year)
 drop subject
 rename y lifeExp
@@ -567,7 +574,7 @@ save gapminder_lifeExp, replace
                 style="color:black; font-weight: bold;">restore</code> to reload the original dataset, so
             that we can proceed with creating the next subset.</p>
         <p>We start by loading the original dataset.</p>
-        <pre><code>. import excel using &quot;https://github.com/mwiemers/datasets/blob/main/gapminder_dirty_reshape.xlsx?raw=true&quot;, firstrow clear
+        <pre><code style="color:black; font-weight: bold;">. import excel using &quot;https://github.com/mwiemers/datasets/blob/main/gapminder_dirty_reshape.xlsx?raw=true&quot;, firstrow clear
 
 
 . * create subset for life_exp, reshape to long and save as new file
@@ -605,7 +612,7 @@ file gapminder_lifeExp.dta saved
             <code style="color:black; font-weight: bold;">reshape</code> and
             <code style="color:black; font-weight: bold;">save</code> commands.
         </p>
-        <pre><code>. * create subset for pop, reshape to long and save as new file
+        <pre><code style="color:black; font-weight: bold;">. * create subset for pop, reshape to long and save as new file
 . preserve
 
 . keep if subject==&quot;pop&quot;
@@ -638,7 +645,7 @@ file gapminder_pop.dta saved
         <p>Finally, we run the same set of commands again for the subset of the data where the subject is
             <i>gdpPercap</i>.
         </p>
-        <pre><code>. * create subset for gdpPercap and reshape to long
+        <pre><code style="color:black; font-weight: bold;">. * create subset for gdpPercap and reshape to long
 . preserve
 
 . keep if subject==&quot;gdpPercap&quot;
@@ -696,7 +703,7 @@ file gapminder_gdpPercap.dta saved
             <code style="color:black; font-weight: bold;">merge</code> command. In the last step we
             save the new dataset under a new filename.
         </p>
-        <pre><code>
+        <pre><code style="color:black; font-weight: bold;">
 
      +----------------------------------------------------------------+
      |     country   contin~t   year   gdpPercap   lifeExp        pop |
@@ -741,7 +748,7 @@ file gapminder_gdpPercap.dta saved
             subsequent years and would like to combine new and old data into a single dataset. In order to append two or
             more datasets, they must have the same variables.
         </p>
-        <img src="/screenshots/append_01.png" alt="Illustration of append datasets" width="80%">
+        <img src="https://www.dropbox.com/s/lz20h6cvxbt29xr/append_01.png?raw=1" alt="Illustration of append datasets" width="80%">
         <br>
         <p>You would use <code style="color:black; font-weight: bold;">merge</code>, in contrast, in order to add
             variables from another dataset containing the same
@@ -763,7 +770,7 @@ file gapminder_gdpPercap.dta saved
             datasets, which is the combination of the <i>country</i> and <i>year</i> variables.</p>
         <p>Finally, following <b>using</b> we must specify the other dataset with which the gdp_pc.dta dataset should be
             merged, which is the life_exp.dta dataset.</p>
-        <pre><code>. use gapminder_gdpPercap.dta, clear
+        <pre><code style="color:black; font-weight: bold;">. use gapminder_gdpPercap.dta, clear
 
 . merge 1:1 country year using gapminder_lifeExp.dta
 
@@ -787,7 +794,7 @@ file gapminder_gdpPercap.dta saved
             <i>year</i> variables and then adds all other variables that are unique to the gapminder_lifeExp.dta
             dataset, which is the <i>lifeExp</i> variables.
         </p>
-        <pre><code>. list in 1/10
+        <pre><code style="color:black; font-weight: bold;">. list in 1/10
 
      +-------------------------------------------------------------------+
      |     country   year   contin~t   gdpPercap   lifeExp        _merge |
@@ -813,7 +820,7 @@ file gapminder_gdpPercap.dta saved
         <p>We can use the <code style="color:black; font-weight: bold;">tab</code> command to create a table of the
             <i>_merge</i> variable. All observations could be
             matched.</p>
-        <pre><code>. tab _merge
+        <pre><code style="color:black; font-weight: bold;">. tab _merge
 
                  _merge |      Freq.     Percent        Cum.
 ------------------------+-----------------------------------
@@ -826,12 +833,12 @@ file gapminder_gdpPercap.dta saved
         <p>Before we continue with merging the current dataset with the pop.dta dataset in order to add the <i>pop</i>
             variable, we will have to delete the <i>_merge</i> variable so that a new <i>_merge</i> variable can be
             created for the next merge.</p>
-        <pre><code>. drop _merge
+        <pre><code style="color:black; font-weight: bold;">. drop _merge
 
 </code></pre>
         <br>
         <p>Now we are going to merge the existing dataset with the pop.dta dataset.</p>
-        <pre><code>. merge 1:1 country year using gapminder_pop.dta
+        <pre><code style="color:black; font-weight: bold;">. merge 1:1 country year using gapminder_pop.dta
 
     Result                           # of obs.
     -----------------------------------------
@@ -842,7 +849,7 @@ file gapminder_gdpPercap.dta saved
 </code></pre>
         <br>
         <p>The <i>pop</i> variable and another <i>_merge</i> have been added to the dataset.</p>
-        <pre><code>. list in 1/10
+        <pre><code style="color:black; font-weight: bold;">. list in 1/10
 
      +------------------------------------------------------------------------------+
      |     country   year   contin~t   gdpPercap   lifeExp        pop        _merge |
@@ -863,7 +870,7 @@ file gapminder_gdpPercap.dta saved
 </code></pre>
         <br>
         <p>Let us verify that all observations have been matched.</p>
-        <pre><code>. tab _merge
+        <pre><code style="color:black; font-weight: bold;">. tab _merge
 
                  _merge |      Freq.     Percent        Cum.
 ------------------------+-----------------------------------
@@ -876,7 +883,7 @@ file gapminder_gdpPercap.dta saved
         <p>To clean up the dataset, we are going to remove the <i>_merge</i> variable since it is no longer needed.</p>
         <p>We also move the <i>year</i> variable after the <i>continent</i> variable, because it makes our dataset look
             more organized.</p>
-        <pre><code>. drop _merge
+        <pre><code style="color:black; font-weight: bold;">. drop _merge
 
 . order year, after(continent)
 
@@ -905,7 +912,7 @@ file gapminder_gdpPercap.dta saved
                 of merging the gapminder_gdpPercap.dta, gapminder_lifeExp.dta and gapminder_pop.dta datasets</a></h4>
         <p>Below are all commands we were carrying out in order to merge the three subsets. In the last step we save the
             new dataset under the file name gapminder_merged.dta.</p>
-        <pre><code>* Merging the subsets
+        <pre><code style="color:black; font-weight: bold;">* Merging the subsets
 use gapminder_gdpPercap.dta, clear
 merge 1:1 country year using gapminder_lifeExp.dta
 drop _merge
@@ -927,14 +934,14 @@ save gapminder_merged, replace
                 id="bonus-using-a-for-loop-to-iterate-through-the-three-subjects">Bonus: Using a for loop to iterate
                 through the three subjects</a></h3>
         <p>If we look back at our code to create the three subsets, we realize that the three code chunks only differ
-            where we pass the name of the subject for the
+            where we pass the name of the subject to the
             <code style="color:black; font-weight: bold;">keep</code>,
             <code style="color:black; font-weight: bold;">rename</code>, and
             <code style="color:black; font-weight: bold;">save</code> command.
         </p>
         <p>We can simplify our code and reduce the number of lines, by applying a foreach loop that loops over the three
             subject names using a local macro.</p>
-        <pre><code>* create subset for gdpPercap and reshape to long
+        <pre><code style="color:black; font-weight: bold;">* create subset for gdpPercap and reshape to long
 preserve
 keep if subject==&quot;gdpPercap&quot;
 reshape long y, i(country) j(year)
@@ -977,7 +984,7 @@ restore
             when renaming the <i>y</i> variable or saving the dataset.
         </p>
         <p>There are comments added inside the for loop that explain each step</p>
-        <pre><code>* creating subsets for lifeExp pop and gdpPercap and reshaping to long
+        <pre><code style="color:black; font-weight: bold;">* creating subsets for lifeExp pop and gdpPercap and reshaping to long
 local subjects &quot;lifeExp pop gdpPercap&quot;
 foreach sub of local subjects{
 	preserve   /*Creating a retrievable copy of the original dataset*/
@@ -1006,7 +1013,7 @@ foreach sub of local subjects{
         </p>
 
         <pre>
-            <code>
+            <code style="color:black; font-weight: bold;">
         . list in 1/10
 
             +------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -1034,7 +1041,7 @@ foreach sub of local subjects{
         </p>
 
         <pre>
-            <code>
+            <code style="color:black; font-weight: bold;">
 
         . reshape long y, i(country subject) j(year)
 
@@ -1101,7 +1108,7 @@ foreach sub of local subjects{
 
 
         <pre>
-            <code>
+            <code style="color:black; font-weight: bold;">
         . reshape wide y, i(country year) j(subject) string
         (j = gdpPercap lifeExp pop)
 
