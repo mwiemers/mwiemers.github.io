@@ -89,12 +89,7 @@
 /Users/michaelwiemers/OneDrive - London School of Economics/DSL/datasets
 
 </code></pre>
-<p>Stata will return an error, as in the example below, when the folder does not exist on the computer.</p>
-<pre><code>. cd &quot;/Users/mickey_mouse&quot;
-unable to change to /Users/mickey_mouse
-r(170);
 
-</code></pre>
 <br>
 <h3><a href="#exercise-changing-the-working-directory" id="exercise-changing-the-working-directory">Exercise: Changing the working directory</a></h3>
 <ol>
@@ -103,6 +98,7 @@ r(170);
 	gapminder.csv and MCS_testscores.dta are located on your computer.</li>
 	<li>Print the working directory again to verify that it has been changed.</li>
 </ol>
+	
 <br>
 <br>
 <h2><a href="#loading-data-into-stata" id="loading-data-into-stata">Loading data into Stata</a></h2>
@@ -200,215 +196,38 @@ Sorted by:
 
 </code></pre>
 <br>
-<h3><a href="#printing-the-data" id="printing-the-data">Printing the data</a></h3>
-<p>With the <b>list</b> command, you can print the dataset in the results pane. Depending on the width of your Stata window, a single row might be spread out across several lines in the results pane.</p>
-<pre><code>list
+<h3><a href="#viewing-the-data" id="viewing-the-data">Viewing the data</a></h3>
+<p>To display the entire dataset, we use the browse command. This will open the data editor.</p>
 
+<img src="screenshots/browse_01.png">
 
-       +------------------------------------------------------------------------------------------+
-       | age      durun      edage     emplen   ethnic~y   grosswk     hiqual      sex   degree~b |
-       |------------------------------------------------------------------------------------------|
-10086. |  55   Does not         17   10 years      White       451   GCSE gra   Female   Does not |
-10087. |  66   Does not         15   10 years      White       279   Higher e     Male   Does not |
-10088. |  64   Does not         15   20 years      White       337   GCSE gra   Female   Does not |
-10089. |  74   Does not         17   20 years      White        75   Other qu   Female   Does not |
-10090. |  58   Does not         16   5 years,      White       525   No quali     Male   Does not |
-       |------------------------------------------------------------------------------------------|
-10091. |  59   Does not         17   20 years      White       808   GCSE gra     Male   Does not |
-10092. |  63   Does not         19   6 months      White       423   Higher e   Female   Does not |
-10093. |  60   Does not   Never ha   10 years   Black/Af       208   Other qu   Female   Does not |
-10094. |  59   Does not         16   2 years,      White       463   GCSE gra     Male   Does not |
-10095. |  70   Does not         15   20 years      White       138   GCSE gra   Female   Does not |
-       |------------------------------------------------------------------------------------------|
-10096. |  57   Does not         17   20 years      White       279   GCSE gra     Male   Does not |
-       +------------------------------------------------------------------------------------------+
-
-</code></pre>
-<br>
-<h3><a href="#printing-single-observations-or-a-range-of-observations" id="printing-single-observations-or-a-range-of-observations">Printing single observations or a range of observations</a></h3>
-<p>To display only a specific observation, type <b>list in</b> followed by the observation to be displayed. For instance, to display the 10th observation use this command:</p>
-<pre><code>list in 10
-
-     +----------------------------------------------------------------------------------------+
-     | age      durun      edage     emplen   ethnic~y   grosswk     hiqual    sex   degree~b |
-     |----------------------------------------------------------------------------------------|
- 10. |  16   Does not   Still in   3 months      White        66   GCSE gra   Male   Does not |
-     +----------------------------------------------------------------------------------------+
-
-</code></pre>
-<br>
-<p>To display a range of observations, type <b>list in </b> followed by the first observation, a forward slash and the last observation. For instance, to display observations 1 to 20 use this command:</p>
-<pre><code>list in 1/20
-
-     +------------------------------------------------------------------------------------------+
-     | age      durun      edage     emplen   ethnic~y   grosswk     hiqual      sex   degree~b |
-     |------------------------------------------------------------------------------------------|
-  1. |  17   Does not   Still in   6 months      White        42   GCSE gra   Female   Does not |
-  2. |  16   Does not   Still in   3 months      White        20   GCE A le   Female   Does not |
-  3. |  17   Does not   Still in   6 months      White        60   GCSE gra   Female   Does not |
-  4. |  16   Does not   Still in    1 year,      White        46   GCSE gra   Female   Does not |
-  5. |  17   Does not   Still in   6 months      White        20   GCSE gra   Female   Does not |
-     |------------------------------------------------------------------------------------------|
-  6. |  16   Does not   Still in   3 months      White        65   No quali   Female   Does not |
-  7. |  17   Does not   Still in   3 months      White        36   GCSE gra   Female   Does not |
-  8. |  16   Does not   Still in   Less tha      White        24   GCSE gra     Male   Does not |
-  9. |  16   Does not   Still in   3 months      White        64   No quali   Female   Does not |
- 10. |  16   Does not   Still in   3 months      White        66   GCSE gra     Male   Does not |
-     |------------------------------------------------------------------------------------------|
- 11. |  17   Does not   Still in   6 months      White        62   GCSE gra   Female   Does not |
- 12. |  17   Does not   Still in   6 months      White        90   GCSE gra   Female   Does not |
- 13. |  16   Does not   Still in   6 months      White        75   GCSE gra     Male   Does not |
- 14. |  16   Does not   Still in   6 months      White        55   GCSE gra   Female   Does not |
- 15. |  17   Does not   Still in   3 months      White        40   GCSE gra   Female   Does not |
-     |------------------------------------------------------------------------------------------|
- 16. |  16   Does not   Still in   Less tha      White        55   GCSE gra   Female   Does not |
- 17. |  16   Does not   Still in   3 months      White        39   No quali   Female   Does not |
- 18. |  17   Does not         17    1 year,      White       169   GCSE gra   Female   Does not |
- 19. |  17   Does not         16   3 months      White        58   GCSE gra     Male   Does not |
- 20. |  16   Does not   Still in   Less tha      White        24   GCSE gra   Female   Does not |
-     +------------------------------------------------------------------------------------------+
-
-</code></pre>
-<br>
 <h3><a href="#printing-only-a-subset-of-variables" id="printing-only-a-subset-of-variables">Printing only a subset of variables</a></h3>
-<p>To only display the observations for a specific variable, type <b>list</b> followed by the variable name. Here, we are only printing the values for the age variable.</p>
-<pre><code>list age
+<p>To only display the observations for a specific variable, type <b>browse</b> followed by the variable name. Here, we are only printing the values for the age variable.</p>
+<pre><code>browse age</code></pre>
 
-
-       +-----+
-       | age |
-       |-----|
-10086. |  55 |
-10087. |  66 |
-10088. |  64 |
-10089. |  74 |
-10090. |  58 |
-       |-----|
-10091. |  59 |
-10092. |  63 |
-10093. |  60 |
-10094. |  59 |
-10095. |  70 |
-       |-----|
-10096. |  57 |
-       +-----+
-
-</code></pre>
+<img src="screenshots/browse_02.png">
+	
 <br>
-<p>To display a subset of variables, type <b>list</b> followed by the different variable names separated with a space.</p>
-<pre><code>list age grosswk sex
+<p>To display a subset of variables, type <b>browse</b> followed by the different variable names separated with a space.</p>
+<pre><code>browse age grosswk sex</code></pre>
 
-
-       +------------------------+
-       | age   grosswk      sex |
-       |------------------------|
-10086. |  55       451   Female |
-10087. |  66       279     Male |
-10088. |  64       337   Female |
-10089. |  74        75   Female |
-10090. |  58       525     Male |
-       |------------------------|
-10091. |  59       808     Male |
-10092. |  63       423   Female |
-10093. |  60       208   Female |
-10094. |  59       463     Male |
-10095. |  70       138   Female |
-       |------------------------|
-10096. |  57       279     Male |
-       +------------------------+
-
-</code></pre>
+<img src="screenshots/browse_03.png">
+       
 <br>
-<p>To display a range of variables type <b>list</b> followed by the first variable, a hyphen and the last variable. The command <b>list grosswk - degreesub</b> will print the observations for the variables starting from ethnicity till sex in the order as appearing in the dataset from left to right.</p>
-<pre><code>list grosswk - degreesub
+<p>To display a range of variables type <b>browse</b> followed by the first variable, a hyphen and the last variable. The command <b>browse grosswk - degreesub</b> will print the observations for the variables starting from ethnicity till sex in the order as appearing in the dataset from left to right.</p>
+<pre><code>browse grosswk - degreesub</code></pre>
 
-
-       +----------------------------------------+
-       | grosswk     hiqual      sex   degree~b |
-       |----------------------------------------|
-10086. |     451   GCSE gra   Female   Does not |
-10087. |     279   Higher e     Male   Does not |
-10088. |     337   GCSE gra   Female   Does not |
-10089. |      75   Other qu   Female   Does not |
-10090. |     525   No quali     Male   Does not |
-       |----------------------------------------|
-10091. |     808   GCSE gra     Male   Does not |
-10092. |     423   Higher e   Female   Does not |
-10093. |     208   Other qu   Female   Does not |
-10094. |     463   GCSE gra     Male   Does not |
-10095. |     138   GCSE gra   Female   Does not |
-       |----------------------------------------|
-10096. |     279   GCSE gra     Male   Does not |
-       +----------------------------------------+
-
-</code></pre>
+<img src="screenshots/browse_04.png">
+	
 <br>
-<h3><a href="#printing-only-a-subset-of-variables-for-specific-observations" id="printing-only-a-subset-of-variables-for-specific-observations">Printing only a subset of variables for specific observations</a></h3>
-<p>You can also display a range of observations for a subset of variables. Type <b>list</b> followed by the variable names and then specify which observations should be displayed, with <b>in start/end</b>. For instance, to display the first 10 observations for the variables age, sex and grosswk use this command:</p>
-<pre><code>list age sex grosswk in 1/10
-
-     +------------------------+
-     | age      sex   grosswk |
-     |------------------------|
-  1. |  17   Female        42 |
-  2. |  16   Female        20 |
-  3. |  17   Female        60 |
-  4. |  16   Female        46 |
-  5. |  17   Female        20 |
-     |------------------------|
-  6. |  16   Female        65 |
-  7. |  17   Female        36 |
-  8. |  16     Male        24 |
-  9. |  16   Female        64 |
- 10. |  16     Male        66 |
-     +------------------------+
-
-</code></pre>
-<br>
-<p>You can do the same with a range of variables.</p>
-<pre><code>list grosswk-sex in 1/10
-
-     +-----------------------------+
-     | grosswk     hiqual      sex |
-     |-----------------------------|
-  1. |      42   GCSE gra   Female |
-  2. |      20   GCE A le   Female |
-  3. |      60   GCSE gra   Female |
-  4. |      46   GCSE gra   Female |
-  5. |      20   GCSE gra   Female |
-     |-----------------------------|
-  6. |      65   No quali   Female |
-  7. |      36   GCSE gra   Female |
-  8. |      24   GCSE gra     Male |
-  9. |      64   No quali   Female |
- 10. |      66   GCSE gra     Male |
-     +-----------------------------+
-
-</code></pre>
-<br>
-<h3><a href="#viewing-the-dataset-in-the-data-editor-window" id="viewing-the-dataset-in-the-data-editor-window">Viewing the dataset in the data-editor window</a></h3>
-<p>The <b>browse</b> command is very similar to the list command, in the sense that it will list the observations in your dataset. In contrast to list, the output will be displayed in a new window, called the <i>data-editor</i>, and not in the results pane.</p>
-<pre><code>browse
-
-</code></pre>
-<br>
-<img src="screenshots/browse_01.png" alt="the data editor in view only mode">
-<p>Just as with the list command, you can chose to only display a subset of variables or a range of observations. For instance, to only display the first 10 observations for the variables from grosswk to sex, type the command as below.</p>
-<pre><code>browse grosswk-sex in 1/10
-
-</code></pre>
-<br>
-<img src="screenshots/browse_02_mac.png" alt="the data editor in view only mode">
 <br>
 <h3><a href="#exercise-inspecting-data" id="exercise-inspecting-data">Exercise: Inspecting data</a></h3>
 <ol>
 	<li>Open the census5 dataset from the stata website, which has data from 
 	the 1980 US census</li>
 	<li>Print an overview of the variables.</li>
-	<li>Print the first 10 observations.</li>
+	<li>View the census datasets.</li>
 	<li>Print only the marriage and divorce variables.</li>
-	<li>Print only the first 10 observations for the marriage and 
-	divorce variables.</li>
 </ol>
 <br>
 <h2><a href="#summary-statistics" id="summary-statistics">Summary statistics</a></h2>
@@ -462,68 +281,7 @@ Sorted by:
 
 </code></pre>
 <br>
-<p>The command as such only displays the mean of a variable. You can specify each descriptive statistic you want to be included in the output with the stat option. Below we use the stat option to display the mean, the standard deviation, the minimum, percentiles and the maximum.</p>
-<pre><code>tabstat age, stat(mean, sd, min, p10, p25, p50, p75, p90, max)
 
-    variable |      mean        sd       min       p10       p25       p50       p75       p90       max
--------------+------------------------------------------------------------------------------------------
-         age |  42.37223  12.81225        16        25        32        43        52        59        78
---------------------------------------------------------------------------------------------------------
-
-</code></pre>
-<br>
-<p>Here is a list of all the statistics that can be added with the stat() option.</p>
-<pre><code>    statname       Definition
-    ---------------------------------------------------------------------
-    mean            mean
-    count           count of nonmissing observations
-    n               same as count
-    sum             sum
-    max             maximum
-    min             minimum
-    range           range = max - min
-    sd              standard deviation
-    variance        variance
-    cv              coefficient of variation (sd/mean)
-    semean          standard error of mean (sd/sqrt(n))
-    skewness        skewness
-    kurtosis        kurtosis
-    p1              1st percentile
-    p5              5th percentile
-    p10             10th percentile
-    p25             25th percentile
-    median          median (same as p50)
-    p50             50th percentile (same as median)
-    p75             75th percentile
-    p90             90th percentile
-    p95             95th percentile
-    p99             99th percentile
-    iqr             interquartile range = p75 - p25
-    q               equivalent to specifying p25 p50 p75
-</code></pre>
-<p>Both <strong>summarize</strong> and <strong>tabstat</strong> can be used to create descriptive statistics for a selection of variables. You can use a hyphen between two variable names to select a range of variables or select non-adjacent variables with a space inbetween their names.</p>
-<pre><code>sum age edage grosswk
-
-    Variable |        Obs        Mean    Std. Dev.       Min        Max
--------------+---------------------------------------------------------
-         age |     10,096    42.37223    12.81225         16         78
-       edage |     10,096    20.64352    12.94552         -8         97
-     grosswk |     10,096    521.7672    522.8757          5      23076
-
-</code></pre>
-<br>
-<p>When using multiple variables with the <strong>tabstat</strong> command, Stata per default lists the statistics in the rows of the table. To force the statistics to the columns, use the <strong>col(stat)</strong> option.</p>
-<pre><code>tabstat age edage grosswk, stat(mean, sd, min, p10, p25, p50, p75, p90, max) col(stat)
-
-    variable |      mean        sd       min       p10       p25       p50       p75       p90       max
--------------+------------------------------------------------------------------------------------------
-         age |  42.37223  12.81225        16        25        32        43        52        59        78
-       edage |  20.64352  12.94552        -8        16        16        18        21        23        97
-     grosswk |  521.7672  522.8757         5       135       250       418       664       962     23076
---------------------------------------------------------------------------------------------------------
-
-</code></pre>
-<br>
 <br>
 <h3><a href="#exercise-summary-statistics" id="exercise-summary-statistics">Exercise: Summary statistics</a></h3>
 <p>The MCS_testscore dataset contains data from the age 5 sweep from the Millenium Cohort Study, which examined the first year of primary schooling alongside childhood health, childcare, education, social and family circumstances.</p>
@@ -532,9 +290,10 @@ Sorted by:
 	<li>Use <b>summarize</b> to create a table with descriptive 
 	statistics for the variables pse to fsptotal.</li>
 	<li>Use the <b>tabstat</b> command to create a table for the same 
-	variables that lists the mean, standard deviation, standard error of the mean, 
+	variables</li>
+	</li>Adjust your <b>tabstat</b> command to list the mean, standard deviation, standard error of the mean, 
 	min, max and the 25th and 75th percentile.</li>
-	<li>Make sure that the statistics are displayed in the columns.</li>
+	<li>Further adjust you command to ensure that the statistics are displayed in the columns.</li>
 </ol>
 
 <br>
