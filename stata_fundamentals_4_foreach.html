@@ -238,26 +238,22 @@ weight                                                                          
 (bin=8, start=3291, width=1576.875)
 </code></pre>
 <img src="/screenshots/hist1.png" width="60%">
-<pre><code>. hist price, frequency
-(bin=8, start=3291, width=1576.875)
-</code></pre>
-<img src="/screenshots/hist2.png" width="60%">
-<p>If we want to create more than one histogram in separate windows, we have to use the <i>name()</i> option. The <i>name</i> option works with every plot type.</p>
-<pre><code>. hist price, name(hist_price)
-. hist weight, name(hist_weight)
-</code></pre>
-<img src="/screenshots/hist3.png" width="100%">
+
 <p>If we had a large number of histograms we wanted to plot, we could also use <b>foreach</b> to create all histograms in separate windows with a for loop.</p>
 <p>As you can see, we have to use the local macro <i>var</i> to create the histogram with the <b>hist</b> command and to provide a name with the <i>name</i> option, so that the histograms will be created in separate windows.</p>
-<pre><code>. foreach var of varlist price weight length{
+<pre><code>
+set autotabgraphs on
+. foreach var of varlist price weight length{
     hist `var', name(hist_`var')
 }
+set autotabgraphs off
+	
 (bin=8, start=3291, width=1576.875)
 (bin=8, start=1760, width=385)
 (bin=8, start=142, width=11.375)
-
+	
 </code></pre>
-<img src="/screenshots/hist4.png" width="100%">
+<img src="/screenshots/hist1.png" width="100%">
 <br>
 <br>
 <br>
