@@ -98,7 +98,7 @@ length          int     %8.0g                 Length (in.)
         turn |         74    39.64865    4.399354         31         51
       length |         74    187.9324    22.26634        142        233
 </code></pre>
-    <p>We now modify the script and use a local macro to store the variables <i>rep78</i>, <i>turn</i> and <i>length</i>. In the subsequent lines, where we use the <b>describe</b>, <b>list</b> and <b>summarize</b> commands, we now substitute the local macro with the variable names.</p>
+    <p>We now modify the script and use a local macro to store the variables <i>rep78</i>, <i>turn</i> and <i>length</i>. In the subsequent lines, where we use the <b>describe</b>, <b>browse</b> and <b>summarize</b> commands, we now substitute the local macro with the variable names.</p>
     <p>Following <b>local</b>, we first specify the name of the local macro as <i>vars</i> and then enter all variables that should be assigned to the macro.</p>
 <pre><code>. sysuse auto, clear
 (1978 Automobile Data)
@@ -114,23 +114,7 @@ rep78           int     %8.0g                 Repair Record 1978
 turn            int     %8.0g                 Turn Circle (ft.)
 length          int     %8.0g                 Length (in.)
 
-. list `vars' in 1/10
-
-    +-----------------------+
-    | rep78   turn   length |
-    |-----------------------|
- 1. |     3     40      186 |
- 2. |     3     40      173 |
- 3. |     .     35      168 |
- 4. |     3     40      196 |
- 5. |     4     43      222 |
-    |-----------------------|
- 6. |     3     43      218 |
- 7. |     .     34      170 |
- 8. |     3     42      200 |
- 9. |     3     43      207 |
-10. |     3     42      200 |
-    +-----------------------+
+. browse `vars'
 
 . summarize `vars'
 
@@ -159,23 +143,7 @@ rep78           int     %8.0g                 Repair Record 1978
 turn            int     %8.0g                 Turn Circle (ft.)
 length          int     %8.0g                 Length (in.)
 
-. list $vars in 1/10
-
-     +-----------------------+
-     | rep78   turn   length |
-     |-----------------------|
-  1. |     3     40      186 |
-  2. |     3     40      173 |
-  3. |     .     35      168 |
-  4. |     3     40      196 |
-  5. |     4     43      222 |
-     |-----------------------|
-  6. |     3     43      218 |
-  7. |     .     34      170 |
-  8. |     3     42      200 |
-  9. |     3     43      207 |
- 10. |     3     42      200 |
-     +-----------------------+
+. browse $vars
 
 . summarize $vars
 
@@ -323,38 +291,11 @@ weight                                                                          
 . import delimited using &quot;https://raw.githubusercontent.com/mwiemers/datasets/main/income.csv&quot;, varnames(1) clear
 (7 vars, 20 obs)
 </code></pre>
-<p>We print the data in the results panel with the <b>list</b> command to take a closer look at the data.</p>
+<p>We view the data in the data editor panel with the <b>browse</b> command to take a closer look at the data.</p>
 <p>We can see that the dataset has 20 entries on income for the years 2015 to 2020.</p>
-<pre><code>. list, ab(12)
+<pre><code>. browse</code></pre>
+<img src="screenshots/browse_income.png">
 
-     +----------------------------------------------------------------------------------------+
-     | id   income_2015   income_2016   income_2017   income_2018   income_2019   income_2020 |
-     |----------------------------------------------------------------------------------------|
-  1. |  1      28847.44      29710.65      30599.68      31515.32      32458.36      33429.61 |
-  2. |  2      24473.48       25217.9      25984.97      26775.37      27589.81      28429.02 |
-  3. |  3      31362.19      32339.06      33346.36      34385.04      35456.07      36560.45 |
-  4. |  4      40859.16      42049.73         43275      44535.97      45833.69      47169.21 |
-  5. |  5      21124.44      21829.08      22557.22      23309.65      24087.18      24890.64 |
-     |----------------------------------------------------------------------------------------|
-  6. |  6      35068.35      36084.98      37131.08       38207.5      39315.14      40454.88 |
-  7. |  7      30960.02      31904.47      32877.74       33880.7      34914.25      35979.33 |
-  8. |  8      30989.45      31928.93      32896.89      33894.19      34921.73      35980.41 |
-  9. |  9      32260.77      33228.51      34225.28      35251.95      36309.42      37398.61 |
- 10. | 10      28416.77      29326.73      30265.84      31235.01      32235.22      33267.46 |
-     |----------------------------------------------------------------------------------------|
- 11. | 11      28859.97       29704.6      30573.95      31468.75      32389.73      33337.66 |
- 12. | 12      39773.75      41003.82      42271.93      43579.26      44927.02      46316.47 |
- 13. | 13      33917.85      34998.52      36113.61      37264.23      38451.52      39676.63 |
- 14. | 14       23364.9      24086.37      24830.12      25596.83      26387.22      27202.02 |
- 15. | 15      29212.08      30066.21      30945.31      31850.12      32781.38      33739.87 |
-     |----------------------------------------------------------------------------------------|
- 16. | 16      21223.29      21870.35      22537.13      23224.23      23932.29      24661.94 |
- 17. | 17      32021.43      32986.71      33981.09      35005.44      36060.67      37147.71 |
- 18. | 18      39241.28      40356.02      41502.44      42681.42      43893.89      45140.81 |
- 19. | 19      26426.72      27233.36      28064.63      28921.28      29804.07      30713.81 |
- 20. | 20       37565.7      38727.93      39926.12      41161.39      42434.87      43747.75 |
-    +----------------------------------------------------------------------------------------+
-</code></pre>
 <p>For our net income computation, we assume that there is tax free amount of £10000 and of the remaining income 40% are taxed.</p>
 <p>We are now going to create new variables for the income after taxes. To do so, we use the <b>generate</b> command.</p>
 <p>Following <b>generate</b> we specify the name of the newly computed variable and after the equal sign we write our expression to calculate the net income.</p>
@@ -367,23 +308,7 @@ weight                                                                          
 </code></pre>
 <br>
 <p>All of the <b>generate</b> commands have the same format. The only part that changes is the variable name. Therefore, we can use <b>foreach</b> to loop through all income vairables and replace the income variables in the <b>generate</b> commands with a local macro.</p>
-<pre><code>. drop net_income*
 
-. foreach var of varlist income_2015 income_2016 income_2017 income_2018 income_2019 income_2020{
-    generate net_`var' = (10000) + (`var'-10000) * 0.6
-}
-
-</code></pre>
-<p>This for loop will iterate through each of the income variables in turn. On each iteration the local macro <i>var</i> will be assigned one of the variables and then that local macro <i>var</i> will be used in the <b>generate</b> command inside the loop.</p>
-<p>The first argument for the <b>generate</b> command is the name for the new variable that we are generating. The name of each new variable will always start with <i>net_</i> and then be followed by the name of the selected income variable (<i>income_2015</i>, <i>income_2016</i> etc.).</p>
-<p>Since we want to select all of the income variables, we can write income* in the <b>foreach</b> command to do so. Whenever you want to select a list of variables starting with the same letter or word, you can add the asterisk after that letter or word. In our case, we might even use <b>foreach var of i*</b>, since the only variables in our dataset starting with an i are the income variables.</p>
-<p>To select all variables in the dataset simply type *.</p>
-<pre><code>. drop net_income*
-
-. foreach var of varlist income*{
-    gen net_`var' = (10000) + (`var'-10000) * 0.6
-}
-</code></pre>
 <br>
 <br>
 <h3><a href="#exercise-3-generating-new-variables-with-a-for-loop" id="exercise-3-generating-new-variables-with-a-for-loop">Exercise 3: Generating new variables with a for loop</a></h3>
