@@ -155,40 +155,14 @@ cars to determine which is more expensive on average - Dodge or VW?</li>
 <h3><a href="#if-qualifiers-multiple-expressions" id="if-qualifiers-multiple-expressions">if qualifiers: multiple expressions</a></h3>
 <p>Sometimes you might want to run commands on a subset that is defined by a combination of conditions or variables. To do so, we have to combine two or more expressions in an if qualifier.</p>
 <p>For instance, to only list cars with a price above 6000 and lower than 7000, you would have to use the expression <i>price &gt; 6000 &amp; price &lt; 7000</i>. Notice, that you only use one <b>if</b> qualifier and combine both expressions with the <b>&amp;</b> symbol. By using the <b>&amp;</b> Stata knows that both conditions, that is, <b>price &gt; 6000</b> and <b>price &lt; 7000</b> have to be true for an observation to be included in the subset on which the <b>list</b> command will be executed.</p>
-<pre><code>. list if price &gt; 6000 &amp; price &lt; 7000
-
-    +--------------------------------------------------------------------------------------------------------------------+
-    | make              price   mpg   rep78   headroom   trunk   weight   length   turn   displa~t   gear_r~o    foreign |
-    |--------------------------------------------------------------------------------------------------------------------|
-23. | Dodge St. Regis   6,342    17       2        4.5      21    3,740      220     46        225       2.94   Domestic |
-31. | Merc. Marquis     6,165    15       3        3.5      23    3,720      212     44        302       2.26   Domestic |
-33. | Merc. XR-7        6,303    14       4        3.0      16    4,130      217     45        302       2.75   Domestic |
-45. | Plym. Sapporo     6,486    26       .        1.5       8    2,520      182     38        119       3.54   Domestic |
-54. | Audi Fox          6,295    23       3        2.5      11    2,070      174     36         97       3.70    Foreign |
-    |--------------------------------------------------------------------------------------------------------------------|
-56. | Datsun 200        6,229    23       4        1.5       6    2,370      170     35        119       3.89    Foreign |
-73. | VW Scirocco       6,850    25       4        2.0      16    1,990      156     36         97       3.78    Foreign |
-    +--------------------------------------------------------------------------------------------------------------------+
-</code></pre>
+<pre><code>. browse if price &gt; 6000 &amp; price &lt; 7000</code></pre>
+<img src="screenshots/if_double_browse01.png">
+        
 <br>
 <p>Below is another example of how you can combine two expressions with an <b>if</b> qualifier to select a subset of the data for cars from outside the US with a price below 5000 USD.</p>
-<pre><code>. list if foreign==1 &amp; price &lt; 5000
-
-    +------------------------------------------------------------------------------------------------------------------+
-    | make             price   mpg   rep78   headroom   trunk   weight   length   turn   displa~t   gear_r~o   foreign |
-    |------------------------------------------------------------------------------------------------------------------|
-57. | Datsun 210       4,589    35       5        2.0       8    2,020      165     32         85       3.70   Foreign |
-60. | Fiat Strada      4,296    21       3        2.5      16    2,130      161     36        105       3.37   Foreign |
-62. | Honda Civic      4,499    28       4        2.5       5    1,760      149     34         91       3.30   Foreign |
-63. | Mazda GLC        3,995    30       4        3.5      11    1,980      154     33         86       3.73   Foreign |
-65. | Renault Le Car   3,895    26       3        3.0      10    1,830      142     34         79       3.72   Foreign |
-    |------------------------------------------------------------------------------------------------------------------|
-66. | Subaru           3,798    35       5        2.5      11    2,050      164     36         97       3.81   Foreign |
-68. | Toyota Corolla   3,748    31       5        3.0       9    2,200      165     35         97       3.21   Foreign |
-72. | VW Rabbit        4,697    25       4        3.0      15    1,930      155     35         89       3.78   Foreign |
-    +------------------------------------------------------------------------------------------------------------------+
-
-</code></pre>
+<pre><code>. list if foreign==1 &amp; price &lt; 5000</code></pre>
+<img src="screenshots/if_double_browse02.png">
+        
 <br>
 <p>Make sure to run the commands from the previous exercise in order to split the make variable into two separate make and model variables before you continue!</p>
 <pre><code>. webuse auto, clear
@@ -207,58 +181,23 @@ make1  make2  make3
 </code></pre>
 <br>
 <p>What if you would like to print only Dodge or Ford cars? You have to use the | symbol to combine the two expressions <i>brand==&ldquo;Dodge&rdquo;</i> and <i>brand==&ldquo;Ford&rdquo;</i>. This way Stata will select a subset where the brand variable is either equal to the value &ldquo;Dodge&rdquo; or &ldquo;Ford&rdquo;.</p>
-<pre><code>. list if make==&quot;Dodge&quot; | make==&quot;Ford&quot;
-
-    +----------------------------------------------------------------------------------------------------------------------+
-    | price   mpg   rep78   headroom   trunk   weight   length   turn   displa~t   gear_r~o    foreign    make       model |
-    |----------------------------------------------------------------------------------------------------------------------|
-20. | 3,984    30       5        2.0       8    2,120      163     35         98       3.54   Domestic   Dodge       Colt  |
-21. | 4,010    18       2        4.0      17    3,600      206     46        318       2.47   Domestic   Dodge   Diplomat  |
-22. | 5,886    16       2        4.0      17    3,600      206     46        318       2.47   Domestic   Dodge     Magnum  |
-23. | 6,342    17       2        4.5      21    3,740      220     46        225       2.94   Domestic   Dodge   St. Regis |
-24. | 4,389    28       4        1.5       9    1,800      147     33         98       3.15   Domestic    Ford     Fiesta  |
-    |----------------------------------------------------------------------------------------------------------------------|
-25. | 4,187    21       3        2.0      10    2,650      179     43        140       3.08   Domestic    Ford    Mustang  |
-    +----------------------------------------------------------------------------------------------------------------------+
-
-</code></pre>
+<pre><code>. browse if make==&quot;Dodge&quot; | make==&quot;Ford&quot;</code></pre>
+<img src="screenshots/if_double_browse03.png">
+        
 <br>
 <p>In order to run a command on a subset of your data that is defined by an even more complex set of conditions, you might have to combine three or more expressions.</p>
 <p>If you wanted to select cars from either Dodge or Buick with a price below 5000 USD, you would have to combine three expressions. Intuitively, you might assume that the if qualifier below should create a subset of that data.</p>
-<pre><code>. list make price if make==&quot;Dodge&quot; | make==&quot;Buick&quot; &amp; price &lt; 5000
-
-    +---------------+
-    |  make   price |
-    |---------------|
- 4. | Buick   4,816 |
- 7. | Buick   4,453 |
-10. | Buick   4,082 |
-20. | Dodge   3,984 |
-21. | Dodge   4,010 |
-    |---------------|
-22. | Dodge   5,886 |
-23. | Dodge   6,342 |
-    +---------------+
-
-</code></pre>
+<pre><code>. list make price if make==&quot;Dodge&quot; | make==&quot;Buick&quot; &amp; price &lt; 5000</code></pre>
+<img src="screenshots/if_double_browse04.png">
+        
 <br> 
 <p>However, if we look at the values, you will notice that while all Buick cars have a price below 5000 USD, there are Dodge cars with a price above 5000 USD.</p>
 <p>We get this output since the expression <i>make==&ldquo;Buick&rdquo;</i> and <i>price &lt; 5000</i> are being grouped together through the <i>&amp;</i>. Therefor, Stata will<br />
 select observations where the variable make is equal to &ldquo;Buick&rdquo; and the variable price is below 5000 USD and also all observations with the make being &ldquo;Dodge&rdquo; irrespective what the value of the price variable is.</p>
 <p>In order to select cars that are either a Dodge or a Buick and have a price below 5000 USD, you have to put the first two expressions in parentheses. This way, you are effectively testing two conditions. The first is that the car is <i>either</i> a Dodge or a Buick and the second is that it <i>also</i> has a price below 5000 USD. The important difference is that the second condition, the price being below 5000 USD, now has to be true together with the car being either a Dodge or a Buick.</p>
-<pre><code>. list make price if (make==&quot;Dodge&quot; | make==&quot;Buick&quot;) &amp; price &lt; 5000
-
-    +---------------+
-    |  make   price |
-    |---------------|
- 4. | Buick   4,816 |
- 7. | Buick   4,453 |
-10. | Buick   4,082 |
-20. | Dodge   3,984 |
-21. | Dodge   4,010 |
-    +---------------+
-
-</code></pre>
+<pre><code>. list make price if (make==&quot;Dodge&quot; | make==&quot;Buick&quot;) &amp; price &lt; 5000</code></pre>
+<img src="screenshots/if_double_browse05.png">
+        
 <br>
 <h3><a href="#exercise-2-if-qualifiers-with-multiple-expressions" id="exercise-2-if-qualifiers-with-multiple-expressions">Exercise 2: if qualifiers with multiple expressions</a></h3>
 <ol>
