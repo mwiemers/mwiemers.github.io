@@ -61,354 +61,39 @@
 <pre><code>. webuse auto, clear
 (1978 Automobile Data)
 
-. list make price
-
-    +----------------------------+
-    | make                 price |
-    |----------------------------|
- 1. | AMC Concord          4,099 |
- 2. | AMC Pacer            4,749 |
- 3. | AMC Spirit           3,799 |
- 4. | Buick Century        4,816 |
- 5. | Buick Electra        7,827 |
-    |----------------------------|
- 6. | Buick LeSabre        5,788 |
- 7. | Buick Opel           4,453 |
- 8. | Buick Regal          5,189 |
- 9. | Buick Riviera       10,372 |
-10. | Buick Skylark        4,082 |
-    |----------------------------|
-11. | Cad. Deville        11,385 |
-12. | Cad. Eldorado       14,500 |
-13. | Cad. Seville        15,906 |
-14. | Chev. Chevette       3,299 |
-15. | Chev. Impala         5,705 |
-    |----------------------------|
-16. | Chev. Malibu         4,504 |
-17. | Chev. Monte Carlo    5,104 |
-18. | Chev. Monza          3,667 |
-19. | Chev. Nova           3,955 |
-20. | Dodge Colt           3,984 |
-    |----------------------------|
-21. | Dodge Diplomat       4,010 |
-22. | Dodge Magnum         5,886 |
-23. | Dodge St. Regis      6,342 |
-24. | Ford Fiesta          4,389 |
-25. | Ford Mustang         4,187 |
-    |----------------------------|
-26. | Linc. Continental   11,497 |
-27. | Linc. Mark V        13,594 |
-28. | Linc. Versailles    13,466 |
-29. | Merc. Bobcat         3,829 |
-30. | Merc. Cougar         5,379 |
-    |----------------------------|
-31. | Merc. Marquis        6,165 |
-32. | Merc. Monarch        4,516 |
-33. | Merc. XR-7           6,303 |
-34. | Merc. Zephyr         3,291 |
-35. | Olds 98              8,814 |
-    |----------------------------|
-36. | Olds Cutl Supr       5,172 |
-37. | Olds Cutlass         4,733 |
-38. | Olds Delta 88        4,890 |
-39. | Olds Omega           4,181 |
-40. | Olds Starfire        4,195 |
-    |----------------------------|
-41. | Olds Toronado       10,371 |
-42. | Plym. Arrow          4,647 |
-43. | Plym. Champ          4,425 |
-44. | Plym. Horizon        4,482 |
-45. | Plym. Sapporo        6,486 |
-    |----------------------------|
-46. | Plym. Volare         4,060 |
-47. | Pont. Catalina       5,798 |
-48. | Pont. Firebird       4,934 |
-49. | Pont. Grand Prix     5,222 |
-50. | Pont. Le Mans        4,723 |
-    |----------------------------|
-51. | Pont. Phoenix        4,424 |
-52. | Pont. Sunbird        4,172 |
-53. | Audi 5000            9,690 |
-54. | Audi Fox             6,295 |
-55. | BMW 320i             9,735 |
-    |----------------------------|
-56. | Datsun 200           6,229 |
-57. | Datsun 210           4,589 |
-58. | Datsun 510           5,079 |
-59. | Datsun 810           8,129 |
-60. | Fiat Strada          4,296 |
-    |----------------------------|
-61. | Honda Accord         5,799 |
-62. | Honda Civic          4,499 |
-63. | Mazda GLC            3,995 |
-64. | Peugeot 604         12,990 |
-65. | Renault Le Car       3,895 |
-    |----------------------------|
-66. | Subaru               3,798 |
-67. | Toyota Celica        5,899 |
-68. | Toyota Corolla       3,748 |
-69. | Toyota Corona        5,719 |
-70. | VW Dasher            7,140 |
-    |----------------------------|
-71. | VW Diesel            5,397 |
-72. | VW Rabbit            4,697 |
-73. | VW Scirocco          6,850 |
-74. | Volvo 260           11,995 |
-    +----------------------------+
+. browse make price
 
 </code></pre>
+<img src="screenshots/if_browse00.png">
+        
 <br>
 <p>We can use an if qualifier with the <b>list</b> command to limit the observations that are being printed. If, for instance, we only wanted to print observations with a price above 10000, we have to add an <b>if</b> qualifier followed by the expression <i>price &gt; 10000</i> to the command.</p>
 <p>Stata will evaluate the expression for every observation in the dataset and create a subset of the data for those observations for which the expression is true.</p>
 <p>Then Stata will run the <b>list make price</b> command on this particular subset of the data.</p>
-<pre><code>. list make price if price &gt; 10000
-
-    +----------------------------+
-    | make                 price |
-    |----------------------------|
- 9. | Buick Riviera       10,372 |
-11. | Cad. Deville        11,385 |
-12. | Cad. Eldorado       14,500 |
-13. | Cad. Seville        15,906 |
-26. | Linc. Continental   11,497 |
-    |----------------------------|
-27. | Linc. Mark V        13,594 |
-28. | Linc. Versailles    13,466 |
-41. | Olds Toronado       10,371 |
-64. | Peugeot 604         12,990 |
-74. | Volvo 260           11,995 |
-    +----------------------------+
-
-</code></pre>
+<pre><code>. browse make price if price &gt; 10000</code></pre>
+<img src="screenshots/if_browse01.png">
 <br>
 <p>The &gt; operator is used to test whether a variable is larger than a particular value. Below are examples of the other operators that can be used to create expressions.</p>
 <p>To run a command on a subset where a variable is equal to a particular value use the == operator.</p>
-<pre><code>. list price if price == 10372
-
-   +--------+
-   |  price |
-   |--------|
-9. | 10,372 |
-   +--------+
-
-</code></pre>
+<pre><code>. browse price if price == 10372</code></pre>
+<img src="screenshots/if_browse02.png">
+        
 <br>
 <p>To run a command on a subset where a variable is smaller than a particular value use the &lt; operator.</p>
-<pre><code>. list price if price &lt; 5000
-
-    +-------+
-    | price |
-    |-------|
- 1. | 4,099 |
- 2. | 4,749 |
- 3. | 3,799 |
- 4. | 4,816 |
- 7. | 4,453 |
-    |-------|
-10. | 4,082 |
-14. | 3,299 |
-16. | 4,504 |
-18. | 3,667 |
-19. | 3,955 |
-    |-------|
-20. | 3,984 |
-21. | 4,010 |
-24. | 4,389 |
-25. | 4,187 |
-29. | 3,829 |
-    |-------|
-32. | 4,516 |
-34. | 3,291 |
-37. | 4,733 |
-38. | 4,890 |
-39. | 4,181 |
-    |-------|
-40. | 4,195 |
-42. | 4,647 |
-43. | 4,425 |
-44. | 4,482 |
-46. | 4,060 |
-    |-------|
-48. | 4,934 |
-50. | 4,723 |
-51. | 4,424 |
-52. | 4,172 |
-57. | 4,589 |
-    |-------|
-60. | 4,296 |
-62. | 4,499 |
-63. | 3,995 |
-65. | 3,895 |
-66. | 3,798 |
-    |-------|
-68. | 3,748 |
-72. | 4,697 |
-    +-------+
-
-</code></pre>
+<pre><code>. browse price if price &lt; 5000</code></pre>
+<img src="screenshots/if_browse03.png">
+        
 <br>
 <p>To run a command on a subset where a variable is larger or equal to a particular value use the &gt;= or &lt;= operator.</p>
-<pre><code>. list price if price &gt;= 11385
-
-    +--------+
-    |  price |
-    |--------|
-11. | 11,385 |
-12. | 14,500 |
-13. | 15,906 |
-26. | 11,497 |
-27. | 13,594 |
-    |--------|
-28. | 13,466 |
-64. | 12,990 |
-74. | 11,995 |
-    +--------+
-</code></pre>
-<pre><code>. list price if price &lt;= 4749
-
-    +-------+
-    | price |
-    |-------|
- 1. | 4,099 |
- 2. | 4,749 |
- 3. | 3,799 |
- 7. | 4,453 |
-10. | 4,082 |
-    |-------|
-14. | 3,299 |
-16. | 4,504 |
-18. | 3,667 |
-19. | 3,955 |
-20. | 3,984 |
-    |-------|
-21. | 4,010 |
-24. | 4,389 |
-25. | 4,187 |
-29. | 3,829 |
-32. | 4,516 |
-    |-------|
-34. | 3,291 |
-37. | 4,733 |
-39. | 4,181 |
-40. | 4,195 |
-42. | 4,647 |
-    |-------|
-43. | 4,425 |
-44. | 4,482 |
-46. | 4,060 |
-50. | 4,723 |
-51. | 4,424 |
-    |-------|
-52. | 4,172 |
-57. | 4,589 |
-60. | 4,296 |
-62. | 4,499 |
-63. | 3,995 |
-    |-------|
-65. | 3,895 |
-66. | 3,798 |
-68. | 3,748 |
-72. | 4,697 |
-    +-------+
-
-</code></pre>
+<pre><code>. browse price if price &gt;= 11385</code></pre>
+<img src="screenshots/if_browse04.png">
+        
+<pre><code>. browse price if price &lt;= 4749</code></pre>
 <br>
 <p>To run a command on a subset where a variable is larger or equal to a particular value use the != operator.</p>
-<pre><code>. list price if price != 10372
-
-    +--------+
-    |  price |
-    |--------|
- 1. |  4,099 |
- 2. |  4,749 |
- 3. |  3,799 |
- 4. |  4,816 |
- 5. |  7,827 |
-    |--------|
- 6. |  5,788 |
- 7. |  4,453 |
- 8. |  5,189 |
-10. |  4,082 |
-11. | 11,385 |
-    |--------|
-12. | 14,500 |
-13. | 15,906 |
-14. |  3,299 |
-15. |  5,705 |
-16. |  4,504 |
-    |--------|
-17. |  5,104 |
-18. |  3,667 |
-19. |  3,955 |
-20. |  3,984 |
-21. |  4,010 |
-    |--------|
-22. |  5,886 |
-23. |  6,342 |
-24. |  4,389 |
-25. |  4,187 |
-26. | 11,497 |
-    |--------|
-27. | 13,594 |
-28. | 13,466 |
-29. |  3,829 |
-30. |  5,379 |
-31. |  6,165 |
-    |--------|
-32. |  4,516 |
-33. |  6,303 |
-34. |  3,291 |
-35. |  8,814 |
-36. |  5,172 |
-    |--------|
-37. |  4,733 |
-38. |  4,890 |
-39. |  4,181 |
-40. |  4,195 |
-41. | 10,371 |
-    |--------|
-42. |  4,647 |
-43. |  4,425 |
-44. |  4,482 |
-45. |  6,486 |
-46. |  4,060 |
-|--------|
-47. |  5,798 |
-48. |  4,934 |
-49. |  5,222 |
-50. |  4,723 |
-51. |  4,424 |
-    |--------|
-52. |  4,172 |
-53. |  9,690 |
-54. |  6,295 |
-55. |  9,735 |
-56. |  6,229 |
-    |--------|
-57. |  4,589 |
-58. |  5,079 |
-59. |  8,129 |
-60. |  4,296 |
-61. |  5,799 |
-    |--------|
-62. |  4,499 |
-63. |  3,995 |
-64. | 12,990 |
-65. |  3,895 |
-66. |  3,798 |
-    |--------|
-67. |  5,899 |
-68. |  3,748 |
-69. |  5,719 |
-70. |  7,140 |
-71. |  5,397 |
-    |--------|
-72. |  4,697 |
-73. |  6,850 |
-74. | 11,995 |
-    +--------+
-
-</code></pre>
+<pre><code>. browse price if price != 10372</code></pre>
+<img src="screenshots/if_browse05.png">
+        
 <br>
 <p>Let us look at another example using the <b>sum</b> command. The <b>sum</b> command will create a table with descriptive statistics (mean, standard deviation).</p>
 <pre><code>. sum price
