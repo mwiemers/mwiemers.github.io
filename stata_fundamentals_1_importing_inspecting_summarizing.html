@@ -1,172 +1,130 @@
-<head>
-  <link rel="stylesheet" type="text/css" href="/css/stmarkdown.css">
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
-</script>
-<script type="text/javascript" async
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
-</script>
-
-</head>
-
-<body>
-
-
-
-<div class="sidenav">
-       <a href="##access-to-datasets">Access to Datasets</a>
-       <a href="#changing-the-working-directory_section" >Changing the working directory</a>
-       <a href="#exercise-changing-the-working-directory">Exercise: Changing the workign directory</a>
-       <a href="#loading-data-into-stata">Loading data into Stata</a>
-       <a href="#exercise-loading-data">Exercise: Loading data</a>
-       <a href="#inspecting-a-dataset">Inspecting a dataset</a>
-       <a href="#exercise-inspecting-data">Exercise: Inspecting data</a>
-       <a href="#summary-statistics">Summary statistics</a>
-       <a href="#exercise-summary-statistics">Exercise: Summary statistics</a>
-       <a href="#evaluation">Final task: Please give us your feedback!</a>
-</div>
-<div class="main">
-
-
-<h1><a href="#stata-practical-1-importing-and-inspecting-data" id="stata-practical-1-importing-and-inspecting-data">Stata Fundamentals 1: Importing, inspecting and summarizing data</a></h1>
-
-<h2>What is Stata?</h2>
-<p>Stata is a general purpose statistical analysis software, similar to SPSS. You can use it to preprocess, analyse and visualise data.</p>
-<p>It is mostly used in research and particularly in the fields of economics, political science, and the social sciences in 
+<section lang="en" style="max-width: 1040px; margin: 0 auto 32px; padding: 16px; background: #f4f6fb; border-radius: 12px; box-sizing: border-box; font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; color: #111827; font-size: 16px; line-height: 1.7; overflow-wrap: break-word;">
+<section id="confidence-starting" style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px; border-left: 5px solid #1f4f8b; background: #edf3fc;"><h2 style="margin: 0 0 10px; font-size: 21px; color: #0b2c5f;">📋 Starting your session: confidence check</h2><p style="margin: 0 0 18px;">Once your workshop session has started, please complete this short questionnaire before beginning your first project during the workshop you attend today. It helps us understand how confident you feel before the session.</p><a href="https://forms.cloud.microsoft/e/iGpZuvdpfW" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 11px 18px; background: #0b2c5f; color: #ffffff; border-radius: 7px; text-decoration: none;">Open the starting confidence check ↗</a></section>
+<header style="background: linear-gradient(135deg, #0b2c5f, #1f4f8b); color: #ffffff; border-radius: 12px; padding: 28px; margin-bottom: 18px;"><p style="margin: 0 0 10px; font-size: 13px; letter-spacing: 1.5px;">DIGITAL SKILLS LAB · STATA</p><h1 style="margin: 0; font-size: 30px; line-height: 1.3; color: #ffffff;"><span id="stata-practical-1-importing-and-inspecting-data">Stata Fundamentals 1: Importing, inspecting and summarising data</span></h1><p style="margin: 16px 0 0; color: #ffffff;">A practical guide to setting up your workspace, loading datasets and exploring your data.</p></header><nav aria-label="Tutorial sections" style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><p style="margin: 0 0 8px; color: #0b2c5f;">Jump to a section</p><a style="color: #1f4f8b; text-decoration: underline; margin-right: 18px; display: inline-block; padding: 5px 0;" href="#access-to-datasets">Access to Datasets</a><a style="color: #1f4f8b; text-decoration: underline; margin-right: 18px; display: inline-block; padding: 5px 0;" href="#changing-the-working-directory_section">Changing the working directory</a><a style="color: #1f4f8b; text-decoration: underline; margin-right: 18px; display: inline-block; padding: 5px 0;" href="#loading-data-into-stata">Loading data into Stata</a><a style="color: #1f4f8b; text-decoration: underline; margin-right: 18px; display: inline-block; padding: 5px 0;" href="#inspecting-a-dataset">Inspecting a dataset</a><a style="color: #1f4f8b; text-decoration: underline; margin-right: 18px; display: inline-block; padding: 5px 0;" href="#summary-statistics">Summary statistics</a></nav><section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;">What is Stata?</h2>
+<p style="margin: 12px 0;">Stata is a general purpose statistical analysis software, similar to SPSS. You can use it to preprocess, analyse and visualise data.</p>
+<p style="margin: 12px 0;">It is mostly used in research and particularly in the fields of economics, political science, and the social sciences in 
 	general.</p> 
-<p>In Stata you can either use the menus from the graphical user interface or write commands yourself.
+<p style="margin: 12px 0;">In Stata you can either use the menus from the graphical user interface or write commands yourself.
 	Most Stata users write commands and do not use the user interface. There are many advantages to learning commands. 
 	A script can be shared, edited by colleagues and collaborators and made available with publications. By using scripts 
 	for your research, you promote transparency and reproducibility. Since writing commands has many advantages and 
 	the majority of Stata users write scripts, we will also teach you how to write commands in this workshop series.
 </p>
-<h2>More information on how the session is run</h2>
-<b>What to do when getting stuck</b>:
-<ol>
-    <li>Ask the trainer if you struggle to find a solution.</li>
-    <li>Use the help command. To get help with a specific command type <b>help "command name"</b></li>
-    <li>Search online. The statalist.org forum is usually the most useful resource.</li>
+</section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;">More information on how the session is run</h2>
+What to do when getting stuck:
+<ol style="padding-left: 24px; margin: 12px 0;">
+    <li style="margin: 7px 0;">Ask the trainer if you struggle to find a solution.</li>
+    <li style="margin: 7px 0;">Use the help command. To get help with a specific command type help "command name"</li>
+    <li style="margin: 7px 0;">Search online. The statalist.org forum is usually the most useful resource.</li>
 </ol>
 	   
-<b>In this practical session, you will learn to:</b>
-<ul>
-       <li>change the working directory</li>
-       <li>import stata and csv documents</li>
-       <li>print an overview of the variables in a dataset</li>
-       <li>print a dataset and subsets of the data</li>
-       <li>create a summary of continuous variables</li>
+In this practical session, you will learn to:
+<ul style="padding-left: 24px; margin: 12px 0;">
+       <li style="margin: 7px 0;">change the working directory</li>
+       <li style="margin: 7px 0;">import stata and csv documents</li>
+       <li style="margin: 7px 0;">print an overview of the variables in a dataset</li>
+       <li style="margin: 7px 0;">print a dataset and subsets of the data</li>
+       <li style="margin: 7px 0;">create a summary of continuous variables</li>
 </ul>
-<br>
-<br>
+
+
 	   
-<h2><a href="#access-to-datasets" id="access-to-datasets">Access to Datasets</a></h2>
-<p>Please use <a href="https://github.com/mwiemers/mwiemers.github.io/raw/main/dataset/datasets.zip"><b>this link</b></a> 
+</section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="access-to-datasets">Access to Datasets</span></h2>
+<p style="margin: 12px 0;">Please use <a style="color: #1f4f8b; text-decoration: underline;" href="https://github.com/mwiemers/mwiemers.github.io/raw/main/dataset/datasets.zip">this link</a> 
    to get access to the datasets that you will be using in the exercises</p>
-<br>
-<br>
-<h2><a href="#changing-the-working-directory_section" id="changing-the-working-directory_section">Changing the working directory</a></h2>
-<p>When loading a dataset, Stata will always look for the file in the working directory, unless you specify the whole path to the file.</p>
-<p>Although you can always specify the whole path to open a file that is not located in the working directory, it makes sense, to change the working directory to where your datasets are located at the beginning of your analysis. This will make it easier to load and switch between different datasets, since you only have to specify the file name and not the whole path to load a dataset.</p>
-<br>
-<br>
-<h3><a href="#printing-the-current-working-directory" id="printing-the-current-working-directory">Printing the current working directory</a></h3>
-<p>The working directory is displayed on the bottom of the main Stata window, just below the Command field.</p>
-<p>You can also use the <b>pwd</b> command to print the working directory.</p>
-<pre><code>. pwd
-/Users/michaelwiemers
 
-</code></pre>
-<br>
-<h3><a href="#changing-the-working-directory" id="changing-the-working-directory">Changing the working directory</a></h3>
-<p>You can change the working directory by using the <b>cd</b> command as below. Notice that the path has to be put in quotations.</p>
-<pre><code>. cd &quot;/Users/michaelwiemers/OneDrive - London School of Economics/DSL/datasets/&quot;
-/Users/michaelwiemers/OneDrive - London School of Economics/DSL/datasets
 
-</code></pre>
+</section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="changing-the-working-directory_section">Changing the working directory</span></h2>
+<p style="margin: 12px 0;">When loading a dataset, Stata will always look for the file in the working directory, unless you specify the whole path to the file.</p>
+<p style="margin: 12px 0;">Although you can always specify the whole path to open a file that is not located in the working directory, it makes sense, to change the working directory to where your datasets are located at the beginning of your analysis. This will make it easier to load and switch between different datasets, since you only have to specify the file name and not the whole path to load a dataset.</p>
 
-<br>
-<h3><a href="#exercise-changing-the-working-directory" id="exercise-changing-the-working-directory">Exercise: Changing the working directory</a></h3>
-<ol>
-	<li>Print the current working directory.</li>
-	<li>Change the working directory to where the datasets lfs2017.dta,  
+
+<h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="printing-the-current-working-directory">Printing the current working directory</span></h3>
+<p style="margin: 12px 0;">The working directory is displayed on the bottom of the main Stata window, just below the Command field.</p>
+<p style="margin: 12px 0;">You can also use the pwd command to print the working directory.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. pwd
+/Users/michaelwiemers</code></pre>
+
+<h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="changing-the-working-directory">Changing the working directory</span></h3>
+<p style="margin: 12px 0;">You can change the working directory by using the cd command as below. Notice that the path has to be put in quotations.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. cd &quot;/Users/michaelwiemers/OneDrive - London School of Economics/DSL/datasets/&quot;
+/Users/michaelwiemers/OneDrive - London School of Economics/DSL/datasets</code></pre>
+
+
+<div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-changing-the-working-directory">Exercise: Changing the working directory</span></h3>
+<ol style="padding-left: 24px; margin: 12px 0;">
+	<li style="margin: 7px 0;">Print the current working directory.</li>
+	<li style="margin: 7px 0;">Change the working directory to where the datasets lfs2017.dta,  
 	gapminder.csv and MCS_testscores.dta are located on your computer.</li>
-	<li>Print the working directory again to verify that it has been changed.</li>
+	<li style="margin: 7px 0;">Print the working directory again to verify that it has been changed.</li>
 </ol>
 	
-<br>
-<br>
-<h2><a href="#loading-data-into-stata" id="loading-data-into-stata">Loading data into Stata</a></h2>
-<p>In this section you will learn how to import Stata datasets (.dta) and flat files, i.e. comma or tab separated value files (.csv or .tsv).</p>
-<br>
-<h3><a href="#loading-a-dta-file-stata-dataset" id="loading-a-dta-file-stata-dataset">loading a .dta file (Stata dataset)</a></h3>
-<p>Now that Stata knows where your datasets are located, we can load a dataset without having to specify the whole path. We can simply refer to the file name.</p>
-<p>We are going to load the lfs2017.dta file. This dataset contains data from the labour force survey from 2017. This dataset contains data on a persons age, sex, income, highest qualification and more.</p>
-<p>We can load a .dta file, with the <b>use</b> command.</p>
-<pre><code>. use lfs2017
 
-</code></pre>
-<p>You can see that the variables pane on the right now lists all variables in the lfs2017 dataset.</p>
-<img src="screenshots/use_01_mac.png" alt="Stata user interface showing variables in the variables pane after having loaded a dataset">
-<br>
-<br>
-<h3><a href="#loading-a-public-dataset-from-stata-presscom" id="loading-a-public-dataset-from-stata-presscom">Loading a public dataset from stata-press.com</a></h3>
-<p>There are a number of datasets in stata format available from the stata-press.com website. You can use this link for a list of all available datasets (unfortunately, without description):</p>
-<pre><code>https://www.stata-press.com/data/r15/u.html
-</code></pre>
-<p>To load the auto dataset from the stata website, we use the <b>webuse</b> command followed by the name of the dataset.</p>
-<pre><code>. webuse auto
-(1978 Automobile Data)
 
-</code></pre>
-<br>
-<h3><a href="#loading-a-csv-file" id="loading-a-csv-file">Loading a csv file</a></h3>
-<p>We can use the <b>import delimited</b> command to import a csv file. In the example below we are importing the data stored in the gapminder.csv file, which is from the gapminder.org website, and lists unemployment, life expectancy and gdp per capita, for a sample of countries from across the world.</p>
-<p>As you can see below, this commad returns an error. This is because we already have a dataset loaded in Stata and the error warns us that by loading the new dataset, unsaved changes to the currently loaded dataset might be lost.</p>
-<pre><code>. import delimited &quot;gapminder.csv&quot;
+</div></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="loading-data-into-stata">Loading data into Stata</span></h2>
+<p style="margin: 12px 0;">In this section you will learn how to import Stata datasets (.dta) and flat files, i.e. comma or tab separated value files (.csv or .tsv).</p>
+
+<h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="loading-a-dta-file-stata-dataset">loading a .dta file (Stata dataset)</span></h3>
+<p style="margin: 12px 0;">Now that Stata knows where your datasets are located, we can load a dataset without having to specify the whole path. We can simply refer to the file name.</p>
+<p style="margin: 12px 0;">We are going to load the lfs2017.dta file. This dataset contains data from the labour force survey from 2017. This dataset contains data on a persons age, sex, income, highest qualification and more.</p>
+<p style="margin: 12px 0;">We can load a .dta file, with the use command.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. use lfs2017</code></pre>
+<p style="margin: 12px 0;">You can see that the variables pane on the right now lists all variables in the lfs2017 dataset.</p>
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="screenshots/use_01_mac.png" alt="Stata user interface showing variables in the variables pane after having loaded a dataset">
+
+
+<h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="loading-a-public-dataset-from-stata-presscom">Loading a public dataset from stata-press.com</span></h3>
+<p style="margin: 12px 0;">There are a number of datasets in stata format available from the stata-press.com website. You can use this link for a list of all available datasets (unfortunately, without description):</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>https://www.stata-press.com/data/r15/u.html</code></pre>
+<p style="margin: 12px 0;">To load the auto dataset from the stata website, we use the webuse command followed by the name of the dataset.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. webuse auto
+(1978 Automobile Data)</code></pre>
+
+<h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="loading-a-csv-file">Loading a csv file</span></h3>
+<p style="margin: 12px 0;">We can use the import delimited command to import a csv file. In the example below we are importing the data stored in the gapminder.csv file, which is from the gapminder.org website, and lists unemployment, life expectancy and gdp per capita, for a sample of countries from across the world.</p>
+<p style="margin: 12px 0;">As you can see below, this command returns an error. This is because we already have a dataset loaded in Stata and the error warns us that by loading the new dataset, unsaved changes to the currently loaded dataset might be lost.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. import delimited &quot;gapminder.csv&quot;
 no; data in memory would be lost
-r(4);
-
-</code></pre>
-<p>We have to first remove the currently loaded dataset with the <b>clear</b> command.</p>
-<pre><code>. clear
+r(4);</code></pre>
+<p style="margin: 12px 0;">We have to first remove the currently loaded dataset with the clear command.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. clear
 
 . import delimited &quot;gapminder.csv&quot;
-(15 vars, 427 obs)
+(15 vars, 427 obs)</code></pre>
 
-</code></pre>
-<br>
 	   
-<p>Alternatively, we can add <i>clear</i> as an option to the <b>import delimited</b> command or any 
+<p style="margin: 12px 0;">Alternatively, we can add <i>clear</i> as an option to the import delimited command or any 
 	other command to import data.</p>
-<pre><code>. import delimited &quot;gapminder.csv&quot;, clear
-(15 vars, 427 obs)
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. import delimited &quot;gapminder.csv&quot;, clear
+(15 vars, 427 obs)</code></pre>
 
-</code></pre>
-<br>
 	   
-<h3><a href="#exercise-loading-data" id="exercise-loading-data">Exercise: Loading data</a></h3>
-<ol>
-	<li>Load the lfs2017 dataset using the <b>use</b> command.</li>
-	<li>Load the citytemp.dta dataset from the Stata website.</li>
-	<li>Load the csv file gapminder.csv.</li>
-	<li>Notice how you can see the variables in the variables pane change everytime 
+<div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-loading-data">Exercise: Loading data</span></h3>
+<ol style="padding-left: 24px; margin: 12px 0;">
+	<li style="margin: 7px 0;">Load the lfs2017 dataset using the use command.</li>
+	<li style="margin: 7px 0;">Load the citytemp.dta dataset from the Stata website.</li>
+	<li style="margin: 7px 0;">Load the csv file gapminder.csv.</li>
+	<li style="margin: 7px 0;">Notice how you can see the variables in the variables pane change every time 
 	you load a different dataset.</li>
 </ol>
-<br>
-<br>
-<h2><a href="#inspecting-a-dataset" id="inspecting-a-dataset">Inspecting a dataset</a></h2>
-<p>In this section, we will focus on a few commands to inspect a dataset.</p>
-<p>We&rsquo;re first going to re-open the lfs2017 dataset.</p>
-<pre><code>. use lfs2017, clear
 
-</code></pre>
-<br>
-<h3><a href="#summary-of-a-dataset" id="summary-of-a-dataset">Summary of a dataset</a></h3>
-<p>The <b>describe</b> command produces a summary of a dataset. It lists the total number of observations, variables and the size of the dataset. Apart from the <i>variable name</i> and the <i>variable label</i>, which are also displayed in the Variables pane in the top right in the main Stata window, it also lists the <i>storage type</i>, <i>display format</i> and the <i>value label</i>.</p>
-<p>The <i>storage type</i> refers to how the values of a variable are stored in memory. Different storage types can hold different types of information, i.e. numerical or text, and can store information of different size.</p>
-<p>The <i>display format</i> refers to how the information is displayed, that is, the number of digits and decimals and the alignment.</p>
-<p>The <i>value label</i> refers to the text labels that are being associated to the numerical values in the dataset. The sex variable has the numerical values 1 and 2, but when looking at the data you will see the labels &lsquo;Female&rsquo; and &lsquo;Male&rsquo; displayed. This is because the values 1 and 2 have received the corresponding labels &lsquo;Male&rsquo; and &lsquo;Female&rsquo;.</p>
-<pre><code>describe
+
+</div></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="inspecting-a-dataset">Inspecting a dataset</span></h2>
+<p style="margin: 12px 0;">In this section, we will focus on a few commands to inspect a dataset.</p>
+<p style="margin: 12px 0;">We&rsquo;re first going to re-open the lfs2017 dataset.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. use lfs2017, clear</code></pre>
+
+<h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="summary-of-a-dataset">Summary of a dataset</span></h3>
+<p style="margin: 12px 0;">The describe command produces a summary of a dataset. It lists the total number of observations, variables and the size of the dataset. Apart from the <i>variable name</i> and the <i>variable label</i>, which are also displayed in the Variables pane in the top right in the main Stata window, it also lists the <i>storage type</i>, <i>display format</i> and the <i>value label</i>.</p>
+<p style="margin: 12px 0;">The <i>storage type</i> refers to how the values of a variable are stored in memory. Different storage types can hold different types of information, i.e. numerical or text, and can store information of different size.</p>
+<p style="margin: 12px 0;">The <i>display format</i> refers to how the information is displayed, that is, the number of digits and decimals and the alignment.</p>
+<p style="margin: 12px 0;">The <i>value label</i> refers to the text labels that are being associated to the numerical values in the dataset. The sex variable has the numerical values 1 and 2, but when looking at the data you will see the labels &lsquo;Female&rsquo; and &lsquo;Male&rsquo; displayed. This is because the values 1 and 2 have received the corresponding labels &lsquo;Male&rsquo; and &lsquo;Female&rsquo;.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>describe
 
 Contains data from lfs2017.dta
   obs:        10,096                          
@@ -186,56 +144,53 @@ hiqual          byte    %8.0g      HIQUL15D   Highest qualification (detailed gr
 sex             byte    %8.0g      SEX        Sex of respondent
 degreesub       byte    %8.0g      UNCOMBMA   Undergraduate main subject area
 ------------------------------------------------------------------------------------------------------------------------
-Sorted by: 
+Sorted by:</code></pre>
 
-</code></pre>
-<br>
-<h3><a href="#viewing-the-data" id="viewing-the-data">Viewing the data</a></h3>
-<p>To display the entire dataset, we use the browse command. This will open the data editor.</p>
+<h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="viewing-the-data">Viewing the data</span></h3>
+<p style="margin: 12px 0;">To display the entire dataset, we use the browse command. This will open the data editor.</p>
 
-<img src="screenshots/browse_01.png">
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="screenshots/browse_01.png" alt="Stata data browser example">
 
-<h3><a href="#printing-only-a-subset-of-variables" id="printing-only-a-subset-of-variables">Printing only a subset of variables</a></h3>
-<p>To only display the observations for a specific variable, type <b>browse</b> followed by the variable name. Here, we are only printing the values for the age variable.</p>
-<pre><code>browse age</code></pre>
+<h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="printing-only-a-subset-of-variables">Printing only a subset of variables</span></h3>
+<p style="margin: 12px 0;">To only display the observations for a specific variable, type browse followed by the variable name. Here, we are only printing the values for the age variable.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>browse age</code></pre>
 
-<img src="screenshots/browse_02.png">
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="screenshots/browse_02.png" alt="Stata data browser example">
 	
-<br>
-<p>To display a subset of variables, type <b>browse</b> followed by the different variable names separated with a space.</p>
-<pre><code>browse age grosswk sex</code></pre>
 
-<img src="screenshots/browse_03.png">
+<p style="margin: 12px 0;">To display a subset of variables, type browse followed by the different variable names separated with a space.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>browse age grosswk sex</code></pre>
+
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="screenshots/browse_03.png" alt="Stata data browser example">
        
-<br>
-<p>To display a range of variables type <b>browse</b> followed by the first variable, a hyphen and the last variable. The command <b>browse grosswk - degreesub</b> will print the observations for the variables starting from ethnicity till sex in the order as appearing in the dataset from left to right.</p>
-<pre><code>browse grosswk - degreesub</code></pre>
 
-<img src="screenshots/browse_04.png">
+<p style="margin: 12px 0;">To display a range of variables type browse followed by the first variable, a hyphen and the last variable. The command browse grosswk - degreesub will print the observations for the variables starting from grosswk through degreesub in the order as appearing in the dataset from left to right.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>browse grosswk - degreesub</code></pre>
+
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="screenshots/browse_04.png" alt="Stata data browser example">
 	
-<br>
-<br>
-<h3><a href="#exercise-inspecting-data" id="exercise-inspecting-data">Exercise: Inspecting data</a></h3>
-<ol>
-	<li>Open the census5 dataset from the stata website, which has data from 
+
+
+<div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-inspecting-data">Exercise: Inspecting data</span></h3>
+<ol style="padding-left: 24px; margin: 12px 0;">
+	<li style="margin: 7px 0;">Open the census5 dataset from the stata website, which has data from 
 	the 1980 US census</li>
-	<li>Print an overview of the variables.</li>
-	<li>View the census datasets.</li>
-	<li>Print only the marriage and divorce variables.</li>
+	<li style="margin: 7px 0;">Print an overview of the variables.</li>
+	<li style="margin: 7px 0;">View the census datasets.</li>
+	<li style="margin: 7px 0;">Print only the marriage and divorce variables.</li>
 </ol>
-<br>
-<h2><a href="#summary-statistics" id="summary-statistics">Summary statistics</a></h2>
-<p>The <strong>summarize</strong> command gives you a number of descriptive statistics like the mean, standard deviation and the minimum and maximum value. We can abbreviate the <strong>summarize</strong> command as <strong>sum</strong>.</p>
-<pre><code>sum grosswk
+
+</div></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="summary-statistics">Summary statistics</span></h2>
+<p style="margin: 12px 0;">The summarize command gives you a number of descriptive statistics like the mean, standard deviation and the minimum and maximum value. We can abbreviate the summarize command as sum.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>sum grosswk
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
-     grosswk |     10,096    521.7672    522.8757          5      23076
+     grosswk |     10,096    521.7672    522.8757          5      23076</code></pre>
 
-</code></pre>
-<br>
-<p>You can add the detail option to the command to also display the percentiles, variance, skewness and kurtosis.</p>
-<pre><code>sum grosswk, detail
+<p style="margin: 12px 0;">You can add the detail option to the command to also display the percentiles, variance, skewness and kurtosis.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>sum grosswk, detail
 
      Gross weekly pay in main job (Government scheme or
                           employee)
@@ -251,59 +206,40 @@ Sorted by:
 75%          664          10250
 90%          962          13846       Variance         273399
 95%         1269          13846       Skewness       13.48147
-99%         1923          23076       Kurtosis       448.2789
+99%         1923          23076       Kurtosis       448.2789</code></pre>
 
-</code></pre>
-<br>
-<p>To summarize more than one continuous variable, add all variable names after <strong>sum</strong>.</p>
-<pre><code>sum grosswk sex
+<p style="margin: 12px 0;">To summarize more than one continuous variable, add all variable names after sum.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>sum grosswk sex
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
      grosswk |     10,096    521.7672    522.8757          5      23076
-         sex |     10,096    1.520503    .4996042          1          2
-
-</code></pre>
-<h3><a href="#customized-summary-statistics" id="customized-summary-statistics">Customized summary statistics</a></h3>
-<p>The <strong>summarize</strong> command although useful to get a quick impression of a variable, doesn&rsquo;t feature any options to select specific descriptives to be displayed in the output. The <strong>tabstat</strong> command allows such customisation of the statistics to be displayed.</p>
-<pre><code>tabstat age
+         sex |     10,096    1.520503    .4996042          1          2</code></pre>
+<h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="customized-summary-statistics">Customized summary statistics</span></h3>
+<p style="margin: 12px 0;">The summarize command although useful to get a quick impression of a variable, doesn&rsquo;t feature any options to select specific descriptives to be displayed in the output. The tabstat command allows such customisation of the statistics to be displayed.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>tabstat age
 
     variable |      mean
 -------------+----------
          age |  42.37223
-------------------------
+------------------------</code></pre>
 
-</code></pre>
-<br>
 
-<br>
-<h3><a href="#exercise-summary-statistics" id="exercise-summary-statistics">Exercise: Summary statistics</a></h3>
-<p>The MCS_testscore dataset contains data from the age 5 sweep from the Millenium Cohort Study, which examined the first year of primary schooling alongside childhood health, childcare, education, social and family circumstances.</p>
-<ol>
-	<li>Open the MCS_testscore dataset.</li>
-	<li>Use <b>summarize</b> to create a table with descriptive 
+
+<div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-summary-statistics">Exercise: Summary statistics</span></h3>
+<p style="margin: 12px 0;">The MCS_testscore dataset contains data from the age 5 sweep from the Millenium Cohort Study, which examined the first year of primary schooling alongside childhood health, childcare, education, social and family circumstances.</p>
+<ol style="padding-left: 24px; margin: 12px 0;">
+	<li style="margin: 7px 0;">Open the MCS_testscore dataset.</li>
+	<li style="margin: 7px 0;">Use summarize to create a table with descriptive 
 	statistics for the variables pse to fsptotal.</li>
-	<li>Use the <b>tabstat</b> command to create a table for the same 
+	<li style="margin: 7px 0;">Use the tabstat command to create a table for the same 
 	variables</li>
-	</li>Adjust your <b>tabstat</b> command to list the mean, standard deviation, standard error of the mean, 
+	<li style="margin: 7px 0;">Adjust your tabstat command to list the mean, standard deviation, standard error of the mean, 
 	min, max and the 25th and 75th percentile.</li>
-	<li>Further adjust you command to ensure that the statistics are displayed in the columns.</li>
+	<li style="margin: 7px 0;">Further adjust you command to ensure that the statistics are displayed in the columns.</li>
 </ol>
 
-<br>
-<br>
+
+
 	   
-<h3><a href="#evaluation" id="evaluation">Final task: Please give us your feedback! </a></h3>
-	   <p>Upon completing the survey, <b>you will receive the link to the solution file</b>, to check how your commands compares to the sample solution.</p>
-<p>In order to adapt our training to your needs and provide the most valuable learning experience for you, we depend on your feedack.</p>
-	   <p>We would be grateful if you could take 1 min before the end of the workshop to get your feedback! </p>
-
-<a href="https://lse.eu.qualtrics.com/jfe/form/SV_0vJs5yGpF1F359I?coursename=Stata Fundamentals 1: Import and inspecting data &topic=Stata&prog=SR&version=25-26">Click here to open the survey!</a>
-
-<br>
-<br>
-</div>
-
-
-	
-</body>
+</div></section><section id="confidence-leaving" style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px; border-left: 5px solid #1f4f8b; background: #edf3fc;"><h2 style="margin: 0 0 10px; font-size: 21px; color: #0b2c5f;">📋 Leaving your session: confidence check</h2><p style="margin: 0 0 18px;">Please complete this short questionnaire just before you leave the workshop session. It helps us understand how confident you feel after the session. Continuing to another project in this session? Skip this questionnaire and complete the ending questionnaire only before leaving.</p><a href="https://forms.cloud.microsoft/e/mukygeufbv" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 11px 18px; background: #0b2c5f; color: #ffffff; border-radius: 7px; text-decoration: none;">Open the leaving confidence check ↗</a></section></section>
