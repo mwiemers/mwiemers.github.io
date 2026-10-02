@@ -1,98 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <link rel="stylesheet" type="text/css" href="/css/stmarkdown.css">
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
-    </script>
-    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
-    </script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stata Data Cleaning 5 | Digital Skills Lab</title>
+
+  <link rel="stylesheet" type="text/css" href="/css/stmarkdown.css">
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+
+
+<style>
+* {box-sizing:border-box}
+html {scroll-behavior:smooth}
+body {margin:0; padding:0; background:#f4f6fb; color:#111827; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.page-layout {display:grid; grid-template-columns:260px minmax(0,1fr); gap:24px; max-width:none; margin:0 auto; padding:24px}
+.contents {position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow-y:auto; border:1px solid #d2e0f5; border-radius:12px; background:white; padding:20px 14px}
+.contents-label {font-size:12px; letter-spacing:1.5px; color:#526782; margin:0 10px 10px}
+.contents h2 {font-size:21px; color:#0b2c5f; margin:0 10px 16px}
+.toc-link {display:block; padding:10px 12px; margin:3px 0; color:#25476f; text-decoration:none; border-radius:7px; font-size:14px; line-height:1.45; border-left:3px solid transparent}
+.toc-link:hover,.toc-link:focus-visible {background:#edf3fc; color:#0b2c5f}
+.toc-link[aria-current="location"] {background:#edf3fc; border-left-color:#1f4f8b; color:#0b2c5f}
+.exercise-link {padding-left:24px; font-size:13px; color:#596d85}
+main {min-width:0}
+main > section {padding:0 !important; max-width:none !important; margin:0 !important}
+[id] {scroll-margin-top:24px}
+.mobile-contents {display:none}
+.skip-link {position:fixed; top:-100px; left:12px; padding:12px; background:white; z-index:10}
+.skip-link:focus {top:12px}
+a:focus-visible,summary:focus-visible {outline:3px solid #3174c9; outline-offset:3px}
+@media(max-width:900px) {
+ .page-layout {display:block; padding:16px}
+ .contents {display:none}
+ .mobile-contents {display:block; margin-bottom:18px; background:white; border:1px solid #d2e0f5; border-radius:10px; padding:14px}
+ .mobile-contents summary {cursor:pointer; padding:4px; color:#0b2c5f; font-size:17px}
+ .mobile-contents nav {margin-top:12px}
+}
+@media(max-width:520px) {
+ .page-layout {padding:10px}
+ main section,main header {padding:18px !important}
+ main > section {padding:0 !important}
+ main h1 {font-size:25px !important}
+}
+@media(prefers-reduced-motion:reduce) {html {scroll-behavior:auto}}
+@media print {.contents,.mobile-contents,.skip-link {display:none} .page-layout {display:block;padding:0} pre {white-space:pre-wrap}}
+</style>
 </head>
-
 <body>
-
-    <div class="sidenav">
-        <a href="#practicing-reshaping">Practicing Reshaping</a>
-        <a href="#exercise-1-reshaping">Exercise 1: Reshaping Football data</a>
-        <a href="#practicing-reshaping2">Practicing Reshaping: From long back
-            to wide</a>
-        <a href="#exercise-2-reshaping">Exercise 2: Reshaping from long to wide</a>
-        RFd <a href="#reshaping-the-gapminder-dataset">Reshaping the Gapminder dataset</a>
-        <a href="#creating-a-subset">Creating a subset</a>
-        <a href="#exercise-3-creating-a-subset">Exercise 3: Creating a subset</a>
-        <a href="#practicing-reshaping">Practicing reshaping</a>
-        <a href="#reshaping-and-storing-the-subset-in-a-new-file">Reshaping and storing the subset in a new file</a>
-        <a href="#exercise-4-reshaping-and-storing-the-subset">Exercise 4: Reshaping and storing the subset</a>
-        <a href="#using-preserve-and-restore">Using <b>preserve</b> and <b>restore</b></a>
-        <a href="#exercise-5-using-preserve-and-restore-with-the-weo-data-dataset">Exercise 5: Using preserve and
-            restore with the weo_data dataset</a>
-        <a href="#merging-the-separate-subsets-with-merge">Merging the separate subsets with <b>merge</b></a>
-        <a href="#exercise-6-merging-the-different-subsets">Exercise 6: Merging the different subsets</a>
-        <a href="#bonus-using-a-for-loop-to-iterate-through-the-three-subjects">Bonus: Using a for loop to iterate
-            through the three subjects</a>
-        <a href="#exercise-7-adding-a-for-loop">Exercise 7: Adding a for loop</a>
-        <a href="#evaluation">Final task: Please give us your feedback!</a>
-    </div>
-
-    <div class="main">
-        <h1><a href="#data-cleaning-in-stata-merging-data" id="data-cleaning-in-stata-merging-data">Data cleaning in
-                Stata - Merging data</a></h1>
-        <p>The data cleaning series is going to teach you the most fundamental commands and techniques to prepare data
+<a class="skip-link" href="#tutorial">Skip to tutorial</a>
+<div class="page-layout">
+<aside class="contents"><p class="contents-label">DIGITAL SKILLS LAB</p><h2>On this page</h2><nav aria-label="Tutorial contents"><a class="toc-link" href="#confidence-starting">Starting confidence check</a>
+<a class="toc-link" href="#practicing-reshaping">Practising reshaping</a>
+<a class="toc-link exercise-link" href="#exercise-1-reshaping">Exercise 1: Football data</a>
+<a class="toc-link" href="#practicing-reshaping2">Reshaping back to wide</a>
+<a class="toc-link exercise-link" href="#exercise-2-reshaping">Exercise 2: Long to wide</a>
+<a class="toc-link" href="#reshaping-the-gapminder-dataset">Reshaping the Gapminder dataset</a>
+<a class="toc-link" href="#creating-a-subset">Creating a subset</a>
+<a class="toc-link exercise-link" href="#exercise-3-creating-a-subset">Exercise 3: Creating a subset</a>
+<a class="toc-link" href="#reshaping-and-storing-the-subset-in-a-new-file">Reshaping and storing a subset</a>
+<a class="toc-link exercise-link" href="#exercise-4-reshaping-and-storing-the-subset">Exercise 4: Reshaping and storing</a>
+<a class="toc-link" href="#using-preserve-and-restore">Using preserve and restore</a>
+<a class="toc-link exercise-link" href="#exercise-5-using-preserve-and-restore-with-the-weo-data-dataset">Exercise 5: Preserve and restore</a>
+<a class="toc-link" href="#merging-the-separate-subsets-with-merge">Merging the subsets</a>
+<a class="toc-link exercise-link" href="#exercise-6-merging-the-different-subsets">Exercise 6: Merging subsets</a>
+<a class="toc-link" href="#bonus-using-a-for-loop-to-iterate-through-the-three-subjects">Bonus: Using a for loop</a>
+<a class="toc-link exercise-link" href="#exercise-7-adding-a-for-loop">Exercise 7: Adding a for loop</a>
+<a class="toc-link" href="#reshaping-only">Using only reshape</a>
+<a class="toc-link exercise-link" href="#exercise-8-using-reshape-only">Exercise 8: Using only reshape</a>
+<a class="toc-link" href="#confidence-leaving">Leaving confidence check</a></nav></aside>
+<main id="tutorial"><details class="mobile-contents"><summary>On this page</summary><nav aria-label="Mobile tutorial contents"><a class="toc-link" href="#confidence-starting">Starting confidence check</a>
+<a class="toc-link" href="#practicing-reshaping">Practising reshaping</a>
+<a class="toc-link exercise-link" href="#exercise-1-reshaping">Exercise 1: Football data</a>
+<a class="toc-link" href="#practicing-reshaping2">Reshaping back to wide</a>
+<a class="toc-link exercise-link" href="#exercise-2-reshaping">Exercise 2: Long to wide</a>
+<a class="toc-link" href="#reshaping-the-gapminder-dataset">Reshaping the Gapminder dataset</a>
+<a class="toc-link" href="#creating-a-subset">Creating a subset</a>
+<a class="toc-link exercise-link" href="#exercise-3-creating-a-subset">Exercise 3: Creating a subset</a>
+<a class="toc-link" href="#reshaping-and-storing-the-subset-in-a-new-file">Reshaping and storing a subset</a>
+<a class="toc-link exercise-link" href="#exercise-4-reshaping-and-storing-the-subset">Exercise 4: Reshaping and storing</a>
+<a class="toc-link" href="#using-preserve-and-restore">Using preserve and restore</a>
+<a class="toc-link exercise-link" href="#exercise-5-using-preserve-and-restore-with-the-weo-data-dataset">Exercise 5: Preserve and restore</a>
+<a class="toc-link" href="#merging-the-separate-subsets-with-merge">Merging the subsets</a>
+<a class="toc-link exercise-link" href="#exercise-6-merging-the-different-subsets">Exercise 6: Merging subsets</a>
+<a class="toc-link" href="#bonus-using-a-for-loop-to-iterate-through-the-three-subjects">Bonus: Using a for loop</a>
+<a class="toc-link exercise-link" href="#exercise-7-adding-a-for-loop">Exercise 7: Adding a for loop</a>
+<a class="toc-link" href="#reshaping-only">Using only reshape</a>
+<a class="toc-link exercise-link" href="#exercise-8-using-reshape-only">Exercise 8: Using only reshape</a>
+<a class="toc-link" href="#confidence-leaving">Leaving confidence check</a></nav></details>
+<section lang="en" style="max-width: none; margin: 0 auto 32px; padding: 16px; background: #f4f6fb; border-radius: 12px; box-sizing: border-box; font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; color: #111827; font-size: 16px; line-height: 1.7; overflow-wrap: break-word;">
+<section id="confidence-starting" style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px; border-left: 5px solid #1f4f8b; background: #edf3fc;"><h2 style="margin: 0 0 10px; font-size: 21px; color: #0b2c5f;">📋 Starting your session: confidence check</h2><p style="margin: 0 0 18px;">Once your workshop session has started, please complete this short questionnaire before beginning your first project during the workshop you attend today. It helps us understand how confident you feel before the session.</p><a href="https://forms.cloud.microsoft/e/XRDD7iWSmw" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 11px 18px; background: #0b2c5f; color: #ffffff; border-radius: 7px; text-decoration: none;">Open the starting confidence check ↗</a></section>
+<header style="background: linear-gradient(135deg, #0b2c5f, #1f4f8b); color: #ffffff; border-radius: 12px; padding: 28px; margin-bottom: 18px;"><p style="margin: 0 0 10px; font-size: 13px; letter-spacing: 1.5px;">DIGITAL SKILLS LAB · STATA</p><h1 style="margin: 0; font-size: 30px; line-height: 1.3; color: #ffffff;"><span id="data-cleaning-in-stata-merging-data">Stata Data Cleaning 5: Merging data</span></h1><p style="margin: 16px 0 0; color: #ffffff;">A practical guide to reshaping data, creating and preserving subsets, and merging datasets.</p></header>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;">About this session</h2>
+        <p style="margin: 12px 0;">The data cleaning series is going to teach you the most fundamental commands and techniques to prepare data
             in Stata for statistical analysis.</p>
-        <p>The series is going to cover the following topics:</p>
-        <ul>
-            <li>Converting string to numerical</li>
-            <li>Dealing with missings and duplicates</li>
-            <li>Applying variable and value labels</li>
-            <li>Reshaping between long and wide format</li>
-            <li>Merging multiple datasets</li>
+        <p style="margin: 12px 0;">The series is going to cover the following topics:</p>
+        <ul style="padding-left: 24px; margin: 12px 0;">
+            <li style="margin: 7px 0;">Converting string to numerical</li>
+            <li style="margin: 7px 0;">Dealing with missings and duplicates</li>
+            <li style="margin: 7px 0;">Applying variable and value labels</li>
+            <li style="margin: 7px 0;">Reshaping between long and wide format</li>
+            <li style="margin: 7px 0;">Merging multiple datasets</li>
         </ul>
-        <p>In this practical session, you will learn about:</p>
-        <ul>
-            <li>Long vs wide data formats</li>
-            <li>Reshaping data from wide to long</li>
-            <li>Reshaping data from long to wide</li>
-            <li>Merging mulitple datasets into one</li>
+        <p style="margin: 12px 0;">In this practical session, you will learn about:</p>
+        <ul style="padding-left: 24px; margin: 12px 0;">
+            <li style="margin: 7px 0;">Long vs wide data formats</li>
+            <li style="margin: 7px 0;">Reshaping data from wide to long</li>
+            <li style="margin: 7px 0;">Reshaping data from long to wide</li>
+            <li style="margin: 7px 0;">Merging mulitple datasets into one</li>
         </ul>
-        <br>
-        <br>
+        
+        
 
-        <b>What to do when getting stuck</b>:
-        <ol>
-            <li>Ask the <b>trainer</b> if you struggle to find a solution.</li>
-            <li>Use the help command. To get help with a specific command type <b>help "command name"</b></li>
-            <li>Search online. The <b>statalist.org</b> forum is usually the most useful resource.</li>
+        What to do when getting stuck:
+        <ol style="padding-left: 24px; margin: 12px 0;">
+            <li style="margin: 7px 0;">Ask the trainer if you struggle to find a solution.</li>
+            <li style="margin: 7px 0;">Use the help command. To get help with a specific command type help "command name"</li>
+            <li style="margin: 7px 0;">Search online. The statalist.org forum is usually the most useful resource.</li>
         </ol>
-        <br>
-        <p>In this session you will learn about how to identify whether your data is in the long or
+        
+        <p style="margin: 12px 0;">In this session you will learn about how to identify whether your data is in the long or
             wide orientation and how to change between the long and wide orientation using
-            the <code style="color:black; font-weight: bold;">reshape</code> command.</p>
+            the <code>reshape</code> command.</p>
 
-        <p>We will go through an example of how to create subsets of the gapminder dataset for each
+        <p style="margin: 12px 0;">We will go through an example of how to create subsets of the gapminder dataset for each
             subject (GDP, population and life expectancy), reshape each subset to the long format
             and then merge all subsets. You will also learn how to do this more efficiently using
-            just the <code style="color:black; font-weight: bold;">reshape</code> command.
+            just the <code>reshape</code> command.
         </p>
 
-        <p>In the exercises you will apply the same steps independently to the weo_data dataset. You will create
+        <p style="margin: 12px 0;">In the exercises you will apply the same steps independently to the weo_data dataset. You will create
             subsets of the weo_data dataset for three different subjects (GDP per capita, unemployment rate and the
             general government structural balance), reshape each subset to the long format, store it in a
-            separate file and merge all three files into a single dataset.</p>
+            separate file and merge all three files into a single dataset.</p></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="practicing-reshaping">Practicing Reshaping</span></h2>
 
-        <br>
-
-        <h2><a href="#practicing-reshaping" id="practicing-reshaping">Practicing Reshaping</a></h2>
-
-        <p>Before we go into reshaping the gapminder and the weo_data dataset, let us start with a simple
-            dataset to familiarize ourselves with the <code style="color:black; font-weight: bold;">reshape</code>
+        <p style="margin: 12px 0;">Before we go into reshaping the gapminder and the weo_data dataset, let us start with a simple
+            dataset to familiarize ourselves with the <code>reshape</code>
             command in Stata.</p>
 
-        <p>The reshape2 dataset can be downloaded from the Stata server using the following command.</p>
+        <p style="margin: 12px 0;">The reshape2 dataset can be downloaded from the Stata server using the following command.</p>
 
-        <pre><code style="color:black">
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>
     webuse reshape2, clear</code></pre>
 
-        <br>
-        <p>Let us have a look at the data</p>
+        
+        <p style="margin: 12px 0;">Let us have a look at the data</p>
 
-        <pre><code style="color:black">
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>
     list</code>
 
        +----------------------------------+
@@ -105,53 +163,49 @@
        +----------------------------------+
 </pre>
 
-        <p>The different rows represent each a single participant in the survey. The variables inc80 - inc82 indicate
+        <p style="margin: 12px 0;">The different rows represent each a single participant in the survey. The variables inc80 - inc82 indicate
             that each participates income was measured for the years 1980 - 1982. These variables represent a
-            repeating measurement of income. This data is in the <b>wide orientation</b>, since the different levels 
+            repeating measurement of income. This data is in the wide orientation, since the different levels 
             of the repeated measurement year are represented through different columns.
         </p>
-        <p>Let us now reshape this data from the current wide format to the long
+        <p style="margin: 12px 0;">Let us now reshape this data from the current wide format to the long
             format.
         </p>
 
-        <p>Here is how we use the <code style="color:black">reshape</code> command to reshape the income
+        <p style="margin: 12px 0;">Here is how we use the <code>reshape</code> command to reshape the income
             data from wide to long.</p>
 
-        <code style="color:black; font-weight: bold;">reshape long inc, i(id sex) j(year)</code>
+        <code>reshape long inc, i(id sex) j(year)</code>
 
-        <p>Following <code style="color:black; font-weight: bold;">reshape</code>, we add <code
-                style="color:black">long</code> and <code style="color:black">inc</code>.
-        <ul>
-            <li>With <code style="color:black">long</code> we specify that the data should be reshaped to the long
+        <p style="margin: 12px 0;">Following <code>reshape</code>, we add <code>long</code> and <code>inc</code>.</p>
+        <ul style="padding-left: 24px; margin: 12px 0;">
+            <li style="margin: 7px 0;">With <code>long</code> we specify that the data should be reshaped to the long
                 format.</li>
-            <li>With <code style="color:black">inc</code> we specify the stubname that is used at the beginning of the
+            <li style="margin: 7px 0;">With <code>inc</code> we specify the stubname that is used at the beginning of the
                 repeating variables. These are the columns that contain the <i>dependent</i> variable!</li>
         </ul>
-        <p>The second part of the command are the options following the commma. Here we use <code
-                style="color:black">i(id sex)</code>
-            and <code style="color:black">j(year)</code></p>
-        <ul>
-            <li>With <code style="color:black">i(id sex)</code> we specify which variables together identify a unique
+        <p style="margin: 12px 0;">The second part of the command are the options following the commma. Here we use <code>i(id sex)</code>
+            and <code>j(year)</code></p>
+        <ul style="padding-left: 24px; margin: 12px 0;">
+            <li style="margin: 7px 0;">With <code>i(id sex)</code> we specify which variables together identify a unique
                 observation. Since
                 the value 2 is occuring twice in the id column, Stata needs the values from id and sex in combination to
                 identify a unique observation.</li>
-            <li>With <code style="color:black">j(year)</code> we specify the name to be used for the variable that
+            <li style="margin: 7px 0;">With <code>j(year)</code> we specify the name to be used for the variable that
                 represents the levels of the
-                repeating measurement. The levels are 80, 81, 82. By using <code style="color:black">j(year)</code>,
+                repeating measurement. The levels are 80, 81, 82. By using <code>j(year)</code>,
                 these will be represented in a variable named year.</li>
         </ul>
 
-        </p>
-
-        <p>This command will reshape the income data to look like this. The repeated measurements of income
+        <p style="margin: 12px 0;">This command will reshape the income data to look like this. The repeated measurements of income
             are now represented in different rows, where each row represents a different year, as indicated by
-            the year column. The data is now in the <b>long orientation</b>. The long orientation is generally considered 
+            the year column. The data is now in the long orientation. The long orientation is generally considered 
             to be a tidier way to represent data as the repeated measurement is made explicit through a separate column.
             When looking at the data in the wide orientation, i.e. the way it was structured before the reshape, 
             it is not immediately obvious that each respondent, as identified by the id and sex column, is measured in 1980, 1981, 
             and 1982.
         </p>
-        <pre><code style="color:black">
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>
     . list
     
         +------------------------+
@@ -176,13 +230,13 @@
     
     </code></pre>
 
-        <br>
+        
 
-        <h3><a href="#exercise-1-reshaping" id="exercise-1-reshaping">Exercise 1: Reshaping Football data</a></h3>
+        <div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-1-reshaping">Exercise 1: Reshaping Football data</span></h3>
 
-        <ol>
-            <li>Run the following command in Stata to enter the football data.
-                <pre><code style="color: black;">
+        <ol style="padding-left: 24px; margin: 12px 0;">
+            <li style="margin: 7px 0;">Run the following command in Stata to enter the football data.
+                <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>
     clear
 
     input id str10 team goals1 goals2 goals3 goals4
@@ -216,8 +270,8 @@
     end
         </code></pre>
             </li>
-            <li>Reshape the data from wide to long so that it looks like below.
-                <pre><code style="color: black;">
+            <li style="margin: 7px 0;">Reshape the data from wide to long so that it looks like below.
+                <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>
         +--------------------------------+
         | id         team   game   goals |
         |--------------------------------|
@@ -249,23 +303,24 @@
             </li>
         </ol>
 
-        <br>
+        
 
-        <h2><a href="#practicing-reshaping2" id="practicing-reshaping2">Practicing Reshaping: From long back
-                to wide</a></h2>
+        </div></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="practicing-reshaping2">Practicing Reshaping: From long back
+                to wide</span></h2>
 
-        <p>Sometimes we actually want to reshape from long to wide. We will see an example of this at the end
+        <p style="margin: 12px 0;">Sometimes we actually want to reshape from long to wide. We will see an example of this at the end
             of this workshop. For now, let us just practice one more time with the
-            <code style="color:black; font-weight: bold;">reshape</code> command, by reshaping the football data back to
+            <code>reshape</code> command, by reshaping the football data back to
             its
             original wide format.
         </p>
 
-        <p>
+        <p style="margin: 12px 0;">
             After having reshaped the football data the first time to the long format, it is in the below orientation.
         </p>
 
-        <pre><code style="color:black">
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>
         +--------------------------------+
         | id         team   game   goals |
         |--------------------------------|
@@ -296,59 +351,57 @@
 </code></pre>
 
 
-        <p>To reshape the football data back to the wide orientation, all we need to do is replace <code
-                style="color:black">long</code> with
-            <code style="color:black">wide</code>!
+        <p style="margin: 12px 0;">To reshape the football data back to the wide orientation, all we need to do is replace <code>long</code> with
+            <code>wide</code>!
         </p>
 
-        <code style="color:black; font-weight: bold;">reshape wide goals, i(id team) j(game)</code>
+        <code>reshape wide goals, i(id team) j(game)</code>
 
-        <ul>
-            <li>With <code style="color:black">wide</code> we specify that we want to reshape the
-                data to the wide orientation.</thead>
+        <ul style="padding-left: 24px; margin: 12px 0;">
+            <li style="margin: 7px 0;">With <code>wide</code> we specify that we want to reshape the
+                data to the wide orientation.
             </li>
-            <li>Following <code style="color:black">wide</code>, we specify the stubname
-                <code style="color:black">goals</code>. We have to use goals, since this column
+            <li style="margin: 7px 0;">Following <code>wide</code>, we specify the stubname
+                <code>goals</code>. We have to use goals, since this column
                 contains the <i>dependent</i> variable that has been measured repeatedly.
                 These values will be recoded to wide.
             </li>
-            <li>We still use both the id and team column to identify a unique observation, which is why we
-                use the option <code style="color:black">i(id team)</code></li>
-            <li>The j option specifies the name of the variable that contains the levels of the repeated
+            <li style="margin: 7px 0;">We still use both the id and team column to identify a unique observation, which is why we
+                use the option <code>i(id team)</code></li>
+            <li style="margin: 7px 0;">The j option specifies the name of the variable that contains the levels of the repeated
                 measurement.</li>
         </ul>
 
-        <h3><a href="#exercise-2-reshaping" id="exercise-2-reshaping">Exercise 2: Reshaping back to wide</a></h3>
+        <div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-2-reshaping">Exercise 2: Reshaping back to wide</span></h3>
 
-        <p>
-        <ol>
-            <li>Load the reshape2 dataset.</li>
-            <li>Reshape the data to the long format. Use the name year for the levels of the
+        <ol style="padding-left: 24px; margin: 12px 0;">
+            <li style="margin: 7px 0;">Load the reshape2 dataset.</li>
+            <li style="margin: 7px 0;">Reshape the data to the long format. Use the name year for the levels of the
                 repeated measurement.</li>
-            <li>Reshape the data back to the wide format.</li>
+            <li style="margin: 7px 0;">Reshape the data back to the wide format.</li>
         </ol>
-        </p>
 
-        <br>
+        
 
-        <br>
+        
 
 
-        <h2><a href="#reshaping-the-gapminder-dataset" id="reshaping-the-gapminder-dataset">Reshaping the Gapminder
-                dataset</a></h2>
-        <p>The gapminder dataset in its original format contains a variable that codes for the subject, that is,
+        </div></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="reshaping-the-gapminder-dataset">Reshaping the Gapminder
+                dataset</span></h2>
+        <p style="margin: 12px 0;">The gapminder dataset in its original format contains a variable that codes for the subject, that is,
             GDP per capita, life expectancy and population, and the actual values for each year in separate
             variables.</p>
-        <p>The data is in the wide format. Although year is not represented as a single column,
+        <p style="margin: 12px 0;">The data is in the wide format. Although year is not represented as a single column,
             it is a variable in the study design. In particular, it is a repeated measurement or a
             within-subject variable. The dependent variables GDP, life expectancy and population are
             measured repeatedly, within each subject (country), across a series of years.
         </p>
-        <pre><code style="color:black; font-weight: bold;">. import excel using &quot;https://github.com/mwiemers/datasets/raw/main/gapminder_dirty_reshape.xlsx&quot;, firstrow clear
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. import excel using &quot;https://github.com/mwiemers/datasets/raw/main/gapminder_dirty_reshape.xlsx&quot;, firstrow clear
 
 . list in 1/10
 </code>
-<code style="color:gray">
+<code>
 
      +------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
      |     country   contin~t     subject       y1952       y1957       y1962       y1967       y1972       y1977       y1982       y1987       y1992       y1997       y2002       y2007 |
@@ -367,15 +420,15 @@
      +------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 </code></pre>
-        <br>
-        <p>We want to transform the orientation of the dataset so that there is a variable <i>year</i> and
+        
+        <p style="margin: 12px 0;">We want to transform the orientation of the dataset so that there is a variable <i>year</i> and
             the subjects are each presented in three separate variables as you can see below.</p>
-        <p>The reshape is supposed to put the data in the long format, when there is a single column for each variable.
+        <p style="margin: 12px 0;">The reshape is supposed to put the data in the long format, when there is a single column for each variable.
             Repeated measurements are no longer spread out across multiple columns, where each column
             represents a specific level (year), but instead each row represents a different level (year)
             for each country.
         </p>
-        <pre><code style="color:black; font-weight: bold;">
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>
 
      +-----------------------------------------------------------------+
      |     country   continent   year   gdpPercap   lifeExp        pop |
@@ -405,59 +458,55 @@
  20. |     Albania      Europe   1987   3738.9327        72    3075321 |
      +-----------------------------------------------------------------+
 
-</code></pre>
-        <br>
-        <br>
-        <h3><a href="#creating-a-subset" id="creating-a-subset">Creating a subset</a></h3>
-        <p>In order to restructure the whole dataset from the wide to the long format, we have to create subsets of the
+</code></pre></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="creating-a-subset">Creating a subset</span></h2>
+        <p style="margin: 12px 0;">In order to restructure the whole dataset from the wide to the long format, we have to create subsets of the
             data for each subject, reshape that subset from wide to long and in a final step merge all three subsets
             back together into a single dataset.</p>
-        <p>We will first create a subset for the life expectancy subject with the <code
-                style="color:black; font-weight: bold;">keep</code> command. With the
-            <code style="color:black; font-weight: bold;">keep</code> command we can select those observations and
+        <p style="margin: 12px 0;">We will first create a subset for the life expectancy subject with the <code>keep</code> command. With the
+            <code>keep</code> command we can select those observations and
             variables that we want to keep. Every other
             observation and/or variable will be removed from the data.
         </p>
-        <p>In order to only select those observations in our dataset where the <i>subject</i> variable is equal to
+        <p style="margin: 12px 0;">In order to only select those observations in our dataset where the <i>subject</i> variable is equal to
             life_exp, we add an if qualifier with the expression <i>subject==&ldquo;life_exp&rdquo;</i>.</p>
-        <pre><code style="color:black; font-weight: bold;"></code></pre>
-        <pre><code style="color:black; font-weight: bold;">. keep if subject==&quot;lifeExp&quot;
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code></code></pre>
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. keep if subject==&quot;lifeExp&quot;
 (284 observations deleted)
 
 </code></pre>
-        <br>
-        <h3><a href="#exercise-3-creating-a-subset" id="exercise-3-creating-a-subset">Exercise 3: Creating a subset</a>
+        
+        <div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-3-creating-a-subset">Exercise 3: Creating a subset</span>
         </h3>
-        <p>We will start by practicing with the <code style="color:black; font-weight: bold;">keep</code> command.</p>
-        <ol>
-            <li>Load the weo_data dataset using the url
+        <p style="margin: 12px 0;">We will start by practicing with the <code>keep</code> command.</p>
+        <ol style="padding-left: 24px; margin: 12px 0;">
+            <li style="margin: 7px 0;">Load the weo_data dataset using the url
                 &ldquo;https://github.com/mwiemers/datasets/blob/main/weo_data_dirty_reshape.xlsx?raw=true&rdquo;</li>
-            <li>Use the <code style="color:black; font-weight: bold;">keep</code> command to only keep the GDP per
+            <li style="margin: 7px 0;">Use the <code>keep</code> command to only keep the GDP per
                 capita data. Which command can you use to quickly
                 verify that you only have data for life expectancy without looking at each row in the data editor?</li>
-            <li>Reload the data, create a subset for the unemployment values and verify that the subset only consists of
+            <li style="margin: 7px 0;">Reload the data, create a subset for the unemployment values and verify that the subset only consists of
                 population values.</li>
         </ol>
-        <br>
-        <br>
-        <h3><a href="#reshaping-and-storing-the-subset-in-a-new-file"
-                id="reshaping-and-storing-the-subset-in-a-new-file">Reshaping and storing the subset in a new file</a>
-        </h3>
-        <p>In the next step, we are going to reshape and store the subset in a new file.</p>
-        <p>In order to reshape the data to the long format with the <code
-                style="color:black; font-weight: bold;">reshape</code> command, we need to provide following
+        
+        
+        </div></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="reshaping-and-storing-the-subset-in-a-new-file">Reshaping and storing the subset in a new file</span>
+        </h2>
+        <p style="margin: 12px 0;">In the next step, we are going to reshape and store the subset in a new file.</p>
+        <p style="margin: 12px 0;">In order to reshape the data to the long format with the <code>reshape</code> command, we need to provide following
             information:</p>
-        <ul>
-            <li>The orientation of the new dataset, which should be long.</li>
-            <li>The stub: The repeated measurements for the years 1952 - 2007 use the stub <i>y</i></li>
-            <li>The variables that identify a single case in the data:
+        <ul style="padding-left: 24px; margin: 12px 0;">
+            <li style="margin: 7px 0;">The orientation of the new dataset, which should be long.</li>
+            <li style="margin: 7px 0;">The stub: The repeated measurements for the years 1952 - 2007 use the stub <i>y</i></li>
+            <li style="margin: 7px 0;">The variables that identify a single case in the data:
                 The countries are uniquely identified by the variable <i>country</i>, since there
                 is only one row per country.</li>
-            <li>The name for the new variable that holds the different levels of the repeated measurement,
+            <li style="margin: 7px 0;">The name for the new variable that holds the different levels of the repeated measurement,
                 ie. the year..</li>
         </ul>
-        <p>The reshape command generates a long version of the data.</p>
-        <pre><code style="color:black; font-weight: bold;">. reshape long y, i(country) j(year)
+        <p style="margin: 12px 0;">The reshape command generates a long version of the data.</p>
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. reshape long y, i(country) j(year)
 (note: j = 1952 1957 1962 1967 1972 1977 1982 1987 1992 1997 2002 2007)
 
 Data                               wide   -&gt;   long
@@ -488,9 +537,9 @@ xij variables:
      +--------------------------------------------------+
 
 </code></pre>
-        <br>
-        <p>We can drop the <i>subject</i> variable and rename the y variable to <i>lifeExp</i>.</p>
-        <pre><code style="color:black; font-weight: bold;">. drop subject
+        
+        <p style="margin: 12px 0;">We can drop the <i>subject</i> variable and rename the y variable to <i>lifeExp</i>.</p>
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. drop subject
 
 . rename y lifeExp
 
@@ -513,57 +562,51 @@ xij variables:
      +-----------------------------------------+
 
 </code></pre>
-        <br>
-        <p>Next, we are going to save the new subset under the file name gapminder_lifeExp.</p>
-        <pre><code style="color:black; font-weight: bold;">. save gapminder_lifeExp, replace
+        
+        <p style="margin: 12px 0;">Next, we are going to save the new subset under the file name gapminder_lifeExp.</p>
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. save gapminder_lifeExp, replace
 (note: file gapminder_lifeExp.dta not found)
 file gapminder_lifeExp.dta saved
 
 </code></pre>
-        <br>
-        <p>Let us look at all commands together.</p>
-        <pre><code style="color:black; font-weight: bold;">keep if subject==&quot;lifeExp&quot;
+        
+        <p style="margin: 12px 0;">Let us look at all commands together.</p>
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>keep if subject==&quot;lifeExp&quot;
 reshape long y, i(country) j(year)
 drop subject
 rename y lifeExp
 save gapminder_lifeExp, replace
 </code></pre>
-        <h3><a href="#exercise-4-reshaping-and-storing-the-subset"
-                id="exercise-4-reshaping-and-storing-the-subset">Exercise 4: Reshaping and storing the subset</a></h3>
-        <ol>
-            <li>Load the weo_data dataset using the url
+        <div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-4-reshaping-and-storing-the-subset">Exercise 4: Reshaping and storing the subset</span></h3>
+        <ol style="padding-left: 24px; margin: 12px 0;">
+            <li style="margin: 7px 0;">Load the weo_data dataset using the url
                 &ldquo;https://github.com/mwiemers/datasets/blob/main/weo_data_dirty_reshape.xlsx?raw=true&rdquo;</li>
-            <li>Create a subset for the GDP per capita data.</li>
-            <li>Reshape the subset to the long format.</li>
-            <li>Rename the variable holding the gdp per capita values to <i>gdpPercap</i> and delete the
+            <li style="margin: 7px 0;">Create a subset for the GDP per capita data.</li>
+            <li style="margin: 7px 0;">Reshape the subset to the long format.</li>
+            <li style="margin: 7px 0;">Rename the variable holding the gdp per capita values to <i>gdpPercap</i> and delete the
                 <i>SubjectDescriptor</i> variable.
             </li>
-            <li>Store the subset under the name weo_data_gdpPercap.</li>
+            <li style="margin: 7px 0;">Store the subset under the name weo_data_gdpPercap.</li>
         </ol>
-        <br>
-        <br>
-        <h3><a href="#repeating-the-process-for-the-remaining-variables"
-                id="repeating-the-process-for-the-remaining-variables">Repeating the process for the remaining
-                variables</a></h3>
-        <br>
-        <h4><a href="#using-preserve-and-restore" id="using-preserve-and-restore">Using <code
-                    style="color:black; font-weight: bold;">preserve</code> and
-                <code
-                    style="color:black; font-weight: bold;">restore</code></a></h4>
-        <p>In order to continue with the next subset of data, the population data, we would have to reload the original
-            gapminder dataset first. Instead of reloading the original gapminder dataset, we can use the <code
-                style="color:black; font-weight: bold;">preserve restore</code> combination.</p>
-        <p>The <code style="color:black; font-weight: bold;">preserve</code> command stores a copy of the open dataset
-            in its current state. With the <code style="color:black; font-weight: bold;">restore</code>
-            command we can reload the dataset in the state it was stored in with <code
-                style="color:black; font-weight: bold;">preserve</code>.</p>
-        <p>Therefore, we add a <code style="color:black; font-weight: bold;">preserve</code> command before we create a
+        
+        
+        </div></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="repeating-the-process-for-the-remaining-variables">Repeating the process for the remaining
+                variables</span></h2>
+        
+        <h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="using-preserve-and-restore">Using <code>preserve</code> and
+                <code>restore</code></span></h3>
+        <p style="margin: 12px 0;">In order to continue with the next subset of data, the population data, we would have to reload the original
+            gapminder dataset first. Instead of reloading the original gapminder dataset, we can use the <code>preserve restore</code> combination.</p>
+        <p style="margin: 12px 0;">The <code>preserve</code> command stores a copy of the open dataset
+            in its current state. With the <code>restore</code>
+            command we can reload the dataset in the state it was stored in with <code>preserve</code>.</p>
+        <p style="margin: 12px 0;">Therefore, we add a <code>preserve</code> command before we create a
             subset of the data for the population. After
-            having saved the reshaped subset in a new file, we use <code
-                style="color:black; font-weight: bold;">restore</code> to reload the original dataset, so
+            having saved the reshaped subset in a new file, we use <code>restore</code> to reload the original dataset, so
             that we can proceed with creating the next subset.</p>
-        <p>We start by loading the original dataset.</p>
-        <pre><code style="color:black; font-weight: bold;">. import excel using &quot;https://github.com/mwiemers/datasets/blob/main/gapminder_dirty_reshape.xlsx?raw=true&quot;, firstrow clear
+        <p style="margin: 12px 0;">We start by loading the original dataset.</p>
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. import excel using &quot;https://github.com/mwiemers/datasets/blob/main/gapminder_dirty_reshape.xlsx?raw=true&quot;, firstrow clear
 
 
 . * create subset for life_exp, reshape to long and save as new file
@@ -594,14 +637,13 @@ file gapminder_lifeExp.dta saved
 . restore
 
 </code></pre>
-        <br>
-        <p>Next, we are going to carry out the same steps for the next subject. We simply have to replace life_exp with
-            pop for the <code style="color:black; font-weight: bold;">keep</code>, <code
-                style="color:black; font-weight: bold;">rename</code>,
-            <code style="color:black; font-weight: bold;">reshape</code> and
-            <code style="color:black; font-weight: bold;">save</code> commands.
+        
+        <p style="margin: 12px 0;">Next, we are going to carry out the same steps for the next subject. We simply have to replace life_exp with
+            pop for the <code>keep</code>, <code>rename</code>,
+            <code>reshape</code> and
+            <code>save</code> commands.
         </p>
-        <pre><code style="color:black; font-weight: bold;">. * create subset for pop, reshape to long and save as new file
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. * create subset for pop, reshape to long and save as new file
 . preserve
 
 . keep if subject==&quot;pop&quot;
@@ -630,11 +672,11 @@ file gapminder_pop.dta saved
 . restore
 
 </code></pre>
-        <br>
-        <p>Finally, we run the same set of commands again for the subset of the data where the subject is
+        
+        <p style="margin: 12px 0;">Finally, we run the same set of commands again for the subset of the data where the subject is
             <i>gdpPercap</i>.
         </p>
-        <pre><code style="color:black; font-weight: bold;">. * create subset for gdpPercap and reshape to long
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. * create subset for gdpPercap and reshape to long
 . preserve
 
 . keep if subject==&quot;gdpPercap&quot;
@@ -663,36 +705,36 @@ file gapminder_gdpPercap.dta saved
 . restore
 
 </code></pre>
-        <br>
-        <h3><a href="#exercise-5-using-preserve-and-restore-with-the-weo-data-dataset"
-                id="exercise-5-using-preserve-and-restore-with-the-weo-data-dataset">Exercise 5: Using preserve and
-                restore with the weo_data dataset</a></h3>
-        <ol>
-            <li>Update the first code chunk that you wrote to create the subset for the gdpPercap data and add the
-                <code style="color:black; font-weight: bold;">preserve</code> and
-                <code style="color:black; font-weight: bold;">restore</code> commands at the beginning and end.
+        
+        <div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-5-using-preserve-and-restore-with-the-weo-data-dataset">Exercise 5: Using preserve and
+                restore with the weo_data dataset</span></h3>
+        <ol style="padding-left: 24px; margin: 12px 0;">
+            <li style="margin: 7px 0;">Update the first code chunk that you wrote to create the subset for the gdpPercap data and add the
+                <code>preserve</code> and
+                <code>restore</code> commands at the beginning and end.
             </li>
-            <li>Continue with the second code chunk using <code style="color:black; font-weight: bold;">preserve</code>
+            <li style="margin: 7px 0;">Continue with the second code chunk using <code>preserve</code>
                 and
-                <code style="color:black; font-weight: bold;">restore</code> to create the subset for
+                <code>restore</code> to create the subset for
                 the population data.
             </li>
-            <li>Write the last code chunk to create the subset for the uenmployment rate.</li>
+            <li style="margin: 7px 0;">Write the last code chunk to create the subset for the uenmployment rate.</li>
         </ol>
-        <br>
-        <br>
-        <h3><a href="#merging-the-separate-subsets-with-merge" id="merging-the-separate-subsets-with-merge">Merging the
-                separate subsets with <b>merge</b></a></h3>
-        <p>In the final step of restructuring the dataset, we are going to combine the three previously created subsets
-            using the <code style="color:black; font-weight: bold;">merge</code> command.</p>
-        <p>We will combine the three different datasets in such a way that the final dataset will have separate
+        
+        
+        </div></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="merging-the-separate-subsets-with-merge">Merging the
+                separate subsets with merge</span></h2>
+        <p style="margin: 12px 0;">In the final step of restructuring the dataset, we are going to combine the three previously created subsets
+            using the <code>merge</code> command.</p>
+        <p style="margin: 12px 0;">We will combine the three different datasets in such a way that the final dataset will have separate
             variables for the GDP per capita, population and life expectancy data (see below). We do this by opening the
             gapminder_gdpPercap.dta dataset first and then adding the <i>pop</i> and <i>life_exp</i> variables from the
             gapminder_pop.dta and gapminder_lifeExp.dta datasets using the
-            <code style="color:black; font-weight: bold;">merge</code> command. In the last step we
+            <code>merge</code> command. In the last step we
             save the new dataset under a new filename.
         </p>
-        <pre><code style="color:black; font-weight: bold;">
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>
 
      +----------------------------------------------------------------+
      |     country   contin~t   year   gdpPercap   lifeExp        pop |
@@ -723,43 +765,42 @@ file gapminder_gdpPercap.dta saved
      +----------------------------------------------------------------+
 
 </code></pre>
-        <br>
-        <h4><a href="#merging-and-appending-data" id="merging-and-appending-data">Merging and appending data</a></h4>
-        <p>There are fundamentally two ways you can combine datasets by either appending them using the
-            <code style="color:black; font-weight: bold;">append</code>
-            command or merging them using <code style="color:black; font-weight: bold;">merge</code> You use
-            <code style="color:black; font-weight: bold;">append</code> to add observations from another dataset
+        
+        <h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="merging-and-appending-data">Merging and appending data</span></h3>
+        <p style="margin: 12px 0;">There are fundamentally two ways you can combine datasets by either appending them using the
+            <code>append</code>
+            command or merging them using <code>merge</code> You use
+            <code>append</code> to add observations from another dataset
             with the same variables. Appending your dataset will therefore make your dataset longer.
         </p>
-        <p>In the illustration below GPD per capita data from the continents Africa, Asia and Europe are being combined
-            using <code style="color:black; font-weight: bold;">append</code>. Another example for when to use
-            <code style="color:black; font-weight: bold;">append</code> would be if you collected new data for
+        <p style="margin: 12px 0;">In the illustration below GPD per capita data from the continents Africa, Asia and Europe are being combined
+            using <code>append</code>. Another example for when to use
+            <code>append</code> would be if you collected new data for
             subsequent years and would like to combine new and old data into a single dataset. In order to append two or
             more datasets, they must have the same variables.
         </p>
-        <img src="https://www.dropbox.com/s/lz20h6cvxbt29xr/append_01.png?raw=1" alt="Illustration of append datasets" width="80%">
-        <br>
-        <p>You would use <code style="color:black; font-weight: bold;">merge</code>, in contrast, in order to add
+        <img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="https://www.dropbox.com/s/lz20h6cvxbt29xr/append_01.png?raw=1" alt="Illustration of append datasets" width="80%">
+        
+        <p style="margin: 12px 0;">You would use <code>merge</code>, in contrast, in order to add
             variables from another dataset containing the same
             observations, that is, data from the same countries or individuals. Merging two or more datasets will make
             the combined dataset wider but not longer than the original datasets. In the example we create a new dataset
             gapminder_2.dta by adding the <i>pop</i> and <i>life_exp</i> variables from from the pop.dta and
             life_exp.dta datasets to the gdp_pc.dta dataset.</p>
-        <img src="https://www.dropbox.com/s/gb3868wuqtoby2q/illustration_merge.gif?raw=1" width="80%">
-        <br>
-        <h4><a href="#combining-the-gapminder-gdppercapdta-gapminder-lifeexpdta-and-gapminder-popdta-datasets"
-                id="combining-the-gapminder-gdppercapdta-gapminder-lifeexpdta-and-gapminder-popdta-datasets">Combining
-                the gapminder_gdpPercap.dta, gapminder_lifeExp.dta and gapminder_pop.dta datasets</a></h4>
-        <p>In order to combine the three subsets for the GDP per capita, life expectancy and population data, we will
+        <img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="https://www.dropbox.com/s/gb3868wuqtoby2q/illustration_merge.gif?raw=1" width="80%">
+        
+        <h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="combining-the-gapminder-gdppercapdta-gapminder-lifeexpdta-and-gapminder-popdta-datasets">Combining
+                the gapminder_gdpPercap.dta, gapminder_lifeExp.dta and gapminder_pop.dta datasets</span></h3>
+        <p style="margin: 12px 0;">In order to combine the three subsets for the GDP per capita, life expectancy and population data, we will
             start by opening the gapminder_gdpPercap.dta dataset and merge it with the gapminder_lifeExp.dta dataset.
         </p>
-        <p>Following <b>merge</b> we add <i>1:1</i> as the first argument, since the data from each row in the
+        <p style="margin: 12px 0;">Following merge we add <i>1:1</i> as the first argument, since the data from each row in the
             gdp_pc.dta dataset will be merged with a single row from the gapminder_lifeExp.dta dataset.</p>
-        <p>As the next argument the <b>merge</b> command expects the variables that identify an observation in the
+        <p style="margin: 12px 0;">As the next argument the merge command expects the variables that identify an observation in the
             datasets, which is the combination of the <i>country</i> and <i>year</i> variables.</p>
-        <p>Finally, following <b>using</b> we must specify the other dataset with which the gdp_pc.dta dataset should be
+        <p style="margin: 12px 0;">Finally, following using we must specify the other dataset with which the gdp_pc.dta dataset should be
             merged, which is the life_exp.dta dataset.</p>
-        <pre><code style="color:black; font-weight: bold;">. use gapminder_gdpPercap.dta, clear
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. use gapminder_gdpPercap.dta, clear
 
 . merge 1:1 country year using gapminder_lifeExp.dta
 
@@ -770,20 +811,20 @@ file gapminder_gdpPercap.dta saved
     -----------------------------------------
 
 </code></pre>
-        <br>
-        <p>If we now take a look at the data, we notice that the <i>lifeExp</i> and <i>_merge</i> variables have been
+        
+        <p style="margin: 12px 0;">If we now take a look at the data, we notice that the <i>lifeExp</i> and <i>_merge</i> variables have been
             added to the dataset. Befoe we will address the newly created <i>_merge</i> variable, let us first recap how
             the above
-            <code style="color:black; font-weight: bold;">merge 1:1</code> command has combined both datasets.
+            <code>merge 1:1</code> command has combined both datasets.
         </p>
-        <p>The data from every country for each year in the gapminder_gdpPercap.dta dataset has been merged with the
+        <p style="margin: 12px 0;">The data from every country for each year in the gapminder_gdpPercap.dta dataset has been merged with the
             data from every country for each year in the gapminder_lifeExp.dta dataset. The
-            <code style="color:black; font-weight: bold;">merge</code> command first
+            <code>merge</code> command first
             identifies the variables that exist in both datasets, which are the <i>country</i>, <i>continent</i> and
             <i>year</i> variables and then adds all other variables that are unique to the gapminder_lifeExp.dta
             dataset, which is the <i>lifeExp</i> variables.
         </p>
-        <pre><code style="color:black; font-weight: bold;">. list in 1/10
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. list in 1/10
 
      +-------------------------------------------------------------------+
      |     country   year   contin~t   gdpPercap   lifeExp        _merge |
@@ -802,14 +843,14 @@ file gapminder_gdpPercap.dta saved
      +-------------------------------------------------------------------+
 
 </code></pre>
-        <br>
-        <p>The <i>_merge</i> variable indicates whether a merge has been successful, that is, whether an observation
+        
+        <p style="margin: 12px 0;">The <i>_merge</i> variable indicates whether a merge has been successful, that is, whether an observation
             from gdp_pc.dta could be matched with an observation in the life_exp.dta dataset based on the <i>country</i>
             and <i>year</i> variables.</p>
-        <p>We can use the <code style="color:black; font-weight: bold;">tab</code> command to create a table of the
+        <p style="margin: 12px 0;">We can use the <code>tab</code> command to create a table of the
             <i>_merge</i> variable. All observations could be
             matched.</p>
-        <pre><code style="color:black; font-weight: bold;">. tab _merge
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. tab _merge
 
                  _merge |      Freq.     Percent        Cum.
 ------------------------+-----------------------------------
@@ -818,16 +859,16 @@ file gapminder_gdpPercap.dta saved
                   Total |      1,704      100.00
 
 </code></pre>
-        <br>
-        <p>Before we continue with merging the current dataset with the pop.dta dataset in order to add the <i>pop</i>
+        
+        <p style="margin: 12px 0;">Before we continue with merging the current dataset with the pop.dta dataset in order to add the <i>pop</i>
             variable, we will have to delete the <i>_merge</i> variable so that a new <i>_merge</i> variable can be
             created for the next merge.</p>
-        <pre><code style="color:black; font-weight: bold;">. drop _merge
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. drop _merge
 
 </code></pre>
-        <br>
-        <p>Now we are going to merge the existing dataset with the pop.dta dataset.</p>
-        <pre><code style="color:black; font-weight: bold;">. merge 1:1 country year using gapminder_pop.dta
+        
+        <p style="margin: 12px 0;">Now we are going to merge the existing dataset with the pop.dta dataset.</p>
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. merge 1:1 country year using gapminder_pop.dta
 
     Result                           # of obs.
     -----------------------------------------
@@ -836,9 +877,9 @@ file gapminder_gdpPercap.dta saved
     -----------------------------------------
 
 </code></pre>
-        <br>
-        <p>The <i>pop</i> variable and another <i>_merge</i> have been added to the dataset.</p>
-        <pre><code style="color:black; font-weight: bold;">. list in 1/10
+        
+        <p style="margin: 12px 0;">The <i>pop</i> variable and another <i>_merge</i> have been added to the dataset.</p>
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. list in 1/10
 
      +------------------------------------------------------------------------------+
      |     country   year   contin~t   gdpPercap   lifeExp        pop        _merge |
@@ -857,9 +898,9 @@ file gapminder_gdpPercap.dta saved
      +------------------------------------------------------------------------------+
 
 </code></pre>
-        <br>
-        <p>Let us verify that all observations have been matched.</p>
-        <pre><code style="color:black; font-weight: bold;">. tab _merge
+        
+        <p style="margin: 12px 0;">Let us verify that all observations have been matched.</p>
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. tab _merge
 
                  _merge |      Freq.     Percent        Cum.
 ------------------------+-----------------------------------
@@ -868,11 +909,11 @@ file gapminder_gdpPercap.dta saved
                   Total |      1,704      100.00
 
 </code></pre>
-        <br>
-        <p>To clean up the dataset, we are going to remove the <i>_merge</i> variable since it is no longer needed.</p>
-        <p>We also move the <i>year</i> variable after the <i>continent</i> variable, because it makes our dataset look
+        
+        <p style="margin: 12px 0;">To clean up the dataset, we are going to remove the <i>_merge</i> variable since it is no longer needed.</p>
+        <p style="margin: 12px 0;">We also move the <i>year</i> variable after the <i>continent</i> variable, because it makes our dataset look
             more organized.</p>
-        <pre><code style="color:black; font-weight: bold;">. drop _merge
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. drop _merge
 
 . order year, after(continent)
 
@@ -895,13 +936,12 @@ file gapminder_gdpPercap.dta saved
      +----------------------------------------------------------------+
 
 </code></pre>
-        <br>
-        <h4><a href="#recap-of-merging-the-gapminder-gdppercapdta-gapminder-lifeexpdta-and-gapminder-popdta-datasets"
-                id="recap-of-merging-the-gapminder-gdppercapdta-gapminder-lifeexpdta-and-gapminder-popdta-datasets">Recap
-                of merging the gapminder_gdpPercap.dta, gapminder_lifeExp.dta and gapminder_pop.dta datasets</a></h4>
-        <p>Below are all commands we were carrying out in order to merge the three subsets. In the last step we save the
+        
+        <h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="recap-of-merging-the-gapminder-gdppercapdta-gapminder-lifeexpdta-and-gapminder-popdta-datasets">Recap
+                of merging the gapminder_gdpPercap.dta, gapminder_lifeExp.dta and gapminder_pop.dta datasets</span></h3>
+        <p style="margin: 12px 0;">Below are all commands we were carrying out in order to merge the three subsets. In the last step we save the
             new dataset under the file name gapminder_merged.dta.</p>
-        <pre><code style="color:black; font-weight: bold;">* Merging the subsets
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>* Merging the subsets
 use gapminder_gdpPercap.dta, clear
 merge 1:1 country year using gapminder_lifeExp.dta
 drop _merge
@@ -910,27 +950,27 @@ drop _merge
 order year, after(continent)
 save gapminder_merged, replace
 </code></pre>
-        <br>
-        <h4><a href="#exercise-6-merging-the-different-subsets" id="exercise-6-merging-the-different-subsets">Exercise
-                6: Merging the different subsets</a></h4>
-        <ol>
-            <li>Open the weo_data_gdpPercap.dta dataset and merge it with the weo_data_pop.dta dataset.</li>
-            <li>Merge the data again with the weo_data_ue_rate.dta dataset.</li>
+        
+        <div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-6-merging-the-different-subsets">Exercise
+                6: Merging the different subsets</span></h3>
+        <ol style="padding-left: 24px; margin: 12px 0;">
+            <li style="margin: 7px 0;">Open the weo_data_gdpPercap.dta dataset and merge it with the weo_data_pop.dta dataset.</li>
+            <li style="margin: 7px 0;">Merge the data again with the weo_data_ue_rate.dta dataset.</li>
         </ol>
-        <br>
-        <br>
-        <h3><a href="#bonus-using-a-for-loop-to-iterate-through-the-three-subjects"
-                id="bonus-using-a-for-loop-to-iterate-through-the-three-subjects">Bonus: Using a for loop to iterate
-                through the three subjects</a></h3>
-        <p>If we look back at our code to create the three subsets, we realize that the three code chunks only differ
+        
+        
+        </div></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="bonus-using-a-for-loop-to-iterate-through-the-three-subjects">Bonus: Using a for loop to iterate
+                through the three subjects</span></h2>
+        <p style="margin: 12px 0;">If we look back at our code to create the three subsets, we realize that the three code chunks only differ
             where we pass the name of the subject to the
-            <code style="color:black; font-weight: bold;">keep</code>,
-            <code style="color:black; font-weight: bold;">rename</code>, and
-            <code style="color:black; font-weight: bold;">save</code> command.
+            <code>keep</code>,
+            <code>rename</code>, and
+            <code>save</code> command.
         </p>
-        <p>We can simplify our code and reduce the number of lines, by applying a foreach loop that loops over the three
+        <p style="margin: 12px 0;">We can simplify our code and reduce the number of lines, by applying a foreach loop that loops over the three
             subject names using a local macro.</p>
-        <pre><code style="color:black; font-weight: bold;">* create subset for gdpPercap and reshape to long
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>* create subset for gdpPercap and reshape to long
 preserve
 keep if subject==&quot;gdpPercap&quot;
 reshape long y, i(country) j(year)
@@ -957,23 +997,23 @@ drop subject
 save gapminder_pop, replace
 restore
 </code></pre>
-        <p>Below you can see how this can be done.</p>
-        <p>We first create the string macro <i>subjects</i> for the three subjects GPD, life expectancy and population.
+        <p style="margin: 12px 0;">Below you can see how this can be done.</p>
+        <p style="margin: 12px 0;">We first create the string macro <i>subjects</i> for the three subjects GPD, life expectancy and population.
             We can iterate through each of the values of the <i>subjects</i> macro with the
-            <code style="color:black; font-weight: bold;">foreach</code> commmand.
+            <code>foreach</code> commmand.
             Since we want to iterate through a local macro, we have to use
-            <code style="color:black; font-weight: bold;">of local</code>in the
-            <code style="color:black; font-weight: bold;">foreach</code>
+            <code>of local</code>in the
+            <code>foreach</code>
             command.
         </p>
-        <p>Inside the main for loop we have to add double quotations around the slanted quotes for the <i>sub</i> macro,
+        <p style="margin: 12px 0;">Inside the main for loop we have to add double quotations around the slanted quotes for the <i>sub</i> macro,
             when creating the subset with
-            <code style="color:black; font-weight: bold;">keep</code>, because it here should represent a string value
+            <code>keep</code>, because it here should represent a string value
             as opposed to
             when renaming the <i>y</i> variable or saving the dataset.
         </p>
-        <p>There are comments added inside the for loop that explain each step</p>
-        <pre><code style="color:black; font-weight: bold;">* creating subsets for lifeExp pop and gdpPercap and reshaping to long
+        <p style="margin: 12px 0;">There are comments added inside the for loop that explain each step</p>
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>* creating subsets for lifeExp pop and gdpPercap and reshaping to long
 local subjects &quot;lifeExp pop gdpPercap&quot;
 foreach sub of local subjects{
 	preserve   /*Creating a retrievable copy of the original dataset*/
@@ -985,24 +1025,25 @@ foreach sub of local subjects{
 	restore    /*Restoring back to original dataset*/
 }
 </code></pre>
-        <br>
-        <h4><a href="#exercise-7-adding-a-for-loop" id="exercise-7-adding-a-for-loop">Exercise 7: Adding a for loop</a>
-        </h4>
-        <p>Apply a for loop to create the three subsets for the GDP per capita, unemployment and the general government
+        
+        <div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-7-adding-a-for-loop">Exercise 7: Adding a for loop</span>
+        </h3>
+        <p style="margin: 12px 0;">Apply a for loop to create the three subsets for the GDP per capita, unemployment and the general government
             structural balance.</p>
-        <br>
-        <br>
+        
+        
 
-        <h3><a href="#Reshaping-only" id="reshaping-only">Reshaping the gapminder dataset using only the reshape
-                command</a></h3>
+        </div></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="reshaping-only">Reshaping the gapminder dataset using only the reshape
+                command</span></h2>
 
-        <p>There is a more elegant way to reshape the gapminder dataset into the long orientation using only
+        <p style="margin: 12px 0;">There is a more elegant way to reshape the gapminder dataset into the long orientation using only
             a combination of reshape commands. For this, we need to perform a reshape to long followed by a reshape to
             wide orientation in sequence. Below is the gapminder data in its original shape.
         </p>
 
-        <pre>
-            <code style="color:black; font-weight: bold;">
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;">
+            <code>
         . list in 1/10
 
             +------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -1024,13 +1065,13 @@ foreach sub of local subjects{
             </code>
         </pre>
 
-        <p>
+        <p style="margin: 12px 0;">
             We perform the first reshape to the long orientation, just like we did previously, but without
             first creating a subset for one of the three subjects (gdp, life expectancy, and population).
         </p>
 
-        <pre>
-            <code style="color:black; font-weight: bold;">
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;">
+            <code>
 
         . reshape long y, i(country subject) j(year)
 
@@ -1077,16 +1118,16 @@ foreach sub of local subjects{
             </code>
         </pre>
 
-        <p>
+        <p style="margin: 12px 0;">
             This returns the data in the long orientation, where we get a single row for a specific year, for
             a specific subject for a specific country.
         </p>
-        <p>
+        <p style="margin: 12px 0;">
             We can now reshape the data to the wide orientation so that each subject is represented in a
             separate column.
         </p>
 
-        <p>As before, we use the wide option to reshape from long to wide orientation. The stubname for the
+        <p style="margin: 12px 0;">As before, we use the wide option to reshape from long to wide orientation. The stubname for the
             column holding the dependent variable is still y. The data in its final shape should have a row
             for each country and year, but the subjects should be spread across different columns, i.e. a
             separate column for each subject. Therefore, we need to include country and year with the i option
@@ -1096,8 +1137,8 @@ foreach sub of local subjects{
 
 
 
-        <pre>
-            <code style="color:black; font-weight: bold;">
+        <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;">
+            <code>
         . reshape wide y, i(country year) j(subject) string
         (j = gdpPercap lifeExp pop)
 
@@ -1145,25 +1186,37 @@ foreach sub of local subjects{
             </code>
         </pre>
 
-        <h4><a href="#exercise-8-using-reshape-only" id="exercise-8-using-reshape-only">Exercise 8: Using reshape
-                only</a></h4>
-        <ol>
-            <li>Load the weo_data dataset using the url
+        <div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-8-using-reshape-only">Exercise 8: Using reshape
+                only</span></h3>
+        <ol style="padding-left: 24px; margin: 12px 0;">
+            <li style="margin: 7px 0;">Load the weo_data dataset using the url
                 “https://github.com/mwiemers/datasets/blob/main/weo_data_dirty_reshape.xlsx?raw=true”</li>
-            <li>Use a combination of reshape to the long and reshape to the wide orienation as in the
+            <li style="margin: 7px 0;">Use a combination of reshape to the long and reshape to the wide orienation as in the
                 example to put the weo dataset in the right shape.</li>
-            <li>Rename the subject columns to remove the y at the start of the name.</li>
+            <li style="margin: 7px 0;">Rename the subject columns to remove the y at the start of the name.</li>
         </ol>
 
 
-        <h3><a href="#evaluation" id="evaluation">Final task: Please give us your feedback! </a></h3>
-        <p>Upon completing the survey, <b>you will receive the link to the solution file</b>, to check how your commands
-            compares to the sample solution.</p>
-        <p>In order to adapt our training to your needs and provide the most valuable learning experience for you, we
-            depend on your feedack.</p>
-        <p>We would be grateful if you could take 1 min before the end of the workshop to get your feedback! </p>
-        <p><a
-                href="https://lse.eu.qualtrics.com/jfe/form/SV_0vJs5yGpF1F359I?coursename=Data Cleaning in Stata 5: Merging data &topic=Stata&prog=SR&version=25-26">Click
-                here to open the survey!</a></p>
-    </div>
+        </div></section>
+<section id="confidence-leaving" style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px; border-left: 5px solid #1f4f8b; background: #edf3fc;"><h2 style="margin: 0 0 10px; font-size: 21px; color: #0b2c5f;">📋 Leaving your session: confidence check</h2><p style="margin: 0 0 18px;">Please complete this short questionnaire just before you leave the workshop session. It helps us understand how confident you feel after the session. Continuing to another project in this session? Skip this questionnaire and complete the ending questionnaire only before leaving.</p><a href="https://forms.cloud.microsoft/e/JQp2SjCLqm" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 11px 18px; background: #0b2c5f; color: #ffffff; border-radius: 7px; text-decoration: none;">Open the leaving confidence check ↗</a></section></section>
+
+</main></div>
+<script>
+const navLinks = [...document.querySelectorAll('.toc-link')];
+const targets = [...new Set(navLinks.map(link => document.getElementById(link.hash.slice(1))))].filter(Boolean);
+let scheduled = false;
+function updateContents() {
+ let current = targets[0];
+ for (const target of targets) if (target.getBoundingClientRect().top <= 140) current = target;
+ for (const link of navLinks) {
+  if (current && link.hash === '#' + current.id) link.setAttribute('aria-current', 'location');
+  else link.removeAttribute('aria-current');
+ }
+ scheduled = false;
+}
+window.addEventListener('scroll', () => {if (!scheduled) {scheduled = true; requestAnimationFrame(updateContents);}}, {passive:true});
+updateContents();
+document.querySelectorAll('.mobile-contents a').forEach(link => link.addEventListener('click', () => {document.querySelector('.mobile-contents').open = false;}));
+</script>
 </body>
+</html>
