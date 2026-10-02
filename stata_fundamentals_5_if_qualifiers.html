@@ -1,121 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <link rel="stylesheet" type="text/css" href="/css/stmarkdown.css">
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
-    </script>
-    <script type="text/javascript" async
-        src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
-    </script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stata Fundamentals 5 | Digital Skills Lab</title>
+
+  <link rel="stylesheet" type="text/css" href="/css/stmarkdown.css">
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+
+
+<style>
+* {box-sizing:border-box}
+html {scroll-behavior:smooth}
+body {margin:0; padding:0; background:#f4f6fb; color:#111827; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.page-layout {display:grid; grid-template-columns:260px minmax(0,1fr); gap:24px; max-width:1400px; margin:0 auto; padding:24px}
+.contents {position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow-y:auto; border:1px solid #d2e0f5; border-radius:12px; background:white; padding:20px 14px}
+.contents-label {font-size:12px; letter-spacing:1.5px; color:#526782; margin:0 10px 10px}
+.contents h2 {font-size:21px; color:#0b2c5f; margin:0 10px 16px}
+.toc-link {display:block; padding:10px 12px; margin:3px 0; color:#25476f; text-decoration:none; border-radius:7px; font-size:14px; line-height:1.45; border-left:3px solid transparent}
+.toc-link:hover,.toc-link:focus-visible {background:#edf3fc; color:#0b2c5f}
+.toc-link[aria-current="location"] {background:#edf3fc; border-left-color:#1f4f8b; color:#0b2c5f}
+.exercise-link {padding-left:24px; font-size:13px; color:#596d85}
+main {min-width:0}
+main > section {padding:0 !important; max-width:none !important; margin:0 !important}
+[id] {scroll-margin-top:24px}
+.mobile-contents {display:none}
+.skip-link {position:fixed; top:-100px; left:12px; padding:12px; background:white; z-index:10}
+.skip-link:focus {top:12px}
+a:focus-visible,summary:focus-visible {outline:3px solid #3174c9; outline-offset:3px}
+@media(max-width:900px) {
+ .page-layout {display:block; padding:16px}
+ .contents {display:none}
+ .mobile-contents {display:block; margin-bottom:18px; background:white; border:1px solid #d2e0f5; border-radius:10px; padding:14px}
+ .mobile-contents summary {cursor:pointer; padding:4px; color:#0b2c5f; font-size:17px}
+ .mobile-contents nav {margin-top:12px}
+}
+@media(max-width:520px) {
+ .page-layout {padding:10px}
+ main section,main header {padding:18px !important}
+ main > section {padding:0 !important}
+ main h1 {font-size:25px !important}
+}
+@media(prefers-reduced-motion:reduce) {html {scroll-behavior:auto}}
+@media print {.contents,.mobile-contents,.skip-link {display:none} .page-layout {display:block;padding:0} pre {white-space:pre-wrap}}
+</style>
 </head>
-  
 <body>
-  
-    <div class="sidenav">
-        <a href="##access-to-datasets">Access to Datasets</a>
-        <a href="#changing-the-working-directory_section" >Changing the working directory</a>
-        <a href="#exercise-changing-the-working-directory">Exercise: Changing the workign directory</a>
-        <a href="#loading-data-into-stata">Loading data into Stata</a>
-        <a href="#exercise-loading-data">Exercise: Loading data</a>
-        <a href="#inspecting-a-dataset">Inspecting a dataset</a>
-        <a href="#exercise-inspecting-data">Exercise: Inspecting data</a>
-        <a href="#summary-statistics">Summary statistics</a>
-        <a href="#exercise-summary-statistics">Exercise: Summary statistics</a>
-        <a href="#evaluation">Final task: Please give us your feedback!</a>
-    </div>
-    <div class="main">
-  
-<h1><a href="#stata-practical-5-if-qualifiers" id="stata-practical-5-if-qualifiers">Stata Fundamentals 5: If qualifiers</a></h1>
+<a class="skip-link" href="#tutorial">Skip to tutorial</a>
+<div class="page-layout">
+<aside class="contents"><p class="contents-label">DIGITAL SKILLS LAB</p><h2>On this page</h2><nav aria-label="Tutorial contents"><a class="toc-link" href="#confidence-starting">Starting confidence check</a>
+<a class="toc-link" href="#if-qualifiers-single-expressions">If qualifiers: single expressions</a>
+<a class="toc-link exercise-link" href="#exercise-1-if-qualifiers-with-single-expressions">Exercise 1: Single expressions</a>
+<a class="toc-link" href="#if-qualifiers-multiple-expressions">If qualifiers: multiple expressions</a>
+<a class="toc-link exercise-link" href="#exercise-2-if-qualifiers-with-multiple-expressions">Exercise 2: Multiple expressions</a>
+<a class="toc-link" href="#using-if-qualifiers-to-replace-values-and-create-variables">Replacing values and creating variables</a>
+<a class="toc-link exercise-link" href="#exercise-3-replacing-values-using-if-qualifiers">Exercise 3: Replacing values</a>
+<a class="toc-link" href="#confidence-leaving">Leaving confidence check</a></nav></aside>
+<main id="tutorial"><details class="mobile-contents"><summary>On this page</summary><nav aria-label="Mobile tutorial contents"><a class="toc-link" href="#confidence-starting">Starting confidence check</a>
+<a class="toc-link" href="#if-qualifiers-single-expressions">If qualifiers: single expressions</a>
+<a class="toc-link exercise-link" href="#exercise-1-if-qualifiers-with-single-expressions">Exercise 1: Single expressions</a>
+<a class="toc-link" href="#if-qualifiers-multiple-expressions">If qualifiers: multiple expressions</a>
+<a class="toc-link exercise-link" href="#exercise-2-if-qualifiers-with-multiple-expressions">Exercise 2: Multiple expressions</a>
+<a class="toc-link" href="#using-if-qualifiers-to-replace-values-and-create-variables">Replacing values and creating variables</a>
+<a class="toc-link exercise-link" href="#exercise-3-replacing-values-using-if-qualifiers">Exercise 3: Replacing values</a>
+<a class="toc-link" href="#confidence-leaving">Leaving confidence check</a></nav></details>
+<section lang="en" style="max-width: 1040px; margin: 0 auto 32px; padding: 16px; background: #f4f6fb; border-radius: 12px; box-sizing: border-box; font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; color: #111827; font-size: 16px; line-height: 1.7; overflow-wrap: break-word;">
+<section id="confidence-starting" style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px; border-left: 5px solid #1f4f8b; background: #edf3fc;"><h2 style="margin: 0 0 10px; font-size: 21px; color: #0b2c5f;">📋 Starting your session: confidence check</h2><p style="margin: 0 0 18px;">Once your workshop session has started, please complete this short questionnaire before beginning your first project during the workshop you attend today. It helps us understand how confident you feel before the session.</p><a href="https://forms.cloud.microsoft/e/XRDD7iWSmw" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 11px 18px; background: #0b2c5f; color: #ffffff; border-radius: 7px; text-decoration: none;">Open the starting confidence check ↗</a></section>
+<header style="background: linear-gradient(135deg, #0b2c5f, #1f4f8b); color: #ffffff; border-radius: 12px; padding: 28px; margin-bottom: 18px;"><p style="margin: 0 0 10px; font-size: 13px; letter-spacing: 1.5px;">DIGITAL SKILLS LAB · STATA</p><h1 style="margin: 0; font-size: 30px; line-height: 1.3; color: #ffffff;"><span id="stata-practical-5-if-qualifiers">Stata Fundamentals 5: If qualifiers</span></h1><p style="margin: 16px 0 0; color: #ffffff;">A practical guide to selecting observations, combining conditions and recoding variables with if qualifiers.</p></header>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;">About this session</h2>
         
-        <p>In this unit, you are going to learn about if qualifiers. The if qualifier enables you to carry out a command on a subset of the dataset for which the expression being used in the if qualifier is true.</p>
-<p>This way you can run a command for specific categories, that is, for instance, only female participants, but also for a specific range of values of a continuous variable, for instance, only participants with a minimum amount of income or a combination of both.</p>
+        <p style="margin: 12px 0;">In this unit, you are going to learn about if qualifiers. The if qualifier enables you to carry out a command on a subset of the dataset for which the expression being used in the if qualifier is true.</p>
+<p style="margin: 12px 0;">This way you can run a command for specific categories, that is, for instance, only female participants, but also for a specific range of values of a continuous variable, for instance, only participants with a minimum amount of income or a combination of both.</p>
 
-        <p><b>In this practical session, you will learn:</b></p>
-<ul>
-<li>about the purpose of if qualifiers</li>
-<li>how to use single if qualifiers</li>
-<li>how to combine multiple if qualifiers</li>
+        <p style="margin: 12px 0;">In this practical session, you will learn:</p>
+<ul style="padding-left: 24px; margin: 12px 0;">
+<li style="margin: 7px 0;">about the purpose of if qualifiers</li>
+<li style="margin: 7px 0;">how to use single if qualifiers</li>
+<li style="margin: 7px 0;">how to combine multiple if qualifiers</li>
 </ul>
 
-<br>
-<h3>More information on how the session is run</h3>
-<b>How to work together in the Zoom sessions</b>: 
-<ul>
-    <li>Plesase turn on your microphone and webcam.</li>
-    <li>One shares the screen and the other requests remote control. </li>
-    <li>Take turns on who types for each exercise.</li>
-</ul>
-<b>What to do when getting stuck</b>:
-<ol>
-    <li>Ask the trainer if you struggle to find a solution.</li>
-    <li>Use the help command. To get help with a specific command type <b>help "command name"</b></li>
-    <li>Search online. The statalist.org forum is usually the most useful resource.</li>
-</ol>
-        
-<br>
-<br>
-        
 
-<h2><a href="#if-qualifiers-single-expressions" id="if-qualifiers-single-expressions">if qualifiers: single expressions</a></h2>
-<p>With an if qualifier you can limit the scope of a command to those observations for which the expression you use after the <b>if</b> is true.</p>
-<p>Let us look at a few examples to explain how if qualifiers work.</p>
-<p>If we use the <b>list</b> command on the variables <i>make</i> and <i>price</i>, Stata will print all observations for those two variables.</p>
-<pre><code>. webuse auto, clear
+<h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;">More information on how the session is run</h3>
+How to work together in the Zoom sessions: 
+<ul style="padding-left: 24px; margin: 12px 0;">
+    <li style="margin: 7px 0;">Please turn on your microphone and webcam.</li>
+    <li style="margin: 7px 0;">One shares the screen and the other requests remote control. </li>
+    <li style="margin: 7px 0;">Take turns on who types for each exercise.</li>
+</ul>
+What to do when getting stuck:
+<ol style="padding-left: 24px; margin: 12px 0;">
+    <li style="margin: 7px 0;">Ask the trainer if you struggle to find a solution.</li>
+    <li style="margin: 7px 0;">Use the help command. To get help with a specific command type help "command name"</li>
+    <li style="margin: 7px 0;">Search online. The statalist.org forum is usually the most useful resource.</li>
+</ol></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="if-qualifiers-single-expressions">if qualifiers: single expressions</span></h2>
+<p style="margin: 12px 0;">With an if qualifier you can limit the scope of a command to those observations for which the expression you use after the if is true.</p>
+<p style="margin: 12px 0;">Let us look at a few examples to explain how if qualifiers work.</p>
+<p style="margin: 12px 0;">If we use the list command on the variables <i>make</i> and <i>price</i>, Stata will print all observations for those two variables.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. webuse auto, clear
 (1978 Automobile Data)
 
 . browse make price
 
 </code></pre>
-<img src="screenshots/if_browse00.png">
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="screenshots/if_browse00.png" alt="Stata data browser demonstrating a single if condition">
         
-<br>
-<p>We can use an if qualifier with the <b>list</b> command to limit the observations that are being printed. If, for instance, we only wanted to print observations with a price above 10000, we have to add an <b>if</b> qualifier followed by the expression <i>price &gt; 10000</i> to the command.</p>
-<p>Stata will evaluate the expression for every observation in the dataset and create a subset of the data for those observations for which the expression is true.</p>
-<p>Then Stata will run the <b>list make price</b> command on this particular subset of the data.</p>
-<pre><code>. browse make price if price &gt; 10000</code></pre>
-<img src="screenshots/if_browse01.png">
-<br>
-<p>The &gt; operator is used to test whether a variable is larger than a particular value. Below are examples of the other operators that can be used to create expressions.</p>
-<p>To run a command on a subset where a variable is equal to a particular value use the == operator.</p>
-<pre><code>. browse price if price == 10372</code></pre>
-<img src="screenshots/if_browse02.png">
+
+<p style="margin: 12px 0;">We can use an if qualifier with the list command to limit the observations that are being printed. If, for instance, we only wanted to print observations with a price above 10000, we have to add an if qualifier followed by the expression <i>price &gt; 10000</i> to the command.</p>
+<p style="margin: 12px 0;">Stata will evaluate the expression for every observation in the dataset and create a subset of the data for those observations for which the expression is true.</p>
+<p style="margin: 12px 0;">Then Stata will run the list make price command on this particular subset of the data.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. browse make price if price &gt; 10000</code></pre>
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="screenshots/if_browse01.png" alt="Stata data browser demonstrating a single if condition">
+
+<p style="margin: 12px 0;">The &gt; operator is used to test whether a variable is larger than a particular value. Below are examples of the other operators that can be used to create expressions.</p>
+<p style="margin: 12px 0;">To run a command on a subset where a variable is equal to a particular value use the == operator.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. browse price if price == 10372</code></pre>
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="screenshots/if_browse02.png" alt="Stata data browser demonstrating a single if condition">
         
-<br>
-<p>To run a command on a subset where a variable is smaller than a particular value use the &lt; operator.</p>
-<pre><code>. browse price if price &lt; 5000</code></pre>
-<img src="screenshots/if_browse03.png">
+
+<p style="margin: 12px 0;">To run a command on a subset where a variable is smaller than a particular value use the &lt; operator.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. browse price if price &lt; 5000</code></pre>
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="screenshots/if_browse03.png" alt="Stata data browser demonstrating a single if condition">
         
-<br>
-<p>To run a command on a subset where a variable is larger or equal to a particular value use the &gt;= or &lt;= operator.</p>
-<pre><code>. browse price if price &gt;= 11385</code></pre>
-<img src="screenshots/if_browse04.png">
+
+<p style="margin: 12px 0;">To run a command on a subset where a variable is larger or equal to a particular value use the &gt;= or &lt;= operator.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. browse price if price &gt;= 11385</code></pre>
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="screenshots/if_browse04.png" alt="Stata data browser demonstrating a single if condition">
         
-<pre><code>. browse price if price &lt;= 4749</code></pre>
-<br>
-<p>To run a command on a subset where a variable is larger or equal to a particular value use the != operator.</p>
-<pre><code>. browse price if price != 10372</code></pre>
-<img src="screenshots/if_browse05.png">
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. browse price if price &lt;= 4749</code></pre>
+
+<p style="margin: 12px 0;">To run a command on a subset where a variable is larger or equal to a particular value use the != operator.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. browse price if price != 10372</code></pre>
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="screenshots/if_browse05.png" alt="Stata data browser demonstrating a single if condition">
         
-<br>
-<p>Let us look at another example using the <b>sum</b> command. The <b>sum</b> command will create a table with descriptive statistics (mean, standard deviation).</p>
-<pre><code>. sum price
+
+<p style="margin: 12px 0;">Let us look at another example using the sum command. The sum command will create a table with descriptive statistics (mean, standard deviation).</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. sum price
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
        price |         74    6165.257    2949.496       3291      15906
 
 </code></pre>
-<br>
-<p>If we wanted to print the descriptive statistics of the price variable only for cars from the United States, we can add an if qualifier with the expression <i>foreign == 0</i>, as 0 represents domestic, that is, US cars.</p>
-<p>You can see that the number of observations is 52, since only those observations where the variable <i>foreign</i> has the value 0 have been selected.</p>
-<pre><code>. sum price if foreign == 0
+
+<p style="margin: 12px 0;">If we wanted to print the descriptive statistics of the price variable only for cars from the United States, we can add an if qualifier with the expression <i>foreign == 0</i>, as 0 represents domestic, that is, US cars.</p>
+<p style="margin: 12px 0;">You can see that the number of observations is 52, since only those observations where the variable <i>foreign</i> has the value 0 have been selected.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. sum price if foreign == 0
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
        price |         52    6072.423    3097.104       3291      15906
 
 </code></pre>
-<br>
-<p>In case you do not know the mapping of numbers and labels for a specific variable, you can use the <b>codebook</b> command, which contains a table with the mapping.</p>
-<pre><code>. codebook foreign
+
+<p style="margin: 12px 0;">In case you do not know the mapping of numbers and labels for a specific variable, you can use the codebook command, which contains a table with the mapping.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. codebook foreign
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 foreign                                                                                                                                                                                                                                           Car type
@@ -132,40 +176,40 @@ foreign                                                                         
                         22         1  Foreign
 
 </code></pre>
-<br>
-<h3><a href="#exercise-1-if-qualifiers-with-single-expressions" id="exercise-1-if-qualifiers-with-single-expressions">Exercise 1: if qualifiers with single expressions</a></h3>
-<ol>
-<li>Load the auto dataset</li>
-<li>List cars with a weight below 2000</li>
-<li>Print the descriptive statistics of the weight variable for foreign cars.</li> 
-<li>Run the four commands below, to split the make variable into two separate 
+
+<div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-1-if-qualifiers-with-single-expressions">Exercise 1: if qualifiers with single expressions</span></h3>
+<ol style="padding-left: 24px; margin: 12px 0;">
+<li style="margin: 7px 0;">Load the auto dataset</li>
+<li style="margin: 7px 0;">List cars with a weight below 2000</li>
+<li style="margin: 7px 0;">Print the descriptive statistics of the weight variable for foreign cars.</li> 
+<li style="margin: 7px 0;">Run the four commands below, to split the make variable into two separate 
 variables; one for the <i>make</i> and one for the <i>model</i>.
-<p>The <b>split</b> command will split the <i>make</i> variable into the three variables <i>make</i>, <i>make2</i> and <i>make3</i>. The <b>generate</b> command combines the <i>make2</i> and <i>make3</i> variables into the variable <i>model</i>. Then we delete the <i>make</i>, <i>make2</i> and <i>make3</i> variable and rename the <i>make1</i> variable to <i>make</i>.</p>
-<pre><code>split make
+<p style="margin: 12px 0;">The split command will split the <i>make</i> variable into the three variables <i>make</i>, <i>make2</i> and <i>make3</i>. The generate command combines the <i>make2</i> and <i>make3</i> variables into the variable <i>model</i>. Then we delete the <i>make</i>, <i>make2</i> and <i>make3</i> variable and rename the <i>make1</i> variable to <i>make</i>.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>split make
 generate model = make2+&quot; &quot;+make3
 drop make make2 make3
 rename make1 make
 </code></pre>
 </li>
-<li>Print the descriptive statistics of the price variable for Dodge and VW
+<li style="margin: 7px 0;">Print the descriptive statistics of the price variable for Dodge and VW
 cars to determine which is more expensive on average - Dodge or VW?</li>
 </ol>
-<br>
-<br>
-<h3><a href="#if-qualifiers-multiple-expressions" id="if-qualifiers-multiple-expressions">if qualifiers: multiple expressions</a></h3>
-<p>Sometimes you might want to run commands on a subset that is defined by a combination of conditions or variables. To do so, we have to combine two or more expressions in an if qualifier.</p>
-<p>For instance, to only list cars with a price above 6000 and lower than 7000, you would have to use the expression <i>price &gt; 6000 &amp; price &lt; 7000</i>. Notice, that you only use one <b>if</b> qualifier and combine both expressions with the <b>&amp;</b> symbol. By using the <b>&amp;</b> Stata knows that both conditions, that is, <b>price &gt; 6000</b> and <b>price &lt; 7000</b> have to be true for an observation to be included in the subset on which the <b>list</b> command will be executed.</p>
-<pre><code>. browse if price &gt; 6000 &amp; price &lt; 7000</code></pre>
-<img src="screenshots/if_double_browse01.png">
+
+</div></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="if-qualifiers-multiple-expressions">if qualifiers: multiple expressions</span></h2>
+<p style="margin: 12px 0;">Sometimes you might want to run commands on a subset that is defined by a combination of conditions or variables. To do so, we have to combine two or more expressions in an if qualifier.</p>
+<p style="margin: 12px 0;">For instance, to only list cars with a price above 6000 and lower than 7000, you would have to use the expression <i>price &gt; 6000 &amp; price &lt; 7000</i>. Notice, that you only use one if qualifier and combine both expressions with the &amp; symbol. By using the &amp; Stata knows that both conditions, that is, price &gt; 6000 and price &lt; 7000 have to be true for an observation to be included in the subset on which the list command will be executed.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. browse if price &gt; 6000 &amp; price &lt; 7000</code></pre>
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="screenshots/if_double_browse01.png" alt="Stata output demonstrating combined if conditions">
         
-<br>
-<p>Below is another example of how you can combine two expressions with an <b>if</b> qualifier to select a subset of the data for cars from outside the US with a price below 5000 USD.</p>
-<pre><code>. list if foreign==1 &amp; price &lt; 5000</code></pre>
-<img src="screenshots/if_double_browse02.png">
+
+<p style="margin: 12px 0;">Below is another example of how you can combine two expressions with an if qualifier to select a subset of the data for cars from outside the US with a price below 5000 USD.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. list if foreign==1 &amp; price &lt; 5000</code></pre>
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="screenshots/if_double_browse02.png" alt="Stata output demonstrating combined if conditions">
         
-<br>
-<p>Make sure to run the commands from the previous exercise in order to split the make variable into two separate make and model variables before you continue!</p>
-<pre><code>. webuse auto, clear
+
+<p style="margin: 12px 0;">Make sure to run the commands from the previous exercise in order to split the make variable into two separate make and model variables before you continue!</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. webuse auto, clear
 (1978 Automobile Data)
 
 . split make
@@ -179,44 +223,44 @@ make1  make2  make3
 . rename make1 make
 
 </code></pre>
-<br>
-<p>What if you would like to print only Dodge or Ford cars? You have to use the | symbol to combine the two expressions <i>brand==&ldquo;Dodge&rdquo;</i> and <i>brand==&ldquo;Ford&rdquo;</i>. This way Stata will select a subset where the brand variable is either equal to the value &ldquo;Dodge&rdquo; or &ldquo;Ford&rdquo;.</p>
-<pre><code>. browse if make==&quot;Dodge&quot; | make==&quot;Ford&quot;</code></pre>
-<img src="screenshots/if_double_browse03.png">
+
+<p style="margin: 12px 0;">What if you would like to print only Dodge or Ford cars? You have to use the | symbol to combine the two expressions <i>brand==&ldquo;Dodge&rdquo;</i> and <i>brand==&ldquo;Ford&rdquo;</i>. This way Stata will select a subset where the brand variable is either equal to the value &ldquo;Dodge&rdquo; or &ldquo;Ford&rdquo;.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. browse if make==&quot;Dodge&quot; | make==&quot;Ford&quot;</code></pre>
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="screenshots/if_double_browse03.png" alt="Stata output demonstrating combined if conditions">
         
-<br>
-<p>In order to run a command on a subset of your data that is defined by an even more complex set of conditions, you might have to combine three or more expressions.</p>
-<p>If you wanted to select cars from either Dodge or Buick with a price below 5000 USD, you would have to combine three expressions. Intuitively, you might assume that the if qualifier below should create a subset of that data.</p>
-<pre><code>. list make price if make==&quot;Dodge&quot; | make==&quot;Buick&quot; &amp; price &lt; 5000</code></pre>
-<img src="screenshots/if_double_browse04.png">
+
+<p style="margin: 12px 0;">In order to run a command on a subset of your data that is defined by an even more complex set of conditions, you might have to combine three or more expressions.</p>
+<p style="margin: 12px 0;">If you wanted to select cars from either Dodge or Buick with a price below 5000 USD, you would have to combine three expressions. Intuitively, you might assume that the if qualifier below should create a subset of that data.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. list make price if make==&quot;Dodge&quot; | make==&quot;Buick&quot; &amp; price &lt; 5000</code></pre>
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="screenshots/if_double_browse04.png" alt="Stata output demonstrating combined if conditions">
         
-<br> 
-<p>However, if we look at the values, you will notice that while all Buick cars have a price below 5000 USD, there are Dodge cars with a price above 5000 USD.</p>
-<p>We get this output since the expression <i>make==&ldquo;Buick&rdquo;</i> and <i>price &lt; 5000</i> are being grouped together through the <i>&amp;</i>. Therefor, Stata will<br />
+ 
+<p style="margin: 12px 0;">However, if we look at the values, you will notice that while all Buick cars have a price below 5000 USD, there are Dodge cars with a price above 5000 USD.</p>
+<p style="margin: 12px 0;">We get this output since the expression <i>make==&ldquo;Buick&rdquo;</i> and <i>price &lt; 5000</i> are being grouped together through the <i>&amp;</i>. Therefor, Stata will
 select observations where the variable make is equal to &ldquo;Buick&rdquo; and the variable price is below 5000 USD and also all observations with the make being &ldquo;Dodge&rdquo; irrespective what the value of the price variable is.</p>
-<p>In order to select cars that are either a Dodge or a Buick and have a price below 5000 USD, you have to put the first two expressions in parentheses. This way, you are effectively testing two conditions. The first is that the car is <i>either</i> a Dodge or a Buick and the second is that it <i>also</i> has a price below 5000 USD. The important difference is that the second condition, the price being below 5000 USD, now has to be true together with the car being either a Dodge or a Buick.</p>
-<pre><code>. list make price if (make==&quot;Dodge&quot; | make==&quot;Buick&quot;) &amp; price &lt; 5000</code></pre>
-<img src="screenshots/if_double_browse05.png">
+<p style="margin: 12px 0;">In order to select cars that are either a Dodge or a Buick and have a price below 5000 USD, you have to put the first two expressions in parentheses. This way, you are effectively testing two conditions. The first is that the car is <i>either</i> a Dodge or a Buick and the second is that it <i>also</i> has a price below 5000 USD. The important difference is that the second condition, the price being below 5000 USD, now has to be true together with the car being either a Dodge or a Buick.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. list make price if (make==&quot;Dodge&quot; | make==&quot;Buick&quot;) &amp; price &lt; 5000</code></pre>
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="screenshots/if_double_browse05.png" alt="Stata output demonstrating combined if conditions">
         
-<br>
-<h3><a href="#exercise-2-if-qualifiers-with-multiple-expressions" id="exercise-2-if-qualifiers-with-multiple-expressions">Exercise 2: if qualifiers with multiple expressions</a></h3>
-<ol>
-<li>List cars with a price between 6000 and 7000 including both values.</li>
-<li>Create a histogram with the <b>hist</b> command of the car prices for all Buick or Chevrolet cars.</li>
-<li>Create a histogram of price for all Buick and Chevrolet cars with a minimum weight of 3000 Pounds. Use the frequency option and set the number of bins to 10. Use the <b>help hist</b> command if you don&rsquo;t know how to customize the histogram correctly.</li>
+
+<div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-2-if-qualifiers-with-multiple-expressions">Exercise 2: if qualifiers with multiple expressions</span></h3>
+<ol style="padding-left: 24px; margin: 12px 0;">
+<li style="margin: 7px 0;">List cars with a price between 6000 and 7000 including both values.</li>
+<li style="margin: 7px 0;">Create a histogram with the hist command of the car prices for all Buick or Chevrolet cars.</li>
+<li style="margin: 7px 0;">Create a histogram of price for all Buick and Chevrolet cars with a minimum weight of 3000 Pounds. Use the frequency option and set the number of bins to 10. Use the help hist command if you don&rsquo;t know how to customize the histogram correctly.</li>
 </ol>
-<br>
-<br>
-<h2><a href="#using-if-qualifiers-to-replace-values-and-create-variables" id="using-if-qualifiers-to-replace-values-and-create-variables">Using if qualifiers to replace values and create variables</a></h2>
-<p>If qualifiers are particularly useful to replace values in an existing variable. Similarly, you can use if qualifiers to create variables that recode existing variables.</p>
-<p>In the following example we are creating a categorical recoding of the <i>price</i> variable under the new variable <i>price_cat</i>. The new variable <i>price_cat</i> categorizes the price variable into three bands:</p>
-<ul>
-<li>0 : price below 5000</li>
-<li>1 : price between 5000 and 10000</li>
-<li>2 : price above 10000</li>
+
+</div></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="using-if-qualifiers-to-replace-values-and-create-variables">Using if qualifiers to replace values and create variables</span></h2>
+<p style="margin: 12px 0;">If qualifiers are particularly useful to replace values in an existing variable. Similarly, you can use if qualifiers to create variables that recode existing variables.</p>
+<p style="margin: 12px 0;">In the following example we are creating a categorical recoding of the <i>price</i> variable under the new variable <i>price_cat</i>. The new variable <i>price_cat</i> categorizes the price variable into three bands:</p>
+<ul style="padding-left: 24px; margin: 12px 0;">
+<li style="margin: 7px 0;">0 : price below 5000</li>
+<li style="margin: 7px 0;">1 : price between 5000 and 10000</li>
+<li style="margin: 7px 0;">2 : price above 10000</li>
 </ul>
-<p>In the first step we simply create the variable <i>price_cat</i> and set all values to 0. We then use the <b>replace</b> command to replace the 0&rsquo;s with 1&rsquo;s where the price is equal or larger than 5000. Finally, we use the <b>replace</b> command again to replace the 0&rsquo;s with 1&rsquo;s where the price is larger than 10000.</p>
-<pre><code>. gen price_cat=0
+<p style="margin: 12px 0;">In the first step we simply create the variable <i>price_cat</i> and set all values to 0. We then use the replace command to replace the 0&rsquo;s with 1&rsquo;s where the price is equal or larger than 5000. Finally, we use the replace command again to replace the 0&rsquo;s with 1&rsquo;s where the price is larger than 10000.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. gen price_cat=0
 
 . replace price_cat=1 if price &gt;= 5000
 (37 real changes made)
@@ -225,9 +269,9 @@ select observations where the variable make is equal to &ldquo;Buick&rdquo; and 
 (10 real changes made)
 
 </code></pre>
-<br>
-<p>We can now use the <b>tab</b> command to inspect the frequency distribution of the different categories of the newly created <i>price_cat</i> variable.</p>
-<pre><code>. tab price_cat, sort
+
+<p style="margin: 12px 0;">We can now use the tab command to inspect the frequency distribution of the different categories of the newly created <i>price_cat</i> variable.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. tab price_cat, sort
 
   price_cat |      Freq.     Percent        Cum.
 ------------+-----------------------------------
@@ -238,32 +282,45 @@ select observations where the variable make is equal to &ldquo;Buick&rdquo; and 
       Total |         74      100.00
 
 </code></pre>
-<br>
-<h3><a href="#exercise-3-replacing-values-using-if-qualifiers" id="exercise-3-replacing-values-using-if-qualifiers">Exercise 3: Replacing values using if qualifiers</a></h3>
-<ol>
-<li>Create a new variable called <i>german</i> that codes for a car being german 
+
+<div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-3-replacing-values-using-if-qualifiers">Exercise 3: Replacing values using if qualifiers</span></h3>
+<ol style="padding-left: 24px; margin: 12px 0;">
+<li style="margin: 7px 0;">Create a new variable called <i>german</i> that codes for a car being german 
 or not. 
-    <ul>
-        <li>0 : non-german</li>
-        <li>1 : german</li>
+    <ul style="padding-left: 24px; margin: 12px 0;">
+        <li style="margin: 7px 0;">0 : non-german</li>
+        <li style="margin: 7px 0;">1 : german</li>
     </ul>	
     The german car brands in the dataset are:
-    <ul>
-        <li>- Audi</li>
-        <li>- BMW</li>
-        <li>- VW</li>
+    <ul style="padding-left: 24px; margin: 12px 0;">
+        <li style="margin: 7px 0;">- Audi</li>
+        <li style="margin: 7px 0;">- BMW</li>
+        <li style="margin: 7px 0;">- VW</li>
     </ul>
 </li>
-<li>What is the mean price of german cars?</li>
+<li style="margin: 7px 0;">What is the mean price of german cars?</li>
 </ol>
-        <br>
         
-<h3><a href="#evaluation" id="evaluation">Final task: Please give us your feedback! </a></h3>
-<p>Upon completing the survey, <b>you will receive the link to the solution file</b>, to check how your commands compares to the sample solution.</p>
-<p>In order to adapt our training to your needs and provide the most valuable learning experience for you, we depend on your feedack.</p>
-<p>We would be grateful if you could take 1 min before the end of the workshop to get your feedback! </p>
-<p><a href="https://lse.eu.qualtrics.com/jfe/form/SV_0vJs5yGpF1F359I?coursename=Stata Fundamentals 5: if qualifiers &topic=Stata&prog=SR&version=25-26">Click here to open the survey!</a></p>
-  <br>
-        <br>
-    </div>
+        </div></section>
+<section id="confidence-leaving" style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px; border-left: 5px solid #1f4f8b; background: #edf3fc;"><h2 style="margin: 0 0 10px; font-size: 21px; color: #0b2c5f;">📋 Leaving your session: confidence check</h2><p style="margin: 0 0 18px;">Please complete this short questionnaire just before you leave the workshop session. It helps us understand how confident you feel after the session. Continuing to another project in this session? Skip this questionnaire and complete the ending questionnaire only before leaving.</p><a href="https://forms.cloud.microsoft/e/JQp2SjCLqm" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 11px 18px; background: #0b2c5f; color: #ffffff; border-radius: 7px; text-decoration: none;">Open the leaving confidence check ↗</a></section></section>
+
+</main></div>
+<script>
+const navLinks = [...document.querySelectorAll('.toc-link')];
+const targets = [...new Set(navLinks.map(link => document.getElementById(link.hash.slice(1))))].filter(Boolean);
+let scheduled = false;
+function updateContents() {
+ let current = targets[0];
+ for (const target of targets) if (target.getBoundingClientRect().top <= 140) current = target;
+ for (const link of navLinks) {
+  if (current && link.hash === '#' + current.id) link.setAttribute('aria-current', 'location');
+  else link.removeAttribute('aria-current');
+ }
+ scheduled = false;
+}
+window.addEventListener('scroll', () => {if (!scheduled) {scheduled = true; requestAnimationFrame(updateContents);}}, {passive:true});
+updateContents();
+document.querySelectorAll('.mobile-contents a').forEach(link => link.addEventListener('click', () => {document.querySelector('.mobile-contents').open = false;}));
+</script>
 </body>
+</html>
