@@ -1,4 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stata Fundamentals 3 | Digital Skills Lab</title>
+
   <link rel="stylesheet" type="text/css" href="/css/stmarkdown.css">
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
@@ -8,66 +14,107 @@
 </script>
 
 
+<style>
+* {box-sizing:border-box}
+html {scroll-behavior:smooth}
+body {margin:0; padding:0; background:#f4f6fb; color:#111827; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.page-layout {display:grid; grid-template-columns:260px minmax(0,1fr); gap:24px; max-width:1400px; margin:0 auto; padding:24px}
+.contents {position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow-y:auto; border:1px solid #d2e0f5; border-radius:12px; background:white; padding:20px 14px}
+.contents-label {font-size:12px; letter-spacing:1.5px; color:#526782; margin:0 10px 10px}
+.contents h2 {font-size:21px; color:#0b2c5f; margin:0 10px 16px}
+.toc-link {display:block; padding:10px 12px; margin:3px 0; color:#25476f; text-decoration:none; border-radius:7px; font-size:14px; line-height:1.45; border-left:3px solid transparent}
+.toc-link:hover,.toc-link:focus-visible {background:#edf3fc; color:#0b2c5f}
+.toc-link[aria-current="location"] {background:#edf3fc; border-left-color:#1f4f8b; color:#0b2c5f}
+.exercise-link {padding-left:24px; font-size:13px; color:#596d85}
+main {min-width:0}
+main > section {padding:0 !important; max-width:none !important; margin:0 !important}
+[id] {scroll-margin-top:24px}
+.mobile-contents {display:none}
+.skip-link {position:fixed; top:-100px; left:12px; padding:12px; background:white; z-index:10}
+.skip-link:focus {top:12px}
+a:focus-visible,summary:focus-visible {outline:3px solid #3174c9; outline-offset:3px}
+@media(max-width:900px) {
+ .page-layout {display:block; padding:16px}
+ .contents {display:none}
+ .mobile-contents {display:block; margin-bottom:18px; background:white; border:1px solid #d2e0f5; border-radius:10px; padding:14px}
+ .mobile-contents summary {cursor:pointer; padding:4px; color:#0b2c5f; font-size:17px}
+ .mobile-contents nav {margin-top:12px}
+}
+@media(max-width:520px) {
+ .page-layout {padding:10px}
+ main section,main header {padding:18px !important}
+ main > section {padding:0 !important}
+ main h1 {font-size:25px !important}
+}
+@media(prefers-reduced-motion:reduce) {html {scroll-behavior:auto}}
+@media print {.contents,.mobile-contents,.skip-link {display:none} .page-layout {display:block;padding:0} pre {white-space:pre-wrap}}
+</style>
 </head>
-
 <body>
-
-<!-- Side navigation -->
-<div class="sidenav">
-  <a href="#linear-regression">Simple Linear Regression</a>
-  <a href="#scatter-plots">Scatter plots</a>
-  <a href="#running-a-linear-regression">Running a simple linear regression</a>
-  <a href="#scatter-plot-with-fitted-line">Scatter plot with fitted line</a>
-  <a href="#exercise-simple-linear-regression">Exercise: Simple linear regression</a>
-  <a href="#multiple-linear-regression">Multiple Linear Regression</a>
-  <a href="#scatter-matrix">Scatter matrix</a>
-  <a href="#running-multiple-linear-regression">Running a multiple linear regression</a>
-  <a href="#correlation-matrix">Correlation matrix</a>
-  <a href="#exercise-multiple-linear-regression">Exercise: Running a multiple linear regression</a>
-  <a href="#evaluation">Final task: Please give us your feedback!</a>
-  </div>
-  
-  
-<div class="main">
-
-<h1><a href="#stata-practical-3-linear-regression" id="stata-practical-3-linear-regression">Stata Fundamentals 3: Linear Regression</a></h1>
-
-
-<h2>More information on how the session is run</h2>
-<b>How to work together</b>: 
-<ul>
-    <li>Plesase turn on your microphone and webcam.</li>
-    <li>One shares the screen and the other requests remote control. </li>
-    <li>Take turns on who types for each exercise.</li>
+<a class="skip-link" href="#tutorial">Skip to tutorial</a>
+<div class="page-layout">
+<aside class="contents"><p class="contents-label">DIGITAL SKILLS LAB</p><h2>On this page</h2><nav aria-label="Tutorial contents"><a class="toc-link" href="#confidence-starting">Starting confidence check</a>
+<a class="toc-link" href="#linear-regression">Simple linear regression</a>
+<a class="toc-link" href="#scatter-plots">Scatter plots</a>
+<a class="toc-link exercise-link" href="#exercise-scatter-plot">Exercise: Scatter plot</a>
+<a class="toc-link" href="#running-a-linear-regression">Running a simple linear regression</a>
+<a class="toc-link" href="#scatter-plot-with-fitted-line">Scatter plot with fitted line</a>
+<a class="toc-link exercise-link" href="#exercise-simple-linear-regression">Exercise: Simple linear regression</a>
+<a class="toc-link" href="#multiple-linear-regression">Multiple linear regression</a>
+<a class="toc-link" href="#scatter-matrix">Scatter matrix</a>
+<a class="toc-link" href="#running-multiple-linear-regression">Running a multiple linear regression</a>
+<a class="toc-link" href="#correlation-matrix">Correlation matrix</a>
+<a class="toc-link exercise-link" href="#exercise-multiple-linear-regression">Exercise: Multiple linear regression</a>
+<a class="toc-link" href="#confidence-leaving">Leaving confidence check</a></nav></aside>
+<main id="tutorial"><details class="mobile-contents"><summary>On this page</summary><nav aria-label="Mobile tutorial contents"><a class="toc-link" href="#confidence-starting">Starting confidence check</a>
+<a class="toc-link" href="#linear-regression">Simple linear regression</a>
+<a class="toc-link" href="#scatter-plots">Scatter plots</a>
+<a class="toc-link exercise-link" href="#exercise-scatter-plot">Exercise: Scatter plot</a>
+<a class="toc-link" href="#running-a-linear-regression">Running a simple linear regression</a>
+<a class="toc-link" href="#scatter-plot-with-fitted-line">Scatter plot with fitted line</a>
+<a class="toc-link exercise-link" href="#exercise-simple-linear-regression">Exercise: Simple linear regression</a>
+<a class="toc-link" href="#multiple-linear-regression">Multiple linear regression</a>
+<a class="toc-link" href="#scatter-matrix">Scatter matrix</a>
+<a class="toc-link" href="#running-multiple-linear-regression">Running a multiple linear regression</a>
+<a class="toc-link" href="#correlation-matrix">Correlation matrix</a>
+<a class="toc-link exercise-link" href="#exercise-multiple-linear-regression">Exercise: Multiple linear regression</a>
+<a class="toc-link" href="#confidence-leaving">Leaving confidence check</a></nav></details>
+<section lang="en" style="max-width: 1040px; margin: 0 auto 32px; padding: 16px; background: #f4f6fb; border-radius: 12px; box-sizing: border-box; font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; color: #111827; font-size: 16px; line-height: 1.7; overflow-wrap: break-word;">
+<section id="confidence-starting" style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px; border-left: 5px solid #1f4f8b; background: #edf3fc;"><h2 style="margin: 0 0 10px; font-size: 21px; color: #0b2c5f;">📋 Starting your session: confidence check</h2><p style="margin: 0 0 18px;">Once your workshop session has started, please complete this short questionnaire before beginning your first project during the workshop you attend today. It helps us understand how confident you feel before the session.</p><a href="https://forms.cloud.microsoft/e/XRDD7iWSmw" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 11px 18px; background: #0b2c5f; color: #ffffff; border-radius: 7px; text-decoration: none;">Open the starting confidence check ↗</a></section>
+<header style="background: linear-gradient(135deg, #0b2c5f, #1f4f8b); color: #ffffff; border-radius: 12px; padding: 28px; margin-bottom: 18px;"><p style="margin: 0 0 10px; font-size: 13px; letter-spacing: 1.5px;">DIGITAL SKILLS LAB · STATA</p><h1 style="margin: 0; font-size: 30px; line-height: 1.3; color: #ffffff;"><span id="stata-practical-3-linear-regression">Stata Fundamentals 3: Linear Regression</span></h1><p style="margin: 16px 0 0; color: #ffffff;">A practical guide to exploring relationships, creating scatter plots and running simple and multiple linear regression.</p></header>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;">More information on how the session is run</h2>
+How to work together: 
+<ul style="padding-left: 24px; margin: 12px 0;">
+    <li style="margin: 7px 0;">Please turn on your microphone and webcam.</li>
+    <li style="margin: 7px 0;">One shares the screen and the other requests remote control. </li>
+    <li style="margin: 7px 0;">Take turns on who types for each exercise.</li>
 </ul>
-<b>What to do when getting stuck</b>:
-<ol>
-    <li>Ask the trainer if you struggle to find a solution.</li>
-    <li>Use the help command. To get help with a specific command type <b>help "command name"</b></li>
-    <li>Search online. The statalist.org forum is usually the most useful resource.</li>
+What to do when getting stuck:
+<ol style="padding-left: 24px; margin: 12px 0;">
+    <li style="margin: 7px 0;">Ask the trainer if you struggle to find a solution.</li>
+    <li style="margin: 7px 0;">Use the help command. To get help with a specific command type help "command name"</li>
+    <li style="margin: 7px 0;">Search online. The statalist.org forum is usually the most useful resource.</li>
 </ol>
 
-<b>In this practical session, you will learn to:</b>
-<ul>
-    <li>Use familiar Stata commands to explore a dataset prior to running a 
+In this practical session, you will learn to:
+<ul style="padding-left: 24px; margin: 12px 0;">
+    <li style="margin: 7px 0;">Use familiar Stata commands to explore a dataset prior to running a 
   regression analysis.</li>
-    <li>Create and customize scatter plots</li>
-    <li>Run a simple linear regression and read the analysis output.</li>
-    <li>Create scatter plots for a set of variables using a scatter matrix</li>
-    <li>Run a multiple linear regression and read the analysis output.</li>
-    <li>Create a correlation matrix.</li>
-</ul>
-<br>
-<br>
-<h2><a href="#linear-regression" id="linear-regression">Linear Regression</a></h2>
-<p>Stata allows you to easily perform and visualise simple linear regression.</p>
-<p>For this example, we will use the sample dataset <strong>nlsw88.dta</strong> in-built in Stata. We can access this dataset with the <strong>sysuse</strong> command. Add the <em>clear</em> option, if a dataset is already loaded in Stata.</p>
-<pre><code>. sysuse nlsw88.dta, clear
+    <li style="margin: 7px 0;">Create and customize scatter plots</li>
+    <li style="margin: 7px 0;">Run a simple linear regression and read the analysis output.</li>
+    <li style="margin: 7px 0;">Create scatter plots for a set of variables using a scatter matrix</li>
+    <li style="margin: 7px 0;">Run a multiple linear regression and read the analysis output.</li>
+    <li style="margin: 7px 0;">Create a correlation matrix.</li>
+</ul></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="linear-regression">Linear Regression</span></h2>
+<p style="margin: 12px 0;">Stata allows you to easily perform and visualise simple linear regression.</p>
+<p style="margin: 12px 0;">For this example, we will use the sample dataset nlsw88.dta in-built in Stata. We can access this dataset with the sysuse command. Add the <em>clear</em> option, if a dataset is already loaded in Stata.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. sysuse nlsw88.dta, clear
 (NLSW, 1988 extract)
 
 </code></pre>
-<p>Let us start by inspecting the variables in the dataset. We use the describe command, to get an overview of all variables in the dataset and what they represent.</p>
-<pre><code>. describe
+<p style="margin: 12px 0;">Let us start by inspecting the variables in the dataset. We use the describe command, to get an overview of all variables in the dataset and what they represent.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. describe
 
 Contains data from C:\Program Files (x86)\Stata15\ado\base/n/nlsw88.dta
   obs:         2,246                          NLSW, 1988 extract
@@ -98,16 +145,16 @@ tenure          float   %9.0g                 job tenure (years)
 Sorted by: idcode
 
 </code></pre>
-<p>Although it is possible to include categorical variables in a linear regression model, in this tutorial, we will only consider numerical non-categorical variables.</p>
-<p>Examples of a categorical variable is sex, race or occupation. These have a limited set of values and there is no inherent order in the different values.</p>
-<p>Examples of numerical non-categorical variables are age, wage, hours. These variables might have an unlimited set of values or they can be ordered in a pre-defined way.</p>
-<p>To have a look at the whole dataset and to narrow down potential variables for our analysis, we use the <strong>browse</strong> command.</p>
-<pre><code>. browse
+<p style="margin: 12px 0;">Although it is possible to include categorical variables in a linear regression model, in this tutorial, we will only consider numerical non-categorical variables.</p>
+<p style="margin: 12px 0;">Examples of a categorical variable is sex, race or occupation. These have a limited set of values and there is no inherent order in the different values.</p>
+<p style="margin: 12px 0;">Examples of numerical non-categorical variables are age, wage, hours. These variables might have an unlimited set of values or they can be ordered in a pre-defined way.</p>
+<p style="margin: 12px 0;">To have a look at the whole dataset and to narrow down potential variables for our analysis, we use the browse command.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. browse
 
 </code></pre>
-<img src="/screenshots/browse.png" height="500" />
-<p>We are interested in the two variables <strong>wage</strong> and <strong>tenure</strong>. Performing simple summary statistics can help you to better understand the distribution of the variables.</p>
-<pre><code>. sum tenure wage
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="/screenshots/browse.png" alt="Stata data browser showing the NLSW dataset" height="500" />
+<p style="margin: 12px 0;">We are interested in the two variables wage and tenure. Performing simple summary statistics can help you to better understand the distribution of the variables.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. sum tenure wage
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
@@ -115,38 +162,36 @@ Sorted by: idcode
         wage |      2,246    7.766949    5.755523   1.004952   40.74659
 
 </code></pre>
-<h3><a href="#scatter-plots" id="scatter-plots">Scatter Plots</a></h3>
-<p>Stata has a very easy-to-use graphical interface to create all plots. However, it is useful to get used to using code instead of the graphical interface as early as possible to be able to work your way up to more sophisticated graphs.</p>
-<p>Here&rsquo;s how you make a very simple scatter plot in Stata using the <strong>scatter</strong> command. Remember that the first variable is always displayed on the Y axis and the second variable is displayed on the X axis.</p>
-<pre><code>. scatter wage tenure
+<h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="scatter-plots">Scatter Plots</span></h3>
+<p style="margin: 12px 0;">Stata has a very easy-to-use graphical interface to create all plots. However, it is useful to get used to using code instead of the graphical interface as early as possible to be able to work your way up to more sophisticated graphs.</p>
+<p style="margin: 12px 0;">Here&rsquo;s how you make a very simple scatter plot in Stata using the scatter command. Remember that the first variable is always displayed on the Y axis and the second variable is displayed on the X axis.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. scatter wage tenure
 </code></pre>
-<img src="screenshots/first_scatter.png" height="300" />
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="screenshots/first_scatter.png" alt="Scatter plot of hourly wage against job tenure" height="300" />
 
 	
 
 	
-<h3><a href="#exercise-scatter-plot" id="exercise-scatter-plot">Exercise: Scatter plot</a></h3>
-
-</code></pre>
-<ol>
-    <li>Open the auto dataset, which is like the nlsw88.dta data one of Stata's built-in datasets.</li>
-    <li>Explore your dataset using the different commands that you have learned so far. In your opinion, on which variables could you perform a linear regression?</li>
-    <li>Make a scatter plot with the miles per gallon of the car (<strong>mpg</strong>) and their weight (<strong>weight</strong>). What is the relationship between weight and mpg?</li>
-    <li>Customise your plot to show the markers in a different colour and symbol.
-        <ol>
-            <li><em>Bonus:</em> Can you show a label with the model of the car in your scatter plot?</li>
+<div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-scatter-plot">Exercise: Scatter plot</span></h3>
+<ol style="padding-left: 24px; margin: 12px 0;">
+    <li style="margin: 7px 0;">Open the auto dataset, which is like the nlsw88.dta data one of Stata's built-in datasets.</li>
+    <li style="margin: 7px 0;">Explore your dataset using the different commands that you have learned so far. In your opinion, on which variables could you perform a linear regression?</li>
+    <li style="margin: 7px 0;">Make a scatter plot with the miles per gallon of the car (mpg) and their weight (weight). What is the relationship between weight and mpg?</li>
+    <li style="margin: 7px 0;">Customise your plot to show the markers in a different colour and symbol.
+        <ol style="padding-left: 24px; margin: 12px 0;">
+            <li style="margin: 7px 0;"><em>Bonus:</em> Can you show a label with the model of the car in your scatter plot?</li>
         </ol>
     </li>
 </ol>
 
-<br>
 
-<br>
+
+
 	
-<h3><a href="#running-a-linear-regression" id="running-a-linear-regression">Running a linear regression</a></h3>
-<p>Now that we have visualised the relationship between tenure and wage on a scatter plot, it is time to find out if there is an actual linear relationship between the two variables. We can find out by using the <strong>regress</strong> command, which will calculate a model to estimate the relationship between the wage and tenure variable.</p>
-<p>Remember to type the <em>dependent</em> variable first and the <em>independent</em> variable second.</p>
-<pre><code>. regress wage tenure
+</div><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="running-a-linear-regression">Running a linear regression</span></h3>
+<p style="margin: 12px 0;">Now that we have visualised the relationship between tenure and wage on a scatter plot, it is time to find out if there is an actual linear relationship between the two variables. We can find out by using the regress command, which will calculate a model to estimate the relationship between the wage and tenure variable.</p>
+<p style="margin: 12px 0;">Remember to type the <em>dependent</em> variable first and the <em>independent</em> variable second.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. regress wage tenure
 
       Source |       SS           df       MS      Number of obs   =     2,231
 -------------+----------------------------------   F(1, 2229)      =     72.66
@@ -163,53 +208,53 @@ Sorted by: idcode
 ------------------------------------------------------------------------------
 
 </code></pre>
-<p>As a result, Stata gives me a range of useful statistics. Perhaps the most interesting is the first line lower table (tenure), in which we see that there is a regression coefficient of <strong>0.1858747</strong>, alongside a standard error of <strong>0.0218054</strong>.</p>
-<p>We can interpret this as each year increase in work tenure is associated with an increase of 0.1858747 in hourly wage. The standard error gives us an indication of 
+<p style="margin: 12px 0;">As a result, Stata gives me a range of useful statistics. Perhaps the most interesting is the first line lower table (tenure), in which we see that there is a regression coefficient of 0.1858747, alongside a standard error of 0.0218054.</p>
+<p style="margin: 12px 0;">We can interpret this as each year increase in work tenure is associated with an increase of 0.1858747 in hourly wage. The standard error gives us an indication of 
 how certain this estimation is. The lower the standard error, the more certain we can be that the regression coefficient is a good estimation of the relationship between the two variables.</p>
-<p>The p-value (P&gt;|t|) shows that the correlation is statistically significant, as it is below the critical level of 0.05. The _cons line shows us values about the <em>intercept</em>. These are usually not very interesting for the interpretation of the data. The intercept is the predicted value for a tenure of 0 years, which is <strong>6.681316</strong>.</p>
-<h3><a href="#scatter-plot-with-fitted-line" id="scatter-plot-with-fitted-line">Scatter plot with fitted line</a></h3>
-<p>Based on the model that Stata has calculated, we can now create a new variable with predicted values for wage. We can use the <strong>predict</strong> command to generate this new variable with predicted values. We create a new variable called <strong>pred_wage</strong> by typing:</p>
-<pre><code>. predict pred_wage, xb
+<p style="margin: 12px 0;">The p-value (P&gt;|t|) shows that the correlation is statistically significant, as it is below the critical level of 0.05. The _cons line shows us values about the <em>intercept</em>. These are usually not very interesting for the interpretation of the data. The intercept is the predicted value for a tenure of 0 years, which is 6.681316.</p>
+<h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="scatter-plot-with-fitted-line">Scatter plot with fitted line</span></h3>
+<p style="margin: 12px 0;">Based on the model that Stata has calculated, we can now create a new variable with predicted values for wage. We can use the predict command to generate this new variable with predicted values. We create a new variable called pred_wage by typing:</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. predict pred_wage, xb
 (15 missing values generated)
 
 </code></pre>
-<p>Using the fitted values from <strong>pred_wage</strong>, we can now add a fitted line to our scatter plot.</p>
-<p>With the <strong>twoway</strong> command, we can combine a scatter and a line plot in a single chart. We first plot the scatter and then the line on top. When using <strong>twoway</strong> the <strong>scatter</strong> and <strong>line</strong> command both have to be put in separate parentheses.</p>
-<pre><code>. twoway (scatter wage tenure, msize(0.5)) (line pred_wage tenure)
+<p style="margin: 12px 0;">Using the fitted values from pred_wage, we can now add a fitted line to our scatter plot.</p>
+<p style="margin: 12px 0;">With the twoway command, we can combine a scatter and a line plot in a single chart. We first plot the scatter and then the line on top. When using twoway the scatter and line command both have to be put in separate parentheses.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. twoway (scatter wage tenure, msize(0.5)) (line pred_wage tenure)
 </code></pre>
-<img src="screenshots/third_scatter.png" height="300" />
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="screenshots/third_scatter.png" alt="Scatter plot of hourly wage against job tenure with fitted regression line" height="300" />
 
-<h3><a href="#exercise-simple-linear-regression" id="exercise-simple-linear-regression">Exercise: Simple linear regression</a></h3>
-<ol>
-    <li>Perform a regression analysis with the variables <strong>mpg</strong> and <strong>weight</strong></li>
-    <li>Fit a regression line on your scatter plot.</li>
+<div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-simple-linear-regression">Exercise: Simple linear regression</span></h3>
+<ol style="padding-left: 24px; margin: 12px 0;">
+    <li style="margin: 7px 0;">Perform a regression analysis with the variables mpg and weight</li>
+    <li style="margin: 7px 0;">Fit a regression line on your scatter plot.</li>
 </ol>
 
-<br>
-<br>
 
-<h2><a href="#multiple-linear-regression" id="multiple-linear-regression">Multiple Linear Regression</a></h2>
-<p>In the next section, we look at an example of multiple linear regression. Here we have multiple predictors, or independent variables. For this, we will be using a life expectancy dataset from the Stata website:</p>
-<pre><code>. use http://www.stata-press.com/data/r13/lifeexp, clear
+
+</div></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="multiple-linear-regression">Multiple Linear Regression</span></h2>
+<p style="margin: 12px 0;">In the next section, we look at an example of multiple linear regression. Here we have multiple predictors, or independent variables. For this, we will be using a life expectancy dataset from the Stata website:</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. use http://www.stata-press.com/data/r13/lifeexp, clear
 (Life expectancy, 1998)
 
 </code></pre>
-<h3><a href="#scatter-matrix" id="scatter-matrix">Scatter Matrix</a></h3>
-<p>First, we can do a preliminary screening of the relationships by creating a scatter matrix using the <strong>graph matrix</strong> command passing all variables that we would like to explore.</p>
-<pre><code>. graph matrix popgrowth lexp gnppc safewater
+<h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="scatter-matrix">Scatter Matrix</span></h3>
+<p style="margin: 12px 0;">First, we can do a preliminary screening of the relationships by creating a scatter matrix using the graph matrix command passing all variables that we would like to explore.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. graph matrix popgrowth lexp gnppc safewater
 </code></pre>
-<img src="screenshots/scatter_mat.png" height="300" />
-<p>We can also group our scatter matrix by another variable using the <strong>by()</strong> option:</p>
-<pre><code>. graph matrix popgrowth lexp gnppc safewater, by(region)
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="screenshots/scatter_mat.png" alt="Scatter matrix of population growth, life expectancy, GNP per capita and safe water" height="300" />
+<p style="margin: 12px 0;">We can also group our scatter matrix by another variable using the by() option:</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. graph matrix popgrowth lexp gnppc safewater, by(region)
 </code></pre>
-<img src="screenshots/scatter_mat2.png" height="500" />
-<p>Or we can only show half of the graph:</p>
-<pre><code>. graph matrix popgrowth lexp gnppc safewater, half
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="screenshots/scatter_mat2.png" alt="Scatter matrix grouped by region" height="500" />
+<p style="margin: 12px 0;">Or we can only show half of the graph:</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. graph matrix popgrowth lexp gnppc safewater, half
 </code></pre>
-<img src="screenshots/scatter_mat3.png" height="300" />
-<h3><a href="#running-multiple-linear-regression" id="running-multiple-linear-regression">Running a multiple Linear Regression</a></h3>
-<p>Similar to the previous example, we can use the <strong>regress</strong> command for multiple variables, with the dependent variable going first.</p>
-<pre><code>. regress popgrowth lexp gnppc safewater
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="screenshots/scatter_mat3.png" alt="Half scatter matrix" height="300" />
+<h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="running-multiple-linear-regression">Running a multiple Linear Regression</span></h3>
+<p style="margin: 12px 0;">Similar to the previous example, we can use the regress command for multiple variables, with the dependent variable going first.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. regress popgrowth lexp gnppc safewater
 
       Source |       SS           df       MS      Number of obs   =        37
 -------------+----------------------------------   F(3, 33)        =      4.28
@@ -228,12 +273,12 @@ how certain this estimation is. The lower the standard error, the more certain w
 ------------------------------------------------------------------------------
 
 </code></pre>
-<p>The resulting table looks very similar to the results of the simple linear regression and you can check the relevant statistics for each variable.</p>
-<p>This analysis yields and interesting pattern. The upper right table gives us statistics on the model as such. The R-squared value indicates how well the model predicts the The p-value (Prob &gt; F) is below the critical value of 0.05, which means that there is sufficient evidence for us to conclude that the predictors (lexp, gnppc, safewater) together predict the independent variable popgrowth.</p>
-<p>At the same time, we can see in the lower table that none of the regression coefficients is statistically significant. This indicates that there is high correlation between our predictors.</p>
-<h3><a href="#correlation-matrix" id="correlation-matrix">Correlation matrix</a></h3>
-<p>We can use the <strong>pwcorr</strong> command to get a correlation matrix for all variables in our analysis.</p>
-<pre><code>. pwcorr popgrowth lexp gnppc safewater
+<p style="margin: 12px 0;">The resulting table looks very similar to the results of the simple linear regression and you can check the relevant statistics for each variable.</p>
+<p style="margin: 12px 0;">This analysis yields and interesting pattern. The upper right table gives us statistics on the model as such. The R-squared value indicates how well the model predicts the The p-value (Prob &gt; F) is below the critical value of 0.05, which means that there is sufficient evidence for us to conclude that the predictors (lexp, gnppc, safewater) together predict the independent variable popgrowth.</p>
+<p style="margin: 12px 0;">At the same time, we can see in the lower table that none of the regression coefficients is statistically significant. This indicates that there is high correlation between our predictors.</p>
+<h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="correlation-matrix">Correlation matrix</span></h3>
+<p style="margin: 12px 0;">We can use the pwcorr command to get a correlation matrix for all variables in our analysis.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. pwcorr popgrowth lexp gnppc safewater
 
              | popgro~h     lexp    gnppc safewa~r
 -------------+------------------------------------
@@ -243,33 +288,41 @@ how certain this estimation is. The lower the standard error, the more certain w
    safewater |  -0.4280   0.8297   0.7063   1.0000 
 
 </code></pre>
-<h3><a href="#exercise-multiple-linear-regression" id="exercise-multiple-linear-regression">Exercise: Multiple linear regression</a></h3>
-<p>Now, try to perform a multiple linear regression by yourself. We use the <strong>auto</strong> dataset again:</p>
-<pre><code>. sysuse auto.dta, clear
+<div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-multiple-linear-regression">Exercise: Multiple linear regression</span></h3>
+<p style="margin: 12px 0;">Now, try to perform a multiple linear regression by yourself. We use the auto dataset again:</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. sysuse auto.dta, clear
 (1978 Automobile Data)
 
 </code></pre>
-<ol>
-    <li>Make a scatter matrix of the variables <strong>mpg</strong>, <strong>price</strong>, <strong>weight</strong> and <strong>length</strong>. What do you think is the most likely relationship between the variables?</li>
-    <li>Can you show two different plots for foreign and domestic cars?</li>
-    <li>Perform a regression analysis with the previously mentioned variables. What do the results mean?</li>
+<ol style="padding-left: 24px; margin: 12px 0;">
+    <li style="margin: 7px 0;">Make a scatter matrix of the variables mpg, price, weight and length. What do you think is the most likely relationship between the variables?</li>
+    <li style="margin: 7px 0;">Can you show two different plots for foreign and domestic cars?</li>
+    <li style="margin: 7px 0;">Perform a regression analysis with the previously mentioned variables. What do the results mean?</li>
 </ol>
 
   
-<br>
-<br>
-	   
-<h3><a href="#evaluation" id="evaluation">Final task: Please give us your feedback! </a></h3>
-	   <p>Upon completing the survey, <b>you will receive the link to the solution file</b>, to check how your commands compares to the sample solution.</p>
-<p>In order to adapt our training to your needs and provide the most valuable learning experience for you, we depend on your feedack.</p>
-	   <p>We would be grateful if you could take 1 min before the end of the workshop to get your feedback! </p>
-
-<a href="https://lse.eu.qualtrics.com/jfe/form/SV_0vJs5yGpF1F359I?coursename=Stata Fundamentals 3: Linear regression &topic=Stata&prog=SR&version=25-26">Click here to open the survey!</a>
-
-<br>
-<br>
-</div>
 
 
-	
+	   </div></section>
+<section id="confidence-leaving" style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px; border-left: 5px solid #1f4f8b; background: #edf3fc;"><h2 style="margin: 0 0 10px; font-size: 21px; color: #0b2c5f;">📋 Leaving your session: confidence check</h2><p style="margin: 0 0 18px;">Please complete this short questionnaire just before you leave the workshop session. It helps us understand how confident you feel after the session. Continuing to another project in this session? Skip this questionnaire and complete the ending questionnaire only before leaving.</p><a href="https://forms.cloud.microsoft/e/JQp2SjCLqm" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 11px 18px; background: #0b2c5f; color: #ffffff; border-radius: 7px; text-decoration: none;">Open the leaving confidence check ↗</a></section></section>
+
+</main></div>
+<script>
+const navLinks = [...document.querySelectorAll('.toc-link')];
+const targets = [...new Set(navLinks.map(link => document.getElementById(link.hash.slice(1))))].filter(Boolean);
+let scheduled = false;
+function updateContents() {
+ let current = targets[0];
+ for (const target of targets) if (target.getBoundingClientRect().top <= 140) current = target;
+ for (const link of navLinks) {
+  if (current && link.hash === '#' + current.id) link.setAttribute('aria-current', 'location');
+  else link.removeAttribute('aria-current');
+ }
+ scheduled = false;
+}
+window.addEventListener('scroll', () => {if (!scheduled) {scheduled = true; requestAnimationFrame(updateContents);}}, {passive:true});
+updateContents();
+document.querySelectorAll('.mobile-contents a').forEach(link => link.addEventListener('click', () => {document.querySelector('.mobile-contents').open = false;}));
+</script>
 </body>
+</html>
