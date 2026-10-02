@@ -1,4 +1,10 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stata Data Cleaning 1 | Digital Skills Lab</title>
+
   <link rel="stylesheet" type="text/css" href="/css/stmarkdown.css">
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
@@ -7,112 +13,155 @@
   src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
 </script>
 
+
+<style>
+* {box-sizing:border-box}
+html {scroll-behavior:smooth}
+body {margin:0; padding:0; background:#f4f6fb; color:#111827; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.page-layout {display:grid; grid-template-columns:260px minmax(0,1fr); gap:24px; max-width:none; margin:0 auto; padding:24px}
+.contents {position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow-y:auto; border:1px solid #d2e0f5; border-radius:12px; background:white; padding:20px 14px}
+.contents-label {font-size:12px; letter-spacing:1.5px; color:#526782; margin:0 10px 10px}
+.contents h2 {font-size:21px; color:#0b2c5f; margin:0 10px 16px}
+.toc-link {display:block; padding:10px 12px; margin:3px 0; color:#25476f; text-decoration:none; border-radius:7px; font-size:14px; line-height:1.45; border-left:3px solid transparent}
+.toc-link:hover,.toc-link:focus-visible {background:#edf3fc; color:#0b2c5f}
+.toc-link[aria-current="location"] {background:#edf3fc; border-left-color:#1f4f8b; color:#0b2c5f}
+.exercise-link {padding-left:24px; font-size:13px; color:#596d85}
+main {min-width:0}
+main > section {padding:0 !important; max-width:none !important; margin:0 !important}
+[id] {scroll-margin-top:24px}
+.mobile-contents {display:none}
+.skip-link {position:fixed; top:-100px; left:12px; padding:12px; background:white; z-index:10}
+.skip-link:focus {top:12px}
+a:focus-visible,summary:focus-visible {outline:3px solid #3174c9; outline-offset:3px}
+@media(max-width:900px) {
+ .page-layout {display:block; padding:16px}
+ .contents {display:none}
+ .mobile-contents {display:block; margin-bottom:18px; background:white; border:1px solid #d2e0f5; border-radius:10px; padding:14px}
+ .mobile-contents summary {cursor:pointer; padding:4px; color:#0b2c5f; font-size:17px}
+ .mobile-contents nav {margin-top:12px}
+}
+@media(max-width:520px) {
+ .page-layout {padding:10px}
+ main section,main header {padding:18px !important}
+ main > section {padding:0 !important}
+ main h1 {font-size:25px !important}
+}
+@media(prefers-reduced-motion:reduce) {html {scroll-behavior:auto}}
+@media print {.contents,.mobile-contents,.skip-link {display:none} .page-layout {display:block;padding:0} pre {white-space:pre-wrap}}
+</style>
 </head>
-
-
 <body>
+<a class="skip-link" href="#tutorial">Skip to tutorial</a>
+<div class="page-layout">
+<aside class="contents"><p class="contents-label">DIGITAL SKILLS LAB</p><h2>On this page</h2><nav aria-label="Tutorial contents"><a class="toc-link" href="#confidence-starting">Starting confidence check</a>
+<a class="toc-link" href="#properties-of-clean-data">Properties of clean data</a>
+<a class="toc-link" href="#converting-strings-to-numerical">Converting strings to numerical</a>
+<a class="toc-link" href="#importing-the-gapminderxlsx-dataset">Importing the dataset</a>
+<a class="toc-link" href="#identifying-numerical-values-in-string-format">Identifying numeric strings</a>
+<a class="toc-link" href="#removing-illegal-characters-before-converting">Removing unwanted characters</a>
+<a class="toc-link" href="#convert-to-numeric">Convert to numeric</a>
+<a class="toc-link exercise-link" href="#exercise-1-converting-strings-to-numerical-format">Exercise 1: Converting strings</a>
+<a class="toc-link" href="#removing-leading-and-trailing-spaces">Removing leading and trailing spaces</a>
+<a class="toc-link exercise-link" href="#exercise-2-removing-leading-and-trailing-spaces">Exercise 2: Removing spaces</a>
+<a class="toc-link" href="#splitting-and-combining-strings">Splitting and combining strings</a>
+<a class="toc-link exercise-link" href="#exercise-3-splitting-and-combining-strings">Exercise 3: Splitting and combining strings</a>
+<a class="toc-link" href="#confidence-leaving">Leaving confidence check</a></nav></aside>
+<main id="tutorial"><details class="mobile-contents"><summary>On this page</summary><nav aria-label="Mobile tutorial contents"><a class="toc-link" href="#confidence-starting">Starting confidence check</a>
+<a class="toc-link" href="#properties-of-clean-data">Properties of clean data</a>
+<a class="toc-link" href="#converting-strings-to-numerical">Converting strings to numerical</a>
+<a class="toc-link" href="#importing-the-gapminderxlsx-dataset">Importing the dataset</a>
+<a class="toc-link" href="#identifying-numerical-values-in-string-format">Identifying numeric strings</a>
+<a class="toc-link" href="#removing-illegal-characters-before-converting">Removing unwanted characters</a>
+<a class="toc-link" href="#convert-to-numeric">Convert to numeric</a>
+<a class="toc-link exercise-link" href="#exercise-1-converting-strings-to-numerical-format">Exercise 1: Converting strings</a>
+<a class="toc-link" href="#removing-leading-and-trailing-spaces">Removing leading and trailing spaces</a>
+<a class="toc-link exercise-link" href="#exercise-2-removing-leading-and-trailing-spaces">Exercise 2: Removing spaces</a>
+<a class="toc-link" href="#splitting-and-combining-strings">Splitting and combining strings</a>
+<a class="toc-link exercise-link" href="#exercise-3-splitting-and-combining-strings">Exercise 3: Splitting and combining strings</a>
+<a class="toc-link" href="#confidence-leaving">Leaving confidence check</a></nav></details>
+<section lang="en" style="max-width: none; margin: 0 auto 32px; padding: 16px; background: #f4f6fb; border-radius: 12px; box-sizing: border-box; font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; color: #111827; font-size: 16px; line-height: 1.7; overflow-wrap: break-word;">
+<section id="confidence-starting" style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px; border-left: 5px solid #1f4f8b; background: #edf3fc;"><h2 style="margin: 0 0 10px; font-size: 21px; color: #0b2c5f;">📋 Starting your session: confidence check</h2><p style="margin: 0 0 18px;">Once your workshop session has started, please complete this short questionnaire before beginning your first project during the workshop you attend today. It helps us understand how confident you feel before the session.</p><a href="https://forms.cloud.microsoft/e/XRDD7iWSmw" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 11px 18px; background: #0b2c5f; color: #ffffff; border-radius: 7px; text-decoration: none;">Open the starting confidence check ↗</a></section>
+<header style="background: linear-gradient(135deg, #0b2c5f, #1f4f8b); color: #ffffff; border-radius: 12px; padding: 28px; margin-bottom: 18px;"><p style="margin: 0 0 10px; font-size: 13px; letter-spacing: 1.5px;">DIGITAL SKILLS LAB · STATA</p><h1 style="margin: 0; font-size: 30px; line-height: 1.3; color: #ffffff;"><span id="data-cleaning-in-stata-strings">Stata Data Cleaning 1: Strings</span></h1><p style="margin: 16px 0 0; color: #ffffff;">A practical guide to converting numeric strings, removing whitespace, and splitting and combining text.</p></header>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;">About this session</h2>
+    <p style="margin: 12px 0;">The data cleaning series is going to teach you the most fundamental commands and techniques to prepare data in Stata for statistical analysis.</p>
+    <p style="margin: 12px 0;">The series is going to cover the following topics:</p>
   
-
-  <div class="sidenav">
-    <a href="#properties-of-clean-data">Properties of clean data</a>
-    <a href="#converting-strings-to-numerical">Converting strings to numerical</a>
-    <a href="#exercise-1-converting-strings-to-numerical-format">Exercise 1: Converting strings to numerical format</a>
-    <a href="#removing-leading-and-trailing-spaces">Removing leading and trailing spaces</a>
-    <a href="#exercise-2-removing-leading-and-trailing-spaces">Exercise 2: Removing leading and trailing spaces</a>
-    <a href="#splitting-and-combining-strings">Splitting and combining strings</a>
-    <a href="#exercise-3-splitting-and-combining-strings">Exercise 3: Splitting and combining strings</a>
-    <a href="#evaluation">Final task: Please give us your feedback!</a>
-  </div>
-
-  <div class="main">
-    
-    <h1><a href="#data-cleaning-in-stata-strings" id="data-cleaning-in-stata-strings">Data cleaning in Stata - Strings</a></h1>
-    <p>The data cleaning series is going to teach you the most fundamental commands and techniques to prepare data in Stata for statistical analysis.</p>
-    <p>The series is going to cover the following topics:</p>
-  
-    <ul>
-      <li>Converting string to numerical</li>
-      <li>Dealing with missings and duplicates</li>
-      <li>Applying variable and value labels</li>
-      <li>Reshaping between long and wide format</li>
-      <li>Merging multiple datasets</li>
+    <ul style="padding-left: 24px; margin: 12px 0;">
+      <li style="margin: 7px 0;">Converting string to numerical</li>
+      <li style="margin: 7px 0;">Dealing with missings and duplicates</li>
+      <li style="margin: 7px 0;">Applying variable and value labels</li>
+      <li style="margin: 7px 0;">Reshaping between long and wide format</li>
+      <li style="margin: 7px 0;">Merging multiple datasets</li>
     </ul>
     
-    <p>This sessions teaches you how to prepare string columns to a format that is suitable for data analysis and how to convert a string column with numerical values.</p>
+    <p style="margin: 12px 0;">This sessions teaches you how to prepare string columns to a format that is suitable for data analysis and how to convert a string column with numerical values.</p>
     
-    <p><b>By the end of this session, you will know how to:</b></p>
-    <ul>
-      <li>Identify numerical values that have been imported as strings</li>
-      <li>Modifying string values</li>
-      <li>Convert strings to numerical</li>
-      <li>Removing whitespace</li>
-      <li>Splitting and combining string values</li>
-    </ul>
-  <br>
-  <h2>More information on how the session is run</h2>
-<b>How to work together in the Zoom sessions</b>: 
-<ul>
-    <li>Plesase turn on your microphone and webcam.</li>
-    <li>One shares the screen and the other requests remote control. </li>
-    <li>Take turns on who types for each exercise.</li>
+    <p style="margin: 12px 0;">By the end of this session, you will know how to:</p>
+    <ul style="padding-left: 24px; margin: 12px 0;">
+      <li style="margin: 7px 0;">Identify numerical values that have been imported as strings</li>
+      <li style="margin: 7px 0;">Modifying string values</li>
+      <li style="margin: 7px 0;">Convert strings to numerical</li>
+      <li style="margin: 7px 0;">Removing whitespace</li>
+      <li style="margin: 7px 0;">Splitting and combining string values</li>
+    </ul></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;">More information on how the session is run</h2>
+How to work together in the Zoom sessions: 
+<ul style="padding-left: 24px; margin: 12px 0;">
+    <li style="margin: 7px 0;">Please turn on your microphone and webcam.</li>
+    <li style="margin: 7px 0;">One shares the screen and the other requests remote control. </li>
+    <li style="margin: 7px 0;">Take turns on who types for each exercise.</li>
 </ul>
-<b>What to do when getting stuck</b>:
-<ol>
-    <li>Ask the trainer if you struggle to find a solution.</li>
-    <li>Use the help command. To get help with a specific command type <b>help "command name"</b></li>
-    <li>Search online. The statalist.org forum is usually the most useful resource.</li>
-</ol>
-        
-<br>
-
-        <br>
-    
-    <h2><a href="#properties-of-clean-data" id="properties-of-clean-data">Properties of clean data</a></h2>
+What to do when getting stuck:
+<ol style="padding-left: 24px; margin: 12px 0;">
+    <li style="margin: 7px 0;">Ask the trainer if you struggle to find a solution.</li>
+    <li style="margin: 7px 0;">Use the help command. To get help with a specific command type help "command name"</li>
+    <li style="margin: 7px 0;">Search online. The statalist.org forum is usually the most useful resource.</li>
+</ol></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="properties-of-clean-data">Properties of clean data</span></h2>
   
-    <p>What do we mean, when we talk about clean vs unclean data? Here are some of the key features of clean data:</p>
+    <p style="margin: 12px 0;">What do we mean, when we talk about clean vs unclean data? Here are some of the key features of clean data:</p>
   
-    <ul>
-      <li>Numerical values are in a numerical format (integer or float)</li>
-      <li>Missing values are clearly labelled as missing</li>
-      <li>The data does not contain any duplicates</li>
-      <li>Categorical columns are in numerical format using text labels</li>
-      <li>Variables are meaningfully named and labelled</li>
-      <li>Text and numerical variables have been inspected for corrupted values and
+    <ul style="padding-left: 24px; margin: 12px 0;">
+      <li style="margin: 7px 0;">Numerical values are in a numerical format (integer or float)</li>
+      <li style="margin: 7px 0;">Missing values are clearly labelled as missing</li>
+      <li style="margin: 7px 0;">The data does not contain any duplicates</li>
+      <li style="margin: 7px 0;">Categorical columns are in numerical format using text labels</li>
+      <li style="margin: 7px 0;">Variables are meaningfully named and labelled</li>
+      <li style="margin: 7px 0;">Text and numerical variables have been inspected for corrupted values and
       cleaned</li>
-      <li>The data should be in long format, where the levels of a repeated measurement
+      <li style="margin: 7px 0;">The data should be in long format, where the levels of a repeated measurement
       are represented by a single variable and not spread out across several columns</li>
     </ul>
   
-    <p>The main reasons why data should be cleaned in a way outlined in the above list, is that it will prevent errors from commands that assume data to be in that particular format. For instance, Stata assumes data to be in long format for statistical analysis involving repeated measures and categorical variables to be using numerical values instead of strings. All of the above listed aspects of cleaning data will be addressed in the data cleaning workshop series. <br> <br></p>
+    <p style="margin: 12px 0;">The main reasons why data should be cleaned in a way outlined in the above list, is that it will prevent errors from commands that assume data to be in that particular format. For instance, Stata assumes data to be in long format for statistical analysis involving repeated measures and categorical variables to be using numerical values instead of strings. All of the above listed aspects of cleaning data will be addressed in the data cleaning workshop series.  </p></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="converting-strings-to-numerical">Converting strings to numerical</span></h2>
   
-    <h2><a href="#converting-strings-to-numerical" id="converting-strings-to-numerical">Converting strings to numerical</a></h2>
+    <h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="importing-the-gapminderxlsx-dataset">Importing the gapminder.xlsx dataset</span></h3>
   
-    <h3><a href="#importing-the-gapminderxlsx-dataset" id="importing-the-gapminderxlsx-dataset">Importing the gapminder.xlsx dataset</a></h3>
-  
-    <p>We import the gapminder.xlsx dataset with the <b>import excel</b> command. Since the data is coming from an url, we have to put <i>using</i> before the url. Since the first row contains the variable names, we use the <i>firstrow</i> option to set the values from the first row in the csv file as the variable names.</p>
-    <pre><code>. import excel using https://github.com/mwiemers/datasets/raw/main/gapminder_dirty_strings.xlsx, firstrow clear
+    <p style="margin: 12px 0;">We import the gapminder.xlsx dataset with the import excel command. Since the data is coming from an url, we have to put <i>using</i> before the url. Since the first row contains the variable names, we use the <i>firstrow</i> option to set the values from the first row in the csv file as the variable names.</p>
+    <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. import excel using https://github.com/mwiemers/datasets/raw/main/gapminder_dirty_strings.xlsx, firstrow clear
 
     </code></pre>
-    <p>Let us have a quick look at the data.</p>
-    <p>The gapminder dataset contains data on GDP, population and life expectancy across the world. Each row represents values for a country. The actual values for the years 1952 to 2007 are in the D - O variables.</p>
-    <pre><code>. br
+    <p style="margin: 12px 0;">Let us have a quick look at the data.</p>
+    <p style="margin: 12px 0;">The gapminder dataset contains data on GDP, population and life expectancy across the world. Each row represents values for a country. The actual values for the years 1952 to 2007 are in the D - O variables.</p>
+    <pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. br
 
     </code></pre>
   
-    <img src="/screenshots/browse_gapminder.png" height="70%" />
-  <br>
-      <br>
-      <br>
-      <br>
+    <img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="/screenshots/browse_gapminder.png" alt="Stata data browser showing the imported Gapminder dataset" height="70%" />
+  
+      
+      
+      
     
-    <h3><a href="#identifying-numerical-values-in-string-format" id="identifying-numerical-values-in-string-format">Identifying numerical values in string format</a></h3>
+    <h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="identifying-numerical-values-in-string-format">Identifying numerical values in string format</span></h3>
   
-    <p>In this unit you are going to learn how to convert variables that contain numerical data but have been imported into Stata as string, i.e. text variables, into a numerical format.</p>
-    <p>Sometimes numeric variables are displayed using a dot in csv files or a comma in Excel files to separate thousands, which makes large numbers easier to read. This can cause the problem that Stata will import them as strings, since for numerical variables there is no other symbol allowed apart from the dot as a decimal separator.</p>
-    <p>It is therefore a good habit to always inspect a dataset after having imported it to spot variables that need to be converted to a different format.</p>
-    <p>After having imported the gapminder dataset, we are going to inspect how the variables have been imported with <b>describe</b>.</p>
+    <p style="margin: 12px 0;">In this unit you are going to learn how to convert variables that contain numerical data but have been imported into Stata as string, i.e. text variables, into a numerical format.</p>
+    <p style="margin: 12px 0;">Sometimes numeric variables are displayed using a dot in csv files or a comma in Excel files to separate thousands, which makes large numbers easier to read. This can cause the problem that Stata will import them as strings, since for numerical variables there is no other symbol allowed apart from the dot as a decimal separator.</p>
+    <p style="margin: 12px 0;">It is therefore a good habit to always inspect a dataset after having imported it to spot variables that need to be converted to a different format.</p>
+    <p style="margin: 12px 0;">After having imported the gapminder dataset, we are going to inspect how the variables have been imported with describe.</p>
   
-<pre><code>. describe
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. describe
 
 Contains data
   obs:           432                          
@@ -143,11 +192,11 @@ Sorted by:
 
 </code></pre>
   
-    <p>All variables have been imported as string, which makes sense for the first three variables, which are categorical variables that contain text data. The remaining variables for the years from 1952 - 2007 however all contain numerical data.</p>
-    <p>We can get a quick overview of the data that is stored in the D-O variables with list.</p>
-    <p>The D-O variables use a comma to group the thousands as you can see in the third and fourth row.</p>
+    <p style="margin: 12px 0;">All variables have been imported as string, which makes sense for the first three variables, which are categorical variables that contain text data. The remaining variables for the years from 1952 - 2007 however all contain numerical data.</p>
+    <p style="margin: 12px 0;">We can get a quick overview of the data that is stored in the D-O variables with list.</p>
+    <p style="margin: 12px 0;">The D-O variables use a comma to group the thousands as you can see in the third and fourth row.</p>
   
-<pre><code>. list D-O in 1/5
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. list D-O in 1/5
 
    +---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
    |           D             E              F              G              H              I              J              K              L              M              N              O |
@@ -160,21 +209,21 @@ Sorted by:
    +---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 </code></pre>
-  <br>
-      <br>
-    <h3><a href="#removing-illegal-characters-before-converting" id="removing-illegal-characters-before-converting">Removing illegal characters before converting</a></h3>
   
-    <p>In order to convert a variable that is in string format to numeric, we first have to remove any illegal characters. We have identified the commas in the D-O variables in the previous step. We can remove the commas with the replace command in combination with the <b>subinstr()</b> function.</p>
+      
+    <h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="removing-illegal-characters-before-converting">Removing illegal characters before converting</span></h3>
+  
+    <p style="margin: 12px 0;">In order to convert a variable that is in string format to numeric, we first have to remove any illegal characters. We have identified the commas in the D-O variables in the previous step. We can remove the commas with the replace command in combination with the subinstr() function.</p>
 
-<pre><code>. replace D=subinstr(D,&quot;,&quot;, &quot;&quot;, .)
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. replace D=subinstr(D,&quot;,&quot;, &quot;&quot;, .)
 (242 real changes made)
 </code></pre>
   
-    <p>We use replace to make changes to the values in the variable D. In particular, we want to replace every comma with an empty string. In order to do so, we must ust the <b>subinstr()</b> function after the = sign.</p>
-    <p>The <b>subinstr()</b> function takes four arguments. The first is the variable we want to replace - D. The second argument is the value inside the variable, that we want to replace - the comma. The third argument is the value that we want to replace the comma with - an empty string. With the last argument you can specify how often you want to apply changing a comma to an empty string. It could be that there are only two commas in the variable that you want to replace. In that case you would enter a 2. By entering a . we instruct <b>subinstr()</b> to replace all occurences of the comma inside the values of the D variable with an empty string.</p>
-    <p>Below we replace the commas in all remaining variables with an empty string.</p>
+    <p style="margin: 12px 0;">We use replace to make changes to the values in the variable D. In particular, we want to replace every comma with an empty string. In order to do so, we must ust the subinstr() function after the = sign.</p>
+    <p style="margin: 12px 0;">The subinstr() function takes four arguments. The first is the variable we want to replace - D. The second argument is the value inside the variable, that we want to replace - the comma. The third argument is the value that we want to replace the comma with - an empty string. With the last argument you can specify how often you want to apply changing a comma to an empty string. It could be that there are only two commas in the variable that you want to replace. In that case you would enter a 2. By entering a . we instruct subinstr() to replace all occurences of the comma inside the values of the D variable with an empty string.</p>
+    <p style="margin: 12px 0;">Below we replace the commas in all remaining variables with an empty string.</p>
   
-<pre><code>. replace D=subinstr(D,&quot;,&quot;, &quot;&quot;, .)
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. replace D=subinstr(D,&quot;,&quot;, &quot;&quot;, .)
 (0 real changes made)
 
 . replace E=subinstr(E,&quot;,&quot;, &quot;&quot;, .)
@@ -212,9 +261,9 @@ Sorted by:
 
 </code></pre>
     
-    <p>We can write the code more efficient with a foreach loop.</p>
+    <p style="margin: 12px 0;">We can write the code more efficient with a foreach loop.</p>
     
-<pre><code>. foreach var of varlist D-O{
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. foreach var of varlist D-O{
       replace `var'=subinstr(`var', &quot;,&quot;, &quot;&quot;, .)
 }
 (0 real changes made)
@@ -230,16 +279,15 @@ Sorted by:
 (0 real changes made)
 (0 real changes made)
 
-</code></pre>
-    <br>
-    <h2><a href="#convert-to-numeric" id="convert-to-numeric">Convert to numeric</a></h2>
+</code></pre></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="convert-to-numeric">Convert to numeric</span></h2>
     
-    <p>Now that we have removed all commas in the D-O variables, we can convert the<br />
+    <p style="margin: 12px 0;">Now that we have removed all commas in the D-O variables, we can convert the
     variables to the numeric format with the destring command.</p>
-    <p>We provide all D-O variables with D-O as the argument to the <b>destring</b> command. In order to overwrite the existing variables, instead of creating new variables, we use the replace option.</p>
-    <p>If we now attempt to destring all D-O variables, Stata will refuse to do so for the variables D-I, since they contain non-numerical strings.</p>
+    <p style="margin: 12px 0;">We provide all D-O variables with D-O as the argument to the destring command. In order to overwrite the existing variables, instead of creating new variables, we use the replace option.</p>
+    <p style="margin: 12px 0;">If we now attempt to destring all D-O variables, Stata will refuse to do so for the variables D-I, since they contain non-numerical strings.</p>
     
-<pre><code>. destring D-O, replace
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. destring D-O, replace
 D: contains nonnumeric characters; no replace
 E: contains nonnumeric characters; no replace
 F: contains nonnumeric characters; no replace
@@ -254,10 +302,10 @@ N: all characters numeric; replaced as double
 O: all characters numeric; replaced as double
 </code></pre>
   
-    <p>We can inspect the non-numerical values with the following command. The <b>real</b> command will convert string values to number. If a string value does not only consist of digits, it will return the dot, which represents a missing numerical value in Stata. With the below command, we print the frequencies, using <b>tab</b>, for all values where <b>real(D)</b> returns a missing.</p>
-    <p>The value &ldquo;n/a&rdquo; occurs once in the D-I variables.</p>
+    <p style="margin: 12px 0;">We can inspect the non-numerical values with the following command. The real command will convert string values to number. If a string value does not only consist of digits, it will return the dot, which represents a missing numerical value in Stata. With the below command, we print the frequencies, using tab, for all values where real(D) returns a missing.</p>
+    <p style="margin: 12px 0;">The value &ldquo;n/a&rdquo; occurs once in the D-I variables.</p>
     
-<pre><code>. tab D if real(D) == .
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. tab D if real(D) == .
 
          1952 |      Freq.     Percent        Cum.
 --------------+-----------------------------------
@@ -306,9 +354,9 @@ O: all characters numeric; replaced as double
         Total |          1      100.00
 </code></pre>
     
-    <p>In case a variable contains non-numeric entries, we can use the <i>force</i> option to replace all of the non-numeric values that Stata cannot convert to a number to a missing. You will learn more about missing values in the next workshop.</p>
+    <p style="margin: 12px 0;">In case a variable contains non-numeric entries, we can use the <i>force</i> option to replace all of the non-numeric values that Stata cannot convert to a number to a missing. You will learn more about missing values in the next workshop.</p>
     
-<pre><code>. destring D-I, replace force
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. destring D-I, replace force
 D: contains nonnumeric characters; replaced as double
 (1 missing value generated)
 E: contains nonnumeric characters; replaced as double
@@ -323,37 +371,38 @@ I: contains nonnumeric characters; replaced as double
 (1 missing value generated)
 
 </code></pre>
-  <br>
-    <h3><a href="#exercise-1-converting-strings-to-numerical-format" id="exercise-1-converting-strings-to-numerical-format">Exercise 1: Converting strings to numerical format</a></h3>
   
-    <ol>
-      <li>Import the weo_data_dirty.xlsx file using the url <b>https://raw.githubusercontent.com/mwiemers/datasets/main/weo_data_dirty_strings.xlsx</b>. 
+    <div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-1-converting-strings-to-numerical-format">Exercise 1: Converting strings to numerical format</span></h3>
+  
+    <ol style="padding-left: 24px; margin: 12px 0;">
+      <li style="margin: 7px 0;">Import the weo_data_dirty.xlsx file using the url https://raw.githubusercontent.com/mwiemers/datasets/main/weo_data_dirty_strings.xlsx. 
       Make sure to import the variable names from row 1.</li>
-      <li>The dataset is similar to the gapminder dataset, but has different types 
+      <li style="margin: 7px 0;">The dataset is similar to the gapminder dataset, but has different types 
       of economic variables. Like in the gapminder dataset, 
         each row represents the data for a country. The variables <i>C-AK</i> contain data for 
       the different economic variables for each year from 1980 to 2004. The 
     <i>subjectdescriptor</i> variable indicates the type of economic variable.</li>
-      <li>Check which variables have been imported as string.</li>
-      <li>Have a look at the data to check whether some of the string variables 
+      <li style="margin: 7px 0;">Check which variables have been imported as string.</li>
+      <li style="margin: 7px 0;">Have a look at the data to check whether some of the string variables 
       contain numerical values that should be converted to the numerical format. 
       <i>NB: Only numbers and the dot (for missing) are allowed when 
       converting a string to the numerical format. There are two characters that 
       need to be replaced before the variables can be converted to the numeric format.</i></li>
-      <li>Replace the three illegal characters inside the strings so that only the actual 
+      <li style="margin: 7px 0;">Replace the three illegal characters inside the strings so that only the actual 
       numbers remain. Use a foreach loop to do this.</li>
-      <li>Convert the string variables to numerical.</li>
+      <li style="margin: 7px 0;">Convert the string variables to numerical.</li>
     </ol>
     
-    <br>
-    <br>
-  
-    <h2><a href="#removing-leading-and-trailing-spaces" id="removing-leading-and-trailing-spaces">Removing leading and trailing spaces</a></h2>
-  
-    <p>String variables sometimes contain unnecessary white spaces. We can easily remove these with the <b>strtrim</b> function. Let&rsquo;s first find out whether there are any leading or trailing spaces for the continent and country variables.</p>
-    <p>The frequency table shows that several countries occur several times due to leading or trailing spaces.</p>
     
-<pre><code>. tab continent
+    
+  
+    </div></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="removing-leading-and-trailing-spaces">Removing leading and trailing spaces</span></h2>
+  
+    <p style="margin: 12px 0;">String variables sometimes contain unnecessary white spaces. We can easily remove these with the strtrim function. Let&rsquo;s first find out whether there are any leading or trailing spaces for the continent and country variables.</p>
+    <p style="margin: 12px 0;">The frequency table shows that several countries occur several times due to leading or trailing spaces.</p>
+    
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. tab continent
 
   continent |      Freq.     Percent        Cum.
 ------------+-----------------------------------
@@ -370,16 +419,16 @@ I: contains nonnumeric characters; replaced as double
 
 </code></pre>
 
-    <p>We can replace the values with the trimmed values.</p>
+    <p style="margin: 12px 0;">We can replace the values with the trimmed values.</p>
     
-<pre><code>. replace continent = strtrim(continent)
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. replace continent = strtrim(continent)
 (15 real changes made)
 
 </code></pre>
 
-    <p>The frequency table now shows only one value per continent.</p>
+    <p style="margin: 12px 0;">The frequency table now shows only one value per continent.</p>
   
-<pre><code>. tab continent
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. tab continent
 
   continent |      Freq.     Percent        Cum.
 ------------+-----------------------------------
@@ -391,27 +440,28 @@ I: contains nonnumeric characters; replaced as double
 ------------+-----------------------------------
       Total |        432      100.00
 </code></pre>
-  <br>
-    <h3><a href="#exercise-2-removing-leading-and-trailing-spaces" id="exercise-2-removing-leading-and-trailing-spaces">Exercise 2: Removing leading and trailing spaces</a></h3>
+  
+    <div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-2-removing-leading-and-trailing-spaces">Exercise 2: Removing leading and trailing spaces</span></h3>
     
-    <ol>
-      <li>Create a frequency table of the country column to check whether some 
+    <ol style="padding-left: 24px; margin: 12px 0;">
+      <li style="margin: 7px 0;">Create a frequency table of the country column to check whether some 
       of the values occur several time. This might be due to leading or trailing 
       white spaces.</li>
-      <li>Replace the country variable with the trimmed values.</li>
+      <li style="margin: 7px 0;">Replace the country variable with the trimmed values.</li>
     </ol>
     
-    <br>
-    <br>
+    
+    
     
 
   
-    <h2><a href="#splitting-and-combining-strings" id="splitting-and-combining-strings">Splitting and combining strings</a></h2>
+    </div></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="splitting-and-combining-strings">Splitting and combining strings</span></h2>
   
-    <p>We can split string variables into several variables with <b>split</b>. To illustrate how the <b>split</b> command works, we will use the splitxmpl dataset, which we can load from the Stata server.</p>
-    <p>The first column tells us the state and which region of the state.</p>
+    <p style="margin: 12px 0;">We can split string variables into several variables with split. To illustrate how the split command works, we will use the splitxmpl dataset, which we can load from the Stata server.</p>
+    <p style="margin: 12px 0;">The first column tells us the state and which region of the state.</p>
   
-<pre><code>. webuse splitxmpl, clear
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. webuse splitxmpl, clear
 (split example)
 
 . list
@@ -433,9 +483,9 @@ I: contains nonnumeric characters; replaced as double
      +-------------------------+
 </code></pre>
   
-    <p>We can split the string into two variables. Two new variables, for the characters before the space and the characters following the space, have been added.</p>
+    <p style="margin: 12px 0;">We can split the string into two variables. Two new variables, for the characters before the space and the characters following the space, have been added.</p>
     
-<pre><code>. split var1
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. split var1
 variables created as string: 
 var11  var12
 
@@ -459,9 +509,9 @@ var11  var12
      +-----------------------------------------------+
 </code></pre>
     
-    <p>Let&rsquo;s say we wanted to extract the name and title from these manually entered data.</p>
+    <p style="margin: 12px 0;">Let&rsquo;s say we wanted to extract the name and title from these manually entered data.</p>
     
-<pre><code>. clear all
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. clear all
 
 . input str30 name
 
@@ -483,9 +533,9 @@ var11  var12
      +---------------------+
 </code></pre>
     
-    <p>We can use the <i>parse</i> option to split the name variable based on the &ldquo;-&rdquo; character.</p>
+    <p style="margin: 12px 0;">We can use the <i>parse</i> option to split the name variable based on the &ldquo;-&rdquo; character.</p>
     
-<pre><code>. split name, p(&quot;-&quot;)
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. split name, p(&quot;-&quot;)
 variables created as string: 
 name1  name2  name3
 
@@ -500,9 +550,9 @@ name1  name2  name3
      +---------------------------------------------------+
 </code></pre>
     
-    <p>In order to combine the first and last name, we can use the +.</p>
+    <p style="margin: 12px 0;">In order to combine the first and last name, we can use the +.</p>
     
-<pre><code>. replace name = name2 + &quot; &quot; + name3
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. replace name = name2 + &quot; &quot; + name3
 (3 real changes made)
 
 . list
@@ -515,29 +565,40 @@ name1  name2  name3
   3. |  James Pritchard      Mr     James   Pritchard |
      +------------------------------------------------+
 </code></pre>
-  <br>
-    <h3><a href="#exercise-3-splitting-and-combining-strings" id="exercise-3-splitting-and-combining-strings">Exercise 3: Splitting and combining strings</a></h3>
   
-    <ol>
-      <li>Load the auto dataset with <b>sysuse auto, clear</b>.</li>
-      <li>Split the make variable.</li>
-      <li>Generate a new variable named model that combines make2 and make3.</li>
-      <li>Rename make1 into brand.</li>
-      <li>Drop all make variables.</li>
+    <div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-3-splitting-and-combining-strings">Exercise 3: Splitting and combining strings</span></h3>
+  
+    <ol style="padding-left: 24px; margin: 12px 0;">
+      <li style="margin: 7px 0;">Load the auto dataset with sysuse auto, clear.</li>
+      <li style="margin: 7px 0;">Split the make variable.</li>
+      <li style="margin: 7px 0;">Generate a new variable named model that combines make2 and make3.</li>
+      <li style="margin: 7px 0;">Rename make1 into brand.</li>
+      <li style="margin: 7px 0;">Drop all make variables.</li>
     </ol>
   
-    <br>
-    <br>
+    
+    
         
-    <h3><a href="#evaluation" id="evaluation">Final task: Please give us your feedback! </a></h3>
-        <p>Upon completing the survey, <b>you will receive the link to the solution file</b>, to check how your commands compares to the sample solution.</p>
-    <p>In order to adapt our training to your needs and provide the most valuable learning experience for you, we depend on your feedack.</p>
-        <p>We would be grateful if you could take 1 min before the end of the workshop to get your feedback! </p>
+    </div></section>
+<section id="confidence-leaving" style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px; border-left: 5px solid #1f4f8b; background: #edf3fc;"><h2 style="margin: 0 0 10px; font-size: 21px; color: #0b2c5f;">📋 Leaving your session: confidence check</h2><p style="margin: 0 0 18px;">Please complete this short questionnaire just before you leave the workshop session. It helps us understand how confident you feel after the session. Continuing to another project in this session? Skip this questionnaire and complete the ending questionnaire only before leaving.</p><a href="https://forms.cloud.microsoft/e/JQp2SjCLqm" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 11px 18px; background: #0b2c5f; color: #ffffff; border-radius: 7px; text-decoration: none;">Open the leaving confidence check ↗</a></section></section>
 
-    <a href="https://lse.eu.qualtrics.com/jfe/form/SV_0vJs5yGpF1F359I?coursename=Data Cleaning in Stata 1: Strings &topic=Stata&prog=SR&version=25-26">Click here to open the survey!</a>
-
-    <br>
-    <br>
-  </div>
-
+</main></div>
+<script>
+const navLinks = [...document.querySelectorAll('.toc-link')];
+const targets = [...new Set(navLinks.map(link => document.getElementById(link.hash.slice(1))))].filter(Boolean);
+let scheduled = false;
+function updateContents() {
+ let current = targets[0];
+ for (const target of targets) if (target.getBoundingClientRect().top <= 140) current = target;
+ for (const link of navLinks) {
+  if (current && link.hash === '#' + current.id) link.setAttribute('aria-current', 'location');
+  else link.removeAttribute('aria-current');
+ }
+ scheduled = false;
+}
+window.addEventListener('scroll', () => {if (!scheduled) {scheduled = true; requestAnimationFrame(updateContents);}}, {passive:true});
+updateContents();
+document.querySelectorAll('.mobile-contents a').forEach(link => link.addEventListener('click', () => {document.querySelector('.mobile-contents').open = false;}));
+</script>
 </body>
+</html>
