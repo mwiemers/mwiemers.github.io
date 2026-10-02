@@ -1,6 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stata Fundamentals 1 | Digital Skills Lab</title>
+
+  <link rel="stylesheet" type="text/css" href="/css/stmarkdown.css">
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+
+
+<style>
+* {box-sizing:border-box}
+html {scroll-behavior:smooth}
+body {margin:0; padding:0; background:#f4f6fb; color:#111827; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.page-layout {display:grid; grid-template-columns:260px minmax(0,1fr); gap:24px; max-width:1400px; margin:0 auto; padding:24px}
+.contents {position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow-y:auto; border:1px solid #d2e0f5; border-radius:12px; background:white; padding:20px 14px}
+.contents-label {font-size:12px; letter-spacing:1.5px; color:#526782; margin:0 10px 10px}
+.contents h2 {font-size:21px; color:#0b2c5f; margin:0 10px 16px}
+.toc-link {display:block; padding:10px 12px; margin:3px 0; color:#25476f; text-decoration:none; border-radius:7px; font-size:14px; line-height:1.45; border-left:3px solid transparent}
+.toc-link:hover,.toc-link:focus-visible {background:#edf3fc; color:#0b2c5f}
+.toc-link[aria-current="location"] {background:#edf3fc; border-left-color:#1f4f8b; color:#0b2c5f}
+.exercise-link {padding-left:24px; font-size:13px; color:#596d85}
+main {min-width:0}
+main > section {padding:0 !important; max-width:none !important; margin:0 !important}
+[id] {scroll-margin-top:24px}
+.mobile-contents {display:none}
+.skip-link {position:fixed; top:-100px; left:12px; padding:12px; background:white; z-index:10}
+.skip-link:focus {top:12px}
+a:focus-visible,summary:focus-visible {outline:3px solid #3174c9; outline-offset:3px}
+@media(max-width:900px) {
+ .page-layout {display:block; padding:16px}
+ .contents {display:none}
+ .mobile-contents {display:block; margin-bottom:18px; background:white; border:1px solid #d2e0f5; border-radius:10px; padding:14px}
+ .mobile-contents summary {cursor:pointer; padding:4px; color:#0b2c5f; font-size:17px}
+ .mobile-contents nav {margin-top:12px}
+}
+@media(max-width:520px) {
+ .page-layout {padding:10px}
+ main section,main header {padding:18px !important}
+ main > section {padding:0 !important}
+ main h1 {font-size:25px !important}
+}
+@media(prefers-reduced-motion:reduce) {html {scroll-behavior:auto}}
+@media print {.contents,.mobile-contents,.skip-link {display:none} .page-layout {display:block;padding:0} pre {white-space:pre-wrap}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#tutorial">Skip to tutorial</a>
+<div class="page-layout">
+<aside class="contents"><p class="contents-label">DIGITAL SKILLS LAB</p><h2>On this page</h2><nav aria-label="Tutorial contents"><a class="toc-link" href="#confidence-starting">Starting confidence check</a>
+<a class="toc-link" href="#access-to-datasets">Access to Datasets</a>
+<a class="toc-link" href="#changing-the-working-directory_section">Changing the working directory</a>
+<a class="toc-link exercise-link" href="#exercise-changing-the-working-directory">Exercise: Changing the working directory</a>
+<a class="toc-link" href="#loading-data-into-stata">Loading data into Stata</a>
+<a class="toc-link exercise-link" href="#exercise-loading-data">Exercise: Loading data</a>
+<a class="toc-link" href="#inspecting-a-dataset">Inspecting a dataset</a>
+<a class="toc-link exercise-link" href="#exercise-inspecting-data">Exercise: Inspecting data</a>
+<a class="toc-link" href="#summary-statistics">Summary statistics</a>
+<a class="toc-link exercise-link" href="#exercise-summary-statistics">Exercise: Summary statistics</a>
+<a class="toc-link" href="#confidence-leaving">Leaving confidence check</a></nav></aside>
+<main id="tutorial"><details class="mobile-contents"><summary>On this page</summary><nav aria-label="Mobile tutorial contents"><a class="toc-link" href="#confidence-starting">Starting confidence check</a>
+<a class="toc-link" href="#access-to-datasets">Access to Datasets</a>
+<a class="toc-link" href="#changing-the-working-directory_section">Changing the working directory</a>
+<a class="toc-link exercise-link" href="#exercise-changing-the-working-directory">Exercise: Changing the working directory</a>
+<a class="toc-link" href="#loading-data-into-stata">Loading data into Stata</a>
+<a class="toc-link exercise-link" href="#exercise-loading-data">Exercise: Loading data</a>
+<a class="toc-link" href="#inspecting-a-dataset">Inspecting a dataset</a>
+<a class="toc-link exercise-link" href="#exercise-inspecting-data">Exercise: Inspecting data</a>
+<a class="toc-link" href="#summary-statistics">Summary statistics</a>
+<a class="toc-link exercise-link" href="#exercise-summary-statistics">Exercise: Summary statistics</a>
+<a class="toc-link" href="#confidence-leaving">Leaving confidence check</a></nav></details>
 <section lang="en" style="max-width: 1040px; margin: 0 auto 32px; padding: 16px; background: #f4f6fb; border-radius: 12px; box-sizing: border-box; font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; color: #111827; font-size: 16px; line-height: 1.7; overflow-wrap: break-word;">
 <section id="confidence-starting" style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px; border-left: 5px solid #1f4f8b; background: #edf3fc;"><h2 style="margin: 0 0 10px; font-size: 21px; color: #0b2c5f;">📋 Starting your session: confidence check</h2><p style="margin: 0 0 18px;">Once your workshop session has started, please complete this short questionnaire before beginning your first project during the workshop you attend today. It helps us understand how confident you feel before the session.</p><a href="https://forms.cloud.microsoft/e/iGpZuvdpfW" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 11px 18px; background: #0b2c5f; color: #ffffff; border-radius: 7px; text-decoration: none;">Open the starting confidence check ↗</a></section>
-<header style="background: linear-gradient(135deg, #0b2c5f, #1f4f8b); color: #ffffff; border-radius: 12px; padding: 28px; margin-bottom: 18px;"><p style="margin: 0 0 10px; font-size: 13px; letter-spacing: 1.5px;">DIGITAL SKILLS LAB · STATA</p><h1 style="margin: 0; font-size: 30px; line-height: 1.3; color: #ffffff;"><span id="stata-practical-1-importing-and-inspecting-data">Stata Fundamentals 1: Importing, inspecting and summarising data</span></h1><p style="margin: 16px 0 0; color: #ffffff;">A practical guide to setting up your workspace, loading datasets and exploring your data.</p></header><nav aria-label="Tutorial sections" style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><p style="margin: 0 0 8px; color: #0b2c5f;">Jump to a section</p><a style="color: #1f4f8b; text-decoration: underline; margin-right: 18px; display: inline-block; padding: 5px 0;" href="#access-to-datasets">Access to Datasets</a><a style="color: #1f4f8b; text-decoration: underline; margin-right: 18px; display: inline-block; padding: 5px 0;" href="#changing-the-working-directory_section">Changing the working directory</a><a style="color: #1f4f8b; text-decoration: underline; margin-right: 18px; display: inline-block; padding: 5px 0;" href="#loading-data-into-stata">Loading data into Stata</a><a style="color: #1f4f8b; text-decoration: underline; margin-right: 18px; display: inline-block; padding: 5px 0;" href="#inspecting-a-dataset">Inspecting a dataset</a><a style="color: #1f4f8b; text-decoration: underline; margin-right: 18px; display: inline-block; padding: 5px 0;" href="#summary-statistics">Summary statistics</a></nav><section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;">What is Stata?</h2>
+<header style="background: linear-gradient(135deg, #0b2c5f, #1f4f8b); color: #ffffff; border-radius: 12px; padding: 28px; margin-bottom: 18px;"><p style="margin: 0 0 10px; font-size: 13px; letter-spacing: 1.5px;">DIGITAL SKILLS LAB · STATA</p><h1 style="margin: 0; font-size: 30px; line-height: 1.3; color: #ffffff;"><span id="stata-practical-1-importing-and-inspecting-data">Stata Fundamentals 1: Importing, inspecting and summarising data</span></h1><p style="margin: 16px 0 0; color: #ffffff;">A practical guide to setting up your workspace, loading datasets and exploring your data.</p></header><section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;">What is Stata?</h2>
 <p style="margin: 12px 0;">Stata is a general purpose statistical analysis software, similar to SPSS. You can use it to preprocess, analyse and visualise data.</p>
 <p style="margin: 12px 0;">It is mostly used in research and particularly in the fields of economics, political science, and the social sciences in 
 	general.</p> 
@@ -243,3 +320,24 @@ Sorted by:</code></pre>
 
 	   
 </div></section><section id="confidence-leaving" style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px; border-left: 5px solid #1f4f8b; background: #edf3fc;"><h2 style="margin: 0 0 10px; font-size: 21px; color: #0b2c5f;">📋 Leaving your session: confidence check</h2><p style="margin: 0 0 18px;">Please complete this short questionnaire just before you leave the workshop session. It helps us understand how confident you feel after the session. Continuing to another project in this session? Skip this questionnaire and complete the ending questionnaire only before leaving.</p><a href="https://forms.cloud.microsoft/e/mukygeufbv" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 11px 18px; background: #0b2c5f; color: #ffffff; border-radius: 7px; text-decoration: none;">Open the leaving confidence check ↗</a></section></section>
+
+</main></div>
+<script>
+const navLinks = [...document.querySelectorAll('.toc-link')];
+const targets = [...new Set(navLinks.map(link => document.getElementById(link.hash.slice(1))))].filter(Boolean);
+let scheduled = false;
+function updateContents() {
+ let current = targets[0];
+ for (const target of targets) if (target.getBoundingClientRect().top <= 140) current = target;
+ for (const link of navLinks) {
+  if (current && link.hash === '#' + current.id) link.setAttribute('aria-current', 'location');
+  else link.removeAttribute('aria-current');
+ }
+ scheduled = false;
+}
+window.addEventListener('scroll', () => {if (!scheduled) {scheduled = true; requestAnimationFrame(updateContents);}}, {passive:true});
+updateContents();
+document.querySelectorAll('.mobile-contents a').forEach(link => link.addEventListener('click', () => {document.querySelector('.mobile-contents').open = false;}));
+</script>
+</body>
+</html>
