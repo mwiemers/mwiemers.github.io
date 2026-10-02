@@ -1,71 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stata Data Cleaning 2 | Digital Skills Lab</title>
+
   <link rel="stylesheet" type="text/css" href="/css/stmarkdown.css">
-  <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
-  </script>
-  <script type="text/javascript" async
-      src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
-  </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+
+
+<style>
+* {box-sizing:border-box}
+html {scroll-behavior:smooth}
+body {margin:0; padding:0; background:#f4f6fb; color:#111827; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.page-layout {display:grid; grid-template-columns:260px minmax(0,1fr); gap:24px; max-width:none; margin:0 auto; padding:24px}
+.contents {position:sticky; top:24px; align-self:start; max-height:calc(100vh - 48px); overflow-y:auto; border:1px solid #d2e0f5; border-radius:12px; background:white; padding:20px 14px}
+.contents-label {font-size:12px; letter-spacing:1.5px; color:#526782; margin:0 10px 10px}
+.contents h2 {font-size:21px; color:#0b2c5f; margin:0 10px 16px}
+.toc-link {display:block; padding:10px 12px; margin:3px 0; color:#25476f; text-decoration:none; border-radius:7px; font-size:14px; line-height:1.45; border-left:3px solid transparent}
+.toc-link:hover,.toc-link:focus-visible {background:#edf3fc; color:#0b2c5f}
+.toc-link[aria-current="location"] {background:#edf3fc; border-left-color:#1f4f8b; color:#0b2c5f}
+.exercise-link {padding-left:24px; font-size:13px; color:#596d85}
+main {min-width:0}
+main > section {padding:0 !important; max-width:none !important; margin:0 !important}
+[id] {scroll-margin-top:24px}
+.mobile-contents {display:none}
+.skip-link {position:fixed; top:-100px; left:12px; padding:12px; background:white; z-index:10}
+.skip-link:focus {top:12px}
+a:focus-visible,summary:focus-visible {outline:3px solid #3174c9; outline-offset:3px}
+@media(max-width:900px) {
+ .page-layout {display:block; padding:16px}
+ .contents {display:none}
+ .mobile-contents {display:block; margin-bottom:18px; background:white; border:1px solid #d2e0f5; border-radius:10px; padding:14px}
+ .mobile-contents summary {cursor:pointer; padding:4px; color:#0b2c5f; font-size:17px}
+ .mobile-contents nav {margin-top:12px}
+}
+@media(max-width:520px) {
+ .page-layout {padding:10px}
+ main section,main header {padding:18px !important}
+ main > section {padding:0 !important}
+ main h1 {font-size:25px !important}
+}
+@media(prefers-reduced-motion:reduce) {html {scroll-behavior:auto}}
+@media print {.contents,.mobile-contents,.skip-link {display:none} .page-layout {display:block;padding:0} pre {white-space:pre-wrap}}
+</style>
 </head>
-
 <body>
-	<div class="sidenav">
-		<a href="#loading-the-gapminder-dataset">Loading the gapminder dataset</a>
-		<a href="#find-and-delete-duplicates">Find and delete duplicates</a>
-		<a href="#exercise-1-duplicates">Exercise 1: Duplicates</a>
-		<a href="#missing-values">Missing values</a>
-		<a href="#correctly-label-missings">Correctly label missings</a>
-		<a href="#exercise-2-missings-1">Exercise 2: Identify and label missings</a>
-		<a href="#exploring-missings">Exploring missing missings</a>
-		<a href="#exercise-3-missings-2">Exercise 3: Exploring missings</a>
-		<a href="#dealing-with-missing-values">Dealing with missing values</a>
-		<a href="#evaluation">Final task: Please give us your feedback!</a>
-  </div>
-  <div class="main">
+<a class="skip-link" href="#tutorial">Skip to tutorial</a>
+<div class="page-layout">
+<aside class="contents"><p class="contents-label">DIGITAL SKILLS LAB</p><h2>On this page</h2><nav aria-label="Tutorial contents"><a class="toc-link" href="#confidence-starting">Starting confidence check</a>
+<a class="toc-link" href="#loading-the-gapminder-dataset">Loading the Gapminder dataset</a>
+<a class="toc-link" href="#find-and-delete-duplicates">Find and delete duplicates</a>
+<a class="toc-link exercise-link" href="#exercise-1-duplicates">Exercise 1: Duplicates</a>
+<a class="toc-link" href="#missing-values">Missing values</a>
+<a class="toc-link" href="#identify-missings">Identify missing values</a>
+<a class="toc-link" href="#correctly-label-missings">Correctly label missing values</a>
+<a class="toc-link exercise-link" href="#exercise-2-missings-1">Exercise 2: Identify and label missings</a>
+<a class="toc-link" href="#exploring-missings">Exploring missing values</a>
+<a class="toc-link exercise-link" href="#exercise-3-missings-2">Exercise 3: Exploring missings</a>
+<a class="toc-link" href="#dealing-with-missing-values">Dealing with missing values</a>
+<a class="toc-link" href="#dropping-variables">Dropping variables</a>
+<a class="toc-link" href="#mean-imputation">Mean imputation</a>
+<a class="toc-link" href="#complete-case-analysis">Complete case analysis</a>
+<a class="toc-link" href="#multiple-imputation">Multiple imputation</a>
+<a class="toc-link" href="#confidence-leaving">Leaving confidence check</a></nav></aside>
+<main id="tutorial"><details class="mobile-contents"><summary>On this page</summary><nav aria-label="Mobile tutorial contents"><a class="toc-link" href="#confidence-starting">Starting confidence check</a>
+<a class="toc-link" href="#loading-the-gapminder-dataset">Loading the Gapminder dataset</a>
+<a class="toc-link" href="#find-and-delete-duplicates">Find and delete duplicates</a>
+<a class="toc-link exercise-link" href="#exercise-1-duplicates">Exercise 1: Duplicates</a>
+<a class="toc-link" href="#missing-values">Missing values</a>
+<a class="toc-link" href="#identify-missings">Identify missing values</a>
+<a class="toc-link" href="#correctly-label-missings">Correctly label missing values</a>
+<a class="toc-link exercise-link" href="#exercise-2-missings-1">Exercise 2: Identify and label missings</a>
+<a class="toc-link" href="#exploring-missings">Exploring missing values</a>
+<a class="toc-link exercise-link" href="#exercise-3-missings-2">Exercise 3: Exploring missings</a>
+<a class="toc-link" href="#dealing-with-missing-values">Dealing with missing values</a>
+<a class="toc-link" href="#dropping-variables">Dropping variables</a>
+<a class="toc-link" href="#mean-imputation">Mean imputation</a>
+<a class="toc-link" href="#complete-case-analysis">Complete case analysis</a>
+<a class="toc-link" href="#multiple-imputation">Multiple imputation</a>
+<a class="toc-link" href="#confidence-leaving">Leaving confidence check</a></nav></details>
+<section lang="en" style="max-width: none; margin: 0 auto 32px; padding: 16px; background: #f4f6fb; border-radius: 12px; box-sizing: border-box; font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif; color: #111827; font-size: 16px; line-height: 1.7; overflow-wrap: break-word;">
+<section id="confidence-starting" style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px; border-left: 5px solid #1f4f8b; background: #edf3fc;"><h2 style="margin: 0 0 10px; font-size: 21px; color: #0b2c5f;">📋 Starting your session: confidence check</h2><p style="margin: 0 0 18px;">Once your workshop session has started, please complete this short questionnaire before beginning your first project during the workshop you attend today. It helps us understand how confident you feel before the session.</p><a href="https://forms.cloud.microsoft/e/XRDD7iWSmw" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 11px 18px; background: #0b2c5f; color: #ffffff; border-radius: 7px; text-decoration: none;">Open the starting confidence check ↗</a></section>
+<header style="background: linear-gradient(135deg, #0b2c5f, #1f4f8b); color: #ffffff; border-radius: 12px; padding: 28px; margin-bottom: 18px;"><p style="margin: 0 0 10px; font-size: 13px; letter-spacing: 1.5px;">DIGITAL SKILLS LAB · STATA</p><h1 style="margin: 0; font-size: 30px; line-height: 1.3; color: #ffffff;"><span id="data-cleaning-in-stata-missings-and-duplicates">Stata Data Cleaning 2: Missing values and duplicates</span></h1><p style="margin: 16px 0 0; color: #ffffff;">A practical guide to finding duplicates, identifying missing values and exploring approaches to handling missing data.</p></header>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;">About this session</h2>
+<p style="margin: 12px 0;">The data cleaning series is going to teach you the most fundamental commands and techniques to prepare data in Stata for statistical analysis.</p>
+<p style="margin: 12px 0;">The series is going to cover the following topics:</p>
+<ul style="padding-left: 24px; margin: 12px 0;">
+<li style="margin: 7px 0;">Converting string to numerical</li>
+<li style="margin: 7px 0;">Dealing with missings and duplicates</li>
+<li style="margin: 7px 0;">Applying variable and value labels</li>
+<li style="margin: 7px 0;">Reshaping and merging data</li>
+</ul>
+	  <p style="margin: 12px 0;">This session teaches you how to correctly label missing values and duplicates so that Stata can identify them as such when running an analysis or generating plots.</p>
+	  <p style="margin: 12px 0;">By the end of this session you will know how to:</p>
+<ul style="padding-left: 24px; margin: 12px 0;">
+<li style="margin: 7px 0;">Find and delete duplicates.</li>
+<li style="margin: 7px 0;">Identify observations containing missing values.</li>
+<li style="margin: 7px 0;">Correctly label missing values.</li>
+<li style="margin: 7px 0;">Dealing with missing values.</li>
+</ul></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;">More information on how the session is run</h2>
+How to work together: 
+<ul style="padding-left: 24px; margin: 12px 0;">
+    <li style="margin: 7px 0;">Please turn on your microphone and webcam.</li>
+    <li style="margin: 7px 0;">One shares the screen and the other requests remote control. </li>
+    <li style="margin: 7px 0;">Take turns on who types for each exercise.</li>
+</ul>
+What to do when getting stuck:
+<ol style="padding-left: 24px; margin: 12px 0;">
+    <li style="margin: 7px 0;">Ask the trainer if you struggle to find a solution.</li>
+    <li style="margin: 7px 0;">Use the help command. To get help with a specific command type help "command name"</li>
+    <li style="margin: 7px 0;">Search online. The statalist.org forum is usually the most useful resource.</li>
+</ol></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="loading-the-gapminder-dataset">Loading the gapminder dataset</span></h2>
+<p style="margin: 12px 0;">We load the gapminder dataset. So far, we have converted string variables to numerical. In the process, we have also already labelled all non-numerical string values as missing when we ran the destring v*, replace force command.</p>
+<p style="margin: 12px 0;">Today, we will remove duplicates, labell missing values and impute the missing values.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. import excel using https://raw.githubusercontent.com/mwiemers/datasets/main/gapminder_dirty_missings.xlsx, firstrow clear
 
-<h1><a href="#data-cleaning-in-stata-missings-and-duplicates" id="data-cleaning-in-stata-missings-and-duplicates">Data cleaning in Stata - Missings and duplicates</a></h1>
-<p>The data cleaning series is going to teach you the most fundamental commands and techniques to prepare data in Stata for statistical analysis.</p>
-<p>The series is going to cover the following topics:</p>
-<ul>
-<li>Converting string to numerical</li>
-<li>Dealing with missings and duplicates</li>
-<li>Applying variable and value labels</li>
-<li>Reshaping and merging data</li>
-</ul>
-	  <p>This session teaches you how to correctly label missing values and duplicates so that Stata can identify them as such when running an analysis or generating plots.</p>
-	  <p><b>By the end of this session you will know how to:</b></p>
-<ul>
-<li>Find and delete duplicates.</li>
-<li>Identify observations containing missing values.</li>
-<li>Correctly label missing values.</li>
-<li>Dealing with missing values.</li>
-</ul>
-	    <br>
-<h2>More information on how the session is run</h2>
-<b>How to work together</b>: 
-<ul>
-    <li>Please turn on your microphone and webcam.</li>
-    <li>One shares the screen and the other requests remote control. </li>
-    <li>Take turns on who types for each exercise.</li>
-</ul>
-<b>What to do when getting stuck</b>:
-<ol>
-    <li>Ask the trainer if you struggle to find a solution.</li>
-    <li>Use the help command. To get help with a specific command type <b>help "command name"</b></li>
-    <li>Search online. The statalist.org forum is usually the most useful resource.</li>
-</ol>
-<br>
-<br>
-<h2><a href="#loading-the-gapminder-dataset" id="loading-the-gapminder-dataset">Loading the gapminder dataset</a></h2>
-<p>We load the gapminder dataset. So far, we have converted string variables to numerical. In the process, we have also already labelled all non-numerical string values as missing when we ran the <b>destring v*, replace force</b> command.</p>
-<p>Today, we will remove duplicates, labell missing values and impute the missing values.</p>
-<pre><code>. import excel using https://raw.githubusercontent.com/mwiemers/datasets/main/gapminder_dirty_missings.xlsx, firstrow clear
-
-</code></pre>
-	  <br>
-<h2><a href="#find-and-delete-duplicates" id="find-and-delete-duplicates">Find and delete duplicates</a></h2>
-<p>The <b>duplicate</b> commands can help us to identify duplicated observations in our data. You can check out <b>help duplicates</b> to get a full list of all available commands.</p>
-<p>To get an overview of whether the dataset contains any duplicates at all, we can use <b>duplicates report</b>.</p>
-<pre><code>. duplicates report
+</code></pre></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="find-and-delete-duplicates">Find and delete duplicates</span></h2>
+<p style="margin: 12px 0;">The duplicate commands can help us to identify duplicated observations in our data. You can check out help duplicates to get a full list of all available commands.</p>
+<p style="margin: 12px 0;">To get an overview of whether the dataset contains any duplicates at all, we can use duplicates report.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. duplicates report
 
 Duplicates in terms of all variables
 
@@ -77,17 +139,17 @@ Duplicates in terms of all variables
 --------------------------------------
 
 </code></pre>
-<p>In order to view the duplicated observations, we have to create a variable that records how many duplicates an observation has with <b>duplicates tag, gen()</b>. The <i>gen</i> option determines the name of the new variable.</p>
-<pre><code>. duplicates tag, gen(duplicated_n)
+<p style="margin: 12px 0;">In order to view the duplicated observations, we have to create a variable that records how many duplicates an observation has with duplicates tag, gen(). The <i>gen</i> option determines the name of the new variable.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. duplicates tag, gen(duplicated_n)
 
 Duplicates in terms of all variables
 
 . browse if duplicated_n &gt; 0
 
 </code></pre>
-<img src="/screenshots/browse_duplicates.png">
-<p>The <b>duplicates drop</b> command will drop all duplicated rows. We can verify that all duplicates have been dropped with <b>duplicates report</b>. The surplus column shows that there are no duplicates for the 426 observations in the dataset.</p>
-<pre><code>. duplicates drop
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="/screenshots/browse_duplicates.png" alt="Stata data browser showing duplicate observations">
+<p style="margin: 12px 0;">The duplicates drop command will drop all duplicated rows. We can verify that all duplicates have been dropped with duplicates report. The surplus column shows that there are no duplicates for the 426 observations in the dataset.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. duplicates drop
 
 Duplicates in terms of all variables
 
@@ -104,34 +166,34 @@ Duplicates in terms of all variables
 --------------------------------------
 
 </code></pre>
-	    <br>
-<h3><a href="#exercise-1-duplicates" id="exercise-1-duplicates">Exercise 1: Duplicates</a></h3>
-<p>weo_data.csv url:</p>
-<p>https://raw.githubusercontent.com/mwiemers/datasets/main/weo_data_dirty_missings.xlsx</p>
-<ul>
-	<li>Import the weo_data csv file using the above url. Make sure to import 
+	    
+<div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-1-duplicates">Exercise 1: Duplicates</span></h3>
+<p style="margin: 12px 0;">weo_data.csv url:</p>
+<p style="margin: 12px 0;">https://raw.githubusercontent.com/mwiemers/datasets/main/weo_data_dirty_missings.xlsx</p>
+<ul style="padding-left: 24px; margin: 12px 0;">
+	<li style="margin: 7px 0;">Import the weo_data csv file using the above url. Make sure to import 
 	the variable names from row 1</li>
-	<li>Print an overview of the number of duplicates in the data.</li>
-	<li>Create a new variable that codes for whether an observation is duplicated.</li>
-	<li>Print all observations that are duplicated.</li>
-	<li>Remove all duplicated rows and print the overview of duplicates to verify 
+	<li style="margin: 7px 0;">Print an overview of the number of duplicates in the data.</li>
+	<li style="margin: 7px 0;">Create a new variable that codes for whether an observation is duplicated.</li>
+	<li style="margin: 7px 0;">Print all observations that are duplicated.</li>
+	<li style="margin: 7px 0;">Remove all duplicated rows and print the overview of duplicates to verify 
 	that they have been removed.</li>
 </ul>
-<br>
-<br>
-<h2><a href="#missing-values" id="missing-values">Missing values</a></h2>
-<h3><a href="#how-does-stata-represent-missing-values" id="how-does-stata-represent-missing-values">How does Stata represent missing values?</a></h3>
-<p>In Stata the . is the default symbol to represent missing numerical values. The extended missing values, .a, .b., c., &hellip;, .z can be used to represent specific types of numerical missings (don&rsquo;t know, corrupted, etc.).</p>
-<p>Empty quotes, &quot;&quot;, are used to represent missing strings values.</p>
-	    <br>
-<h3><a href="#identify-missings" id="identify-missings">Identify missings</a></h3>
-<p>When working with csv files, missings could be labelled as negative numbers in a variable that can only be positive, string values in a numerical variable or &ldquo;n/a&rdquo; in a categorical variable.</p>
-<p>The first step in dealing with missing values, is therefore, to identify missing values. In the previous workshop on string variables, all numerical variables were imported as strings because of the comma and dollar symbol that they contained. When we converted them to numeric with the <b>destring, replace force</b> command any non-numerical values were directly converted into missing, that is, the . symbol.</p>
-<p>A convenient way to get an overview of the number of missing values per variable, is the <b>mdesc</b> command, which is a user written command that is not part of Stata per default. You can install it with <b>ssc install mdesc</b>.</p>
-<pre><code>ssc install mdesc
+
+</div></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="missing-values">Missing values</span></h2>
+<h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="how-does-stata-represent-missing-values">How does Stata represent missing values?</span></h3>
+<p style="margin: 12px 0;">In Stata the . is the default symbol to represent missing numerical values. The extended missing values, .a, .b., c., &hellip;, .z can be used to represent specific types of numerical missings (don&rsquo;t know, corrupted, etc.).</p>
+<p style="margin: 12px 0;">Empty quotes, &quot;&quot;, are used to represent missing strings values.</p>
+	    
+<h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="identify-missings">Identify missings</span></h3>
+<p style="margin: 12px 0;">When working with csv files, missings could be labelled as negative numbers in a variable that can only be positive, string values in a numerical variable or &ldquo;n/a&rdquo; in a categorical variable.</p>
+<p style="margin: 12px 0;">The first step in dealing with missing values, is therefore, to identify missing values. In the previous workshop on string variables, all numerical variables were imported as strings because of the comma and dollar symbol that they contained. When we converted them to numeric with the destring, replace force command any non-numerical values were directly converted into missing, that is, the . symbol.</p>
+<p style="margin: 12px 0;">A convenient way to get an overview of the number of missing values per variable, is the mdesc command, which is a user written command that is not part of Stata per default. You can install it with ssc install mdesc.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>ssc install mdesc
 </code></pre>
-<p>Once installed, <b>mdesc</b> gives us the number of missing values and the percentage of missing values for each variable. As we can see, there is one value for the <i>D - I</i> variables that have been turned into a missing when we used the <b>destring, force replace</b> command in the previous workshop.</p>
-<pre><code>. mdesc
+<p style="margin: 12px 0;">Once installed, mdesc gives us the number of missing values and the percentage of missing values for each variable. As we can see, there is one value for the <i>D - I</i> variables that have been turned into a missing when we used the destring, force replace command in the previous workshop.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. mdesc
 
     Variable    |     Missing          Total     Percent Missing
 ----------------+-----------------------------------------------
@@ -154,9 +216,9 @@ Duplicates in terms of all variables
 ----------------+-----------------------------------------------
 
 </code></pre>
-<p>Those missing values that were labelled with a negative number, for instance -99, would not be converted to a . when using <b>destring, force replace</b>, since they are a legal numerical values. We can spot those values with the <b>summarize</b> command.</p>
-<p>The variables <i>D-H</i> and <i>L</i> seem to use the value -99 to represent missing values.</p>
-<pre><code>. sum
+<p style="margin: 12px 0;">Those missing values that were labelled with a negative number, for instance -99, would not be converted to a . when using destring, force replace, since they are a legal numerical values. We can spot those values with the summarize command.</p>
+<p style="margin: 12px 0;">The variables <i>D-H</i> and <i>L</i> seem to use the value -99 to represent missing values.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. sum
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
@@ -181,10 +243,10 @@ Duplicates in terms of all variables
 duplicated_n |        426    .0140845     .117978          0          1
 
 </code></pre>
-	    <br>
-<h3><a href="#correctly-label-missings" id="correctly-label-missings">Correctly label missings</a></h3>
-<p>Once the data has been imported into Stata, we should use the . symbol to represent missing numerical values. Let us therefore replace the -99 values with the . symbol for the variables D - H and L using a foreach loop.</p>
-<pre><code>. foreach var of varlist D-H L{
+	    
+<h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="correctly-label-missings">Correctly label missings</span></h3>
+<p style="margin: 12px 0;">Once the data has been imported into Stata, we should use the . symbol to represent missing numerical values. Let us therefore replace the -99 values with the . symbol for the variables D - H and L using a foreach loop.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. foreach var of varlist D-H L{
 	replace `var'=. if `var' == -99
 }
 (12 real changes made, 12 to missing)
@@ -195,8 +257,8 @@ duplicated_n |        426    .0140845     .117978          0          1
 (6 real changes made, 6 to missing)
 
 </code></pre>
-<p>We run the <b>summarize</b> command again to verify that the values have been changed to missings. The -99 values no longer show up in the Min column.</p>
-<pre><code>. sum
+<p style="margin: 12px 0;">We run the summarize command again to verify that the values have been changed to missings. The -99 values no longer show up in the Min column.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. sum
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
 -------------+---------------------------------------------------------
@@ -221,9 +283,9 @@ duplicated_n |        426    .0140845     .117978          0          1
 duplicated_n |        426    .0140845     .117978          0          1
 
 </code></pre>
-<p>If we run the <b>mdesc</b> command again, we notice that the data now also has<br />
+<p style="margin: 12px 0;">If we run the mdesc command again, we notice that the data now also has
 missing values for the <i>D-H</i> and <i>L</i> variables.</p>
-<pre><code>. mdesc
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. mdesc
 
     Variable    |     Missing          Total     Percent Missing
 ----------------+-----------------------------------------------
@@ -246,48 +308,48 @@ missing values for the <i>D-H</i> and <i>L</i> variables.</p>
 ----------------+-----------------------------------------------
 
 </code></pre>
-	    <br>
-<h3><a href="#exercise-2-missings-1" id="exercise-2-missings-1">Exercise 2: Identify and label missings</a></h3>
-<ol>
-	<li>Install the <b>mdesc</b> command.</li>
-	<li>Create an overview of the missings per variable.</li>
-	<li>Use <b>sum</b> to identify any not-correctly represented missing values.</li>
-	<li>Replace the values with the . symbol. Use a foreach loop for this.</li>
-	<li>Use <b>sum</b> and <b>mdesc</b> commands to verify that the -99 values 
+	    
+<div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-2-missings-1">Exercise 2: Identify and label missings</span></h3>
+<ol style="padding-left: 24px; margin: 12px 0;">
+	<li style="margin: 7px 0;">Install the mdesc command.</li>
+	<li style="margin: 7px 0;">Create an overview of the missings per variable.</li>
+	<li style="margin: 7px 0;">Use sum to identify any not-correctly represented missing values.</li>
+	<li style="margin: 7px 0;">Replace the values with the . symbol. Use a foreach loop for this.</li>
+	<li style="margin: 7px 0;">Use sum and mdesc commands to verify that the -99 values 
 	have been changed to missing.</li>
 </ol>
-	    <br>
-<h3><a href="#exploring-missings" id="exploring-missings">Exploring missing values</a></h3>
-<p>Once all missing values have been correctly labelled, we might want to inspect observations with missing values more closely. We can generate a new variable with the number of missing values per observation with the <b>rowmiss</b> command.</p>
-<pre><code>. egen nmiss=rowmiss(*)
+	    
+</div><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exploring-missings">Exploring missing values</span></h3>
+<p style="margin: 12px 0;">Once all missing values have been correctly labelled, we might want to inspect observations with missing values more closely. We can generate a new variable with the number of missing values per observation with the rowmiss command.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. egen nmiss=rowmiss(*)
 
 </code></pre>
-<p>We have added a new variable <i>nmiss</i> to the dataset that codes for the number of missing values per row.</p>
-<pre><code>. browse in 1/10
+<p style="margin: 12px 0;">We have added a new variable <i>nmiss</i> to the dataset that codes for the number of missing values per row.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. browse in 1/10
 
 </code></pre>
-<img src="/screenshots/browse_missing_var.png" width="60%">
-<p>We can now have a look on the subset of the observations that includes missing values in the <b>Data Editor</b>. With the if qualifer <i>if nmiss&gt;0</i>, we limit the output to those observations where <i>nmiss</i> has the value 1 or larger, that is, where there is at least 1 missing value.</p>
-<pre><code>. browse if nmiss&gt;0
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="/screenshots/browse_missing_var.png" alt="Stata data browser showing the number of missing values per row" width="60%">
+<p style="margin: 12px 0;">We can now have a look on the subset of the observations that includes missing values in the Data Editor. With the if qualifer <i>if nmiss&gt;0</i>, we limit the output to those observations where <i>nmiss</i> has the value 1 or larger, that is, where there is at least 1 missing value.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. browse if nmiss&gt;0
 
 </code></pre>
-<img src="/screenshots/browse_missings.png" width="60%">
-<p>To get a sense of the distribution of missing values across observations, we can plot a histogram. This will help us to understand whether there are a lot of observations with a few missings or whether there are a few observations with a lot of missings.</p>
-<pre><code>. hist nmiss
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="/screenshots/browse_missings.png" alt="Stata data browser showing observations with missing values" width="60%">
+<p style="margin: 12px 0;">To get a sense of the distribution of missing values across observations, we can plot a histogram. This will help us to understand whether there are a lot of observations with a few missings or whether there are a few observations with a lot of missings.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. hist nmiss
 (bin=20, start=0, width=.3)
 
 </code></pre>
-<img src="/screenshots/hist_nmiss.png" width="50%">
-<p>Another way we can look for specific patterns in the missings is by using the <b>mvpatterns</b> command. The <b>mvpatterns</b> command is not built-in into Stata and has to be installed first. In order to install it, we have to use the <b>search</b> command, which will open the viewer with any results related to the search term.</p>
-<pre><code>search mvpatterns
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="/screenshots/hist_nmiss.png" alt="Histogram of the number of missing values per observation" width="50%">
+<p style="margin: 12px 0;">Another way we can look for specific patterns in the missings is by using the mvpatterns command. The mvpatterns command is not built-in into Stata and has to be installed first. In order to install it, we have to use the search command, which will open the viewer with any results related to the search term.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>search mvpatterns
 </code></pre>
-<p>We click on the first link to open the mvpatterns page</p>
-<img src="/screenshots/viewer_mvpatterns_01.png" width="60%">
-<p>We then click on the install link, which starts the installation.</p>
-<img src="/screenshots/viewer_mvpatterns_02.png" width="60%">
-<p>Once installed, we can now use the <b>mvpatterns</b> command, which returns a table with the number of missings for all variables with missing values and a second table that provides a list of all patterns of missings. The table indicates the pattern, that is, where inside the variables with missings the missing values occur (<i>_pattern</i>), the number of missings per pattern (<i>_mv</i>), and how often the pattern occurs (<i>_freq</i>).</p>
-<p>The output helps us to quickly discover that a missing for variable <i>D</i> is the most frequent missing pattern. Patterns might be useful to better understand what causes missings in the data.</p>
-<pre><code>. mvpatterns
+<p style="margin: 12px 0;">We click on the first link to open the mvpatterns page</p>
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="/screenshots/viewer_mvpatterns_01.png" alt="Stata search results for mvpatterns" width="60%">
+<p style="margin: 12px 0;">We then click on the install link, which starts the installation.</p>
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="/screenshots/viewer_mvpatterns_02.png" alt="Stata installation page for mvpatterns" width="60%">
+<p style="margin: 12px 0;">Once installed, we can now use the mvpatterns command, which returns a table with the number of missings for all variables with missing values and a second table that provides a list of all patterns of missings. The table indicates the pattern, that is, where inside the variables with missings the missing values occur (<i>_pattern</i>), the number of missings per pattern (<i>_mv</i>), and how often the pattern occurs (<i>_freq</i>).</p>
+<p style="margin: 12px 0;">The output helps us to quickly discover that a missing for variable <i>D</i> is the most frequent missing pattern. Patterns might be useful to better understand what causes missings in the data.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>. mvpatterns
 variables with no mv's: country continent subject J K M N O duplicated_n nmiss
 
 Variable     | type     obs   mv   variable label
@@ -317,52 +379,66 @@ Patterns of missing values
   +------------------------+
 
 </code></pre>
-	    <br>
-<h3><a href="#exercise-3-missings-2" id="exercise-3-missings-2">Exercise 3: Exploring missing values</a></h3>
-<ol>
-	<li>Create a new variable for the number of missing values per row.</li>
-	<li>Have a look at all observations with missing values in the Data Editor.</li>
-	<li>Install the mvpatterns command.</li>
-	<li>Print the pattern of missing values. What is the most common pattern?</li>
+	    
+<div style="background: #f5f7fb; border: 1px solid #d2e0f5; border-left: 4px solid #1f4f8b; border-radius: 8px; padding: 0 20px 16px; margin-top: 24px;"><h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="exercise-3-missings-2">Exercise 3: Exploring missing values</span></h3>
+<ol style="padding-left: 24px; margin: 12px 0;">
+	<li style="margin: 7px 0;">Create a new variable for the number of missing values per row.</li>
+	<li style="margin: 7px 0;">Have a look at all observations with missing values in the Data Editor.</li>
+	<li style="margin: 7px 0;">Install the mvpatterns command.</li>
+	<li style="margin: 7px 0;">Print the pattern of missing values. What is the most common pattern?</li>
 </ol>
-	  <br>
-	    <br>
-<h2><a href="#dealing-with-missing-values" id="dealing-with-missing-values">Dealing with missing values</a></h2>
-<h3><a href="#dropping-variables" id="dropping-variables">Dropping variables</a></h3>
-<p>If a substantial amount of the values for a specific variable is missing, you might consider to remove it from your dataset. This is usually only adviced if 
+	  
+	    </div></section>
+<section style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px;"><h2 style="margin: 0 0 16px; color: #0b2c5f; font-size: 24px; line-height: 1.3;"><span id="dealing-with-missing-values">Dealing with missing values</span></h2>
+<h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="dropping-variables">Dropping variables</span></h3>
+<p style="margin: 12px 0;">If a substantial amount of the values for a specific variable is missing, you might consider to remove it from your dataset. This is usually only adviced if 
 at least 60% of the values are missing and the variable itself doesn&rsquo;t seem to play a significant role for your model.</p>
-<p>We can drop a variable using the drop command. Since there are only 3 percent of the values missing for the D variable, it wouldn&rsquo;t make sense to remove the variable.</p>
-<pre><code>drop D
+<p style="margin: 12px 0;">We can drop a variable using the drop command. Since there are only 3 percent of the values missing for the D variable, it wouldn&rsquo;t make sense to remove the variable.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>drop D
 </code></pre>
-	  <br>
-<h3><a href="#mean-imputation" id="mean-imputation">Mean imputation</a></h3>
-<p>Imputing missing data is a complex topic that we cannot cover comprehensively in this workshop. A very basic approach to dealing with missings values 
-is replacing them with the mean or median of the variable. In order to do that, we first have to use the <b>summarize</b> command, so that we can retrieve the mean of the <i>D</i> variable with <i>`r(mean)&rsquo;</i> in the <b>replace</b> command.</p>
-<pre><code>sum D
+	  
+<h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="mean-imputation">Mean imputation</span></h3>
+<p style="margin: 12px 0;">Imputing missing data is a complex topic that we cannot cover comprehensively in this workshop. A very basic approach to dealing with missings values 
+is replacing them with the mean or median of the variable. In order to do that, we first have to use the summarize command, so that we can retrieve the mean of the <i>D</i> variable with <i>`r(mean)&rsquo;</i> in the replace command.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>sum D
 replace D=`r(mean)' if D==.
 </code></pre>
-<p>This is a common approach that is generally not advised, since it requires the values to be missing completely at random (MCAR). MCAR means, that neither the missing values itself nor other variables in the dataset can predict the missing values. This is rather strong assumption, that almost never is met. Missing values for an income variable, for instance, are likely to be extreme values, either very high or low incomes and are therefore <u>predicting itself</u>. Missing values might also be <u>predicted based on another variable</u> in the data. For instance, male respondents might be less likely to report income compared to women because of perceived social norms and stereotypes.</p>
-<p>If the missigs are not MCAR, mean imputation will lead to biases in how the model parameters are estimated. Even if the MCAR assumption is met, mean imputation reduces the variance of the imputed variable and reduces the correlation with other variables in the data, which will impair your regression models.</p>
-<br>
-	  <h3><a href="#complete-case-analysis" id="complete-case-analysis">Complete case analysis</a></h3>
-<p>Complete case analysis or listwise deletion is the technique of disregarding any non-complete cases for your statistical analyses. If your dependent or predictor variable have missing values, Stata will remove those cases from your data before running the analysis per default. Similar to mean imputation, this approach is only advided when data is missing MCAR, since it otherwise will induce biased parameter estimations. It also will lead to a loss of power, which might not be a problem depending on the size of your data.</p>
-<br>
-	  <h3><a href="#multiple-imputation" id="multiple-imputation">Multiple imputation</a></h3>
-<p>There are more advanced techniques that have weaker assumptions about how the data are missing and will lead to less biased estimations. Multiple imputation (MI) is one of these techniques, that can be applied in Stata rather easily although you will have to consult the documentation to chose the most appropriate imputation method. MI does assume your data to be missing at random (MAR). Data is assumed to be MAR, when the variable itself does not predict its own missings, but other variables in the data do predict the missing values.</p>
-<p>In basic terms, multiple imputation predicts missing values based on the available values in your data using a specific imputation method and creates a number of imputed datasets. All of the imputed versions of the data are then being analysed with the specific model to test your research hypothesis and the results are being pooled to provide a combined model.</p>
-<p>If you want to know more about MI in Stata, you can read <a href="https://stats.idre.ucla.edu/stata/seminars/mi_in_stata_pt1_new/">this tutorial</a>. The Stata documentation also provides very detailed description of it, which you can access with <b>help mi</b> command.</p>
-<pre><code>help mi
+<p style="margin: 12px 0;">This is a common approach that is generally not advised, since it requires the values to be missing completely at random (MCAR). MCAR means, that neither the missing values itself nor other variables in the dataset can predict the missing values. This is rather strong assumption, that almost never is met. Missing values for an income variable, for instance, are likely to be extreme values, either very high or low incomes and are therefore <u>predicting itself</u>. Missing values might also be <u>predicted based on another variable</u> in the data. For instance, male respondents might be less likely to report income compared to women because of perceived social norms and stereotypes.</p>
+<p style="margin: 12px 0;">If the missigs are not MCAR, mean imputation will lead to biases in how the model parameters are estimated. Even if the MCAR assumption is met, mean imputation reduces the variance of the imputed variable and reduces the correlation with other variables in the data, which will impair your regression models.</p>
+
+	  <h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="complete-case-analysis">Complete case analysis</span></h3>
+<p style="margin: 12px 0;">Complete case analysis or listwise deletion is the technique of disregarding any non-complete cases for your statistical analyses. If your dependent or predictor variable have missing values, Stata will remove those cases from your data before running the analysis per default. Similar to mean imputation, this approach is only advided when data is missing MCAR, since it otherwise will induce biased parameter estimations. It also will lead to a loss of power, which might not be a problem depending on the size of your data.</p>
+
+	  <h3 style="margin: 26px 0 12px; color: #0b2c5f; font-size: 19px;"><span id="multiple-imputation">Multiple imputation</span></h3>
+<p style="margin: 12px 0;">There are more advanced techniques that have weaker assumptions about how the data are missing and will lead to less biased estimations. Multiple imputation (MI) is one of these techniques, that can be applied in Stata rather easily although you will have to consult the documentation to chose the most appropriate imputation method. MI does assume your data to be missing at random (MAR). Data is assumed to be MAR, when the variable itself does not predict its own missings, but other variables in the data do predict the missing values.</p>
+<p style="margin: 12px 0;">In basic terms, multiple imputation predicts missing values based on the available values in your data using a specific imputation method and creates a number of imputed datasets. All of the imputed versions of the data are then being analysed with the specific model to test your research hypothesis and the results are being pooled to provide a combined model.</p>
+<p style="margin: 12px 0;">If you want to know more about MI in Stata, you can read <a style="color: #1f4f8b; text-decoration: underline;" href="https://stats.idre.ucla.edu/stata/seminars/mi_in_stata_pt1_new/">this tutorial</a>. The Stata documentation also provides very detailed description of it, which you can access with help mi command.</p>
+<pre style="margin: 18px 0; padding: 18px; background: #f5f7fb; border: 1px solid #d2e0f5; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.55; color: #183153;"><code>help mi
 </code></pre>
-<p>The main mi help page provides links to the manual, the comprehensive introduction, a simple example and links to the specific sub commands.</p>
-<img src="/screenshots/viewer_mi_01.png" width="60%">
-	  <br>
-<p>Below is a complete simple example of applying MI with Stata.</p>
-<img src="/screenshots/viewer_mi_02.png" width="60%">
-	  <br>
-	  <br>
-	    <br>
-<h3><a href="#evaluation" id="evaluation">Final task: Please give us your feedback! </a></h3>
-	   <p>Upon completing the survey, <b>you will receive the link to the solution file</b>, to check how your commands compares to the sample solution.</p>
-<p>In order to adapt our training to your needs and provide the most valuable learning experience for you, we depend on your feedack.</p>
-	   <p>We would be grateful if you could take 1 min before the end of the workshop to get your feedback! </p>
-<p><a href="https://lse.eu.qualtrics.com/jfe/form/SV_0vJs5yGpF1F359I?coursename=Data Cleaning in Stata 2: Missing values &topic=Stata&prog=SR&version=25-26">Click here to open the survey!</a></p>
+<p style="margin: 12px 0;">The main mi help page provides links to the manual, the comprehensive introduction, a simple example and links to the specific sub commands.</p>
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="/screenshots/viewer_mi_01.png" alt="Stata multiple imputation help page" width="60%">
+	  
+<p style="margin: 12px 0;">Below is a complete simple example of applying MI with Stata.</p>
+<img style="display: block; max-width: 100%; height: auto; margin: 20px 0; border: 1px solid #d2e0f5; border-radius: 8px;" src="/screenshots/viewer_mi_02.png" alt="Stata multiple imputation example" width="60%"></section>
+<section id="confidence-leaving" style="background: #ffffff; border: 1px solid #d2e0f5; border-radius: 10px; padding: 24px; margin-bottom: 18px; border-left: 5px solid #1f4f8b; background: #edf3fc;"><h2 style="margin: 0 0 10px; font-size: 21px; color: #0b2c5f;">📋 Leaving your session: confidence check</h2><p style="margin: 0 0 18px;">Please complete this short questionnaire just before you leave the workshop session. It helps us understand how confident you feel after the session. Continuing to another project in this session? Skip this questionnaire and complete the ending questionnaire only before leaving.</p><a href="https://forms.cloud.microsoft/e/JQp2SjCLqm" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 11px 18px; background: #0b2c5f; color: #ffffff; border-radius: 7px; text-decoration: none;">Open the leaving confidence check ↗</a></section></section>
+
+</main></div>
+<script>
+const navLinks = [...document.querySelectorAll('.toc-link')];
+const targets = [...new Set(navLinks.map(link => document.getElementById(link.hash.slice(1))))].filter(Boolean);
+let scheduled = false;
+function updateContents() {
+ let current = targets[0];
+ for (const target of targets) if (target.getBoundingClientRect().top <= 140) current = target;
+ for (const link of navLinks) {
+  if (current && link.hash === '#' + current.id) link.setAttribute('aria-current', 'location');
+  else link.removeAttribute('aria-current');
+ }
+ scheduled = false;
+}
+window.addEventListener('scroll', () => {if (!scheduled) {scheduled = true; requestAnimationFrame(updateContents);}}, {passive:true});
+updateContents();
+document.querySelectorAll('.mobile-contents a').forEach(link => link.addEventListener('click', () => {document.querySelector('.mobile-contents').open = false;}));
+</script>
+</body>
+</html>
